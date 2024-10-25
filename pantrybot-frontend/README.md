@@ -10,7 +10,7 @@ Vite is used to speed up development using React. Bootstrap is for easy styling.
 
 [Vite Documentation](https://vite.dev/)
 
-[React Native Bootstrap Documentation](https://react-bootstrap.netlify.app/)
+[React Bootstrap Documentation](https://react-bootstrap.netlify.app/)
 
 [React Router Documentation](https://reactrouter.com/en/main)
 
@@ -18,7 +18,7 @@ Vite is used to speed up development using React. Bootstrap is for easy styling.
 
 Please use these pre-styled components to create our app in the frontend:
 
-[React Native Bootstrap Components](https://react-bootstrap.netlify.app/docs/components/accordion)
+[React Bootstrap Components](https://react-bootstrap.netlify.app/docs/components/accordion)
 
 **Other Info:**
 
