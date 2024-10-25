@@ -1,8 +1,43 @@
-# React + Vite
+## Frontend Information:
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+**Documentation:**
 
-Currently, two official plugins are available:
+PantryBot frontend uses React, Vite, Bootstrap, and React Router.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+Vite is used to speed up development using React. Bootstrap is for easy styling. React router is used for easy implementation of routing for React applications.
+
+[React Documentation](https://react.dev/)
+
+[Vite Documentation](https://vite.dev/)
+
+[React Native Bootstrap Documentation](https://react-bootstrap.netlify.app/)
+
+[React Router Documentation](https://reactrouter.com/en/main)
+
+**Styling Components:**
+
+Please use these pre-styled components to create our app in the frontend:
+
+[React Native Bootstrap Components](https://react-bootstrap.netlify.app/docs/components/accordion)
+## Frontend Installation
+
+Install the latest version of NodeJS:
+
+[Install Link](https://nodejs.org/en)
+
+Change directory to pantrybot-frontend folder:
+
+```bash
+  cd pantrybot-frontend
+```
+
+Install node packages:
+
+```bash
+  npm install
+```
+
+Run development server:
+```bash
+  npm run dev
+```

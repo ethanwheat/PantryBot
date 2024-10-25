@@ -18,7 +18,7 @@ Description
 
 PantryBot frontend uses React, Vite, Bootstrap, and React Router.
 
-Vite is used to speed up development using React. Bootstrap is for easy styling. React routef is used for easy implementation of routing for React applications.
+Vite is used to speed up development using React. Bootstrap is for easy styling. React router is used for easy implementation of routing for React applications.
 
 [React Documentation](https://react.dev/)
 
