@@ -10,7 +10,7 @@ export default function ThemedNavbar() {
   return (
     <Navbar expand="sm" className="bg-body-tertiary shadow" style={{ height: "75px" }}>
       <Container>
-        <Navbar.Brand as={Link} to={routes.index}><Image src={images.logo_with_text} style={{ width: "10rem" }} /></Navbar.Brand>
+        <Navbar.Brand as={Link} to={routes.index}><Image src={images.logo} style={{ width: "10rem" }} /></Navbar.Brand>
         <Navbar.Toggle aria-controls="navbarScroll" />
         <Navbar.Collapse className="justify-content-end">
             <Nav className="d-flex gap-3">
