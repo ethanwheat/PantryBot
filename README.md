@@ -16,21 +16,25 @@ Description
 
 PantryBot frontend uses React, Vite, Bootstrap, React Router, and React Hook Form.
 
-Vite is used to speed up development using React.
-
-Bootstrap is for easy styling.
-
-React router is used for easy implementation of routing for React applications.
-
-React hook form is used for form validation.
+Frontend uses React.
 
 [React Documentation](https://react.dev/)
 
+Vite is used to speed up development using React.
+
 [Vite Documentation](https://vite.dev/)
+
+Bootstrap is for easy styling.
+
+[Bootstrap Documentation](https://getbootstrap.com/)
 
 [React Bootstrap Documentation](https://react-bootstrap.netlify.app/)
 
+React router is used for easy implementation of routing for React applications.
+
 [React Router Documentation](https://reactrouter.com/en/main)
+
+React hook form is used for form validation.
 
 [React Hook Form Documentation](https://www.react-hook-form.com/)
 
