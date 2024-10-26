@@ -72,6 +72,38 @@ Run development server:
   npm run dev
 ```
 
+## Backend Installation
+
+Install the latest version of NodeJS:
+
+[Install Link](https://nodejs.org/en)
+
+Change directory to pantrybot-backend folder:
+
+```bash
+  cd pantrybot-backend
+```
+
+Install node packages:
+
+```bash
+  npm install
+```
+
+Add a .env file and populate the following fields:
+
+```bash
+  MONGO_URI=<uri_here>
+  JWT_SECRET=<secret_here>
+```
+
+Start the server:
+
+```bash
+  node index.js
+```
+
+
 ## Authors
 
 - Gavin Kirwan [@gkirwan](https://www.github.com/gkirwan43)
