@@ -1,4 +1,4 @@
-import { StrictMode } from 'react'
+import { StrictMode, Suspense } from 'react'
 import { createRoot } from 'react-dom/client'
 import {
   createBrowserRouter,
@@ -11,22 +11,34 @@ import Signup from './pages/auth/Signup';
 import Welcome from './pages/Welcome';
 import RootLayout from './layouts/RootLayout';
 import './app.scss';
-import ThemedNavbar from './components/navigation/ThemedNavbar';
 import Error from './pages/error/Error';
+import Dashboard from './pages/app/Dashboard';
+import AppLayout from './layouts/AppLayout';
+import WelcomeLayout from './layouts/WelcomeLayout';
+import AuthProvider from './providers/AuthProvider';
+import ThemedSpinner from './components/spinners/ThemedSpinner';
 
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path="/" element={<RootLayout />} errorElement={<Error />}>
-      <Route path="/" element={<Welcome />} />
-      <Route path="login" element={<Login />} />
-      <Route path="signup" element={<Signup />} />
+      <Route path="/" element={<WelcomeLayout />} errorElement={<Error />}>
+        <Route path="/" element={<Welcome />} />
+        <Route path="login" element={<Login />} />
+        <Route path="signup" element={<Signup />} />
+      </Route>
+      <Route path="/" element={<AppLayout />}>
+        <Route path="dashboard" element={<Dashboard />} errorElement={<Error />}/>
+      </Route>
     </Route>
-
   )
 );
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <RouterProvider router={router} />
+    <Suspense fallback={<ThemedSpinner />}>
+      <AuthProvider>
+        <RouterProvider router={router} />
+      </AuthProvider>
+    </Suspense>
   </StrictMode>,
 )

@@ -3,12 +3,15 @@ import { Button, Card, Container, Form } from "react-bootstrap";
 import { Controller, useForm } from "react-hook-form";
 import routes from "../../constants/routes";
 import { Link } from "react-router-dom";
+import { useAuth } from '../../providers/AuthProvider';
+import ThemedSpinner from "../../components/spinners/ThemedSpinner";
 
 export default function Signup() {
   // Import useForm hook and set default values to empty strings
   const {
     control,
     handleSubmit,
+    setError,
     formState: { errors },
   } = useForm({
     defaultValues: {
@@ -18,10 +21,28 @@ export default function Signup() {
       confirmPassword: "",
     },
   });
+  // Import auth functions
+  const { signup } = useAuth();
+
+  const [loading, setLoading] = useState(false);
 
   // Function to handle when the form is submitted without errors on the client side
-  const onSubmit = (data) => {
-    console.log(data);
+  const onSubmit = async ({username, email, password}) => {
+    setLoading(true);
+
+    const { errorMessage } = await signup(username, email, password)
+
+    if (errorMessage) {
+      setError("username");
+      setError("email");
+      setError("password");
+      setError("confirmPassword", {
+        type: "manual",
+        message: errorMessage
+      });
+    }
+
+    setLoading(false);
   };
 
   return (
@@ -53,8 +74,9 @@ export default function Signup() {
                   render={({ field }) => (
                     <Form.Control
                       type="text"
-                      placeholder="Username"
+                      placeholder="Username here"
                       maxLength={12}
+                      disabled={loading}
                       isInvalid={errors.username ? true : false}
                       {...field}
                     />
@@ -79,8 +101,9 @@ export default function Signup() {
                   render={({ field }) => (
                     <Form.Control
                       type="text"
-                      placeholder="Email"
+                      placeholder="Email here"
                       maxLength={256}
+                      disabled={loading}
                       isInvalid={errors.email ? true : false}
                       {...field}
                     />
@@ -105,8 +128,9 @@ export default function Signup() {
                   render={({ field }) => (
                     <Form.Control
                       type="password"
-                      placeholder="Password"
+                      placeholder="Password here"
                       maxLength={256}
+                      disabled={loading}
                       isInvalid={errors.password ? true : false}
                       {...field}
                     />
@@ -131,8 +155,9 @@ export default function Signup() {
                   render={({ field }) => (
                     <Form.Control
                       type="password"
-                      placeholder="Confirm Password"
+                      placeholder="Confirm Password here"
                       maxLength={256}
+                      disabled={loading}
                       isInvalid={errors.confirmPassword ? true : false}
                       {...field}
                     />
@@ -143,7 +168,7 @@ export default function Signup() {
                 </Form.Control.Feedback>
               </Form.Group>
               <div className="mt-3 d-flex flex-column align-items-center">
-                <Button type="submit">Sign up</Button>
+                <Button type="submit" disabled={loading}>{!loading ? "Sign up" : <ThemedSpinner size="sm"/>}</Button>
                 <Button as={Link} to={routes.login} variant="link" className="text-black">
                   Login
                 </Button>
