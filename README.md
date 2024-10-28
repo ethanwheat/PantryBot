@@ -40,7 +40,7 @@ React hook form is used for form validation.
 
 JS-Cookie is used to create and get cookies.
 
-[JS-Cookie Documentatio](https://github.com/js-cookie/js-cookie)
+[JS-Cookie Documentation](https://github.com/js-cookie/js-cookie)
 
 **Styling Components:**
 
