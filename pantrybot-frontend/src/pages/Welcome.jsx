@@ -72,8 +72,8 @@ export default function Welcome() {
           <p style={styles.text}>
             {/* Emphasized words with 'highlight' style */}
             <span style={styles.highlight}>Search</span> pantry-based recipes with filters,
-            <span style={styles.highlight}>add</span> missing ingredients to your grocery list, and
-            <span style={styles.highlight}>find</span> nearby stores with the best prices
+            <span style={styles.highlight}>add</span> missing ingredients to your grocery list, and 
+            <span style={styles.highlight}> find</span> nearby stores with the best prices
           </p>
 
           {/* Right Image */}
