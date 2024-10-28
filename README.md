@@ -14,7 +14,7 @@ Description
 
 **Documentation:**
 
-PantryBot frontend uses React, Vite, Bootstrap, React Router, and React Hook Form.
+PantryBot frontend uses React, Vite, Bootstrap, React Router, React Hook Form, and JS-Cookie.
 
 Frontend uses React.
 
