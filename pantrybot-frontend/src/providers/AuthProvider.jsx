@@ -74,7 +74,7 @@ export default function AuthProvider({children}) {
   }
 
   const login = () => {
-
+    // Put login code here, should be pretty simular to sign up.
   }
 
   const logout = () => {
