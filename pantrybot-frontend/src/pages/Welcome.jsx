@@ -1,10 +1,8 @@
 import React from "react";
-import { Button, Container } from "react-bootstrap";
+import { Button, Container, Image } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import routes from "../constants/routes";
-
-import cartIcon from "/public/cart.png";
-import bagIcon from "/public/bag.png";
+import images from "../constants/images";
 
 export default function Welcome() {
   // Define styles as JavaScript objects
@@ -68,7 +66,7 @@ export default function Welcome() {
       <section style={styles.mainContent}>
         <div style={styles.imageTextContainer}>
           {/* Left Image */}
-          <img src={cartIcon} alt="Cart Icon" style={styles.image} />
+          <Image src={images.cartIcon} alt="Cart Icon" style={styles.image} />
 
           {/* Main Text */}
           <p style={styles.text}>
@@ -79,7 +77,7 @@ export default function Welcome() {
           </p>
 
           {/* Right Image */}
-          <img src={bagIcon} alt="Bag Icon" style={styles.image} />
+          <Image src={images.bagIcon} alt="Bag Icon" style={styles.image} />
         </div>
 
         {/* Call-to-action text */}
