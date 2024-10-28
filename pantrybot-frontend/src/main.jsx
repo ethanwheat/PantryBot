@@ -16,7 +16,6 @@ import Dashboard from './pages/app/Dashboard';
 import AppLayout from './layouts/AppLayout';
 import WelcomeLayout from './layouts/WelcomeLayout';
 import AuthProvider from './providers/AuthProvider';
-import ThemedSpinner from './components/spinners/ThemedSpinner';
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -35,10 +34,8 @@ const router = createBrowserRouter(
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <Suspense fallback={<ThemedSpinner />}>
       <AuthProvider>
         <RouterProvider router={router} />
       </AuthProvider>
-    </Suspense>
   </StrictMode>,
 )

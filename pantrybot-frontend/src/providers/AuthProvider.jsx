@@ -42,11 +42,13 @@ export default function AuthProvider({children}) {
     const authCookie = Cookies.get("auth");
 
     if (authCookie) {
-      const authCookieJSON = JSON.parse(authCookie)
-      setUser(authCookieJSON)
-    } else {
-      setUser(null);
+      const authCookieJSON = JSON.parse(authCookie);
+      setUser(authCookieJSON);
+
+      return;
     }
+
+    setUser(null);
   }
 
   // Function that signs up a user with the API and then stores the jwt in a cookie.
@@ -85,7 +87,7 @@ export default function AuthProvider({children}) {
     // Put login code here, should be pretty simular to sign up.
   }
 
-  // Function to logout the user, removes the cookoie.
+  // Function to logout the user, removes the cookie, and redirects to the welcome page.
   const logout = () => {
     removeAuthCookie();
   }

@@ -1,7 +1,5 @@
 import React from "react";
 import { Button, Container } from "react-bootstrap";
-import { useNavigate } from "react-router-dom";
-import routes from "../../constants/routes";
 import { useAuth } from "../../providers/AuthProvider";
 
 export default function Dashboard() {
