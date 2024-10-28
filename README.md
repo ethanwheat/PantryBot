@@ -1,6 +1,6 @@
 # PantryBot
 
-**Description**
+**Description:**
 
 Web application that lets users search pantry-based recipes with filters, add missing ingredients to their grocery list, and find nearby stores with best prices.
 
