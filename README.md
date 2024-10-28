@@ -111,4 +111,4 @@ Start the server:
 
 - Gavin Kirwan [@gkirwan](https://www.github.com/gkirwan43)
 - Ethan Wheat [@ethanwheat](https://github.com/ethanwheat)
-- Add your name and github link her
+- Add your name and github link here
