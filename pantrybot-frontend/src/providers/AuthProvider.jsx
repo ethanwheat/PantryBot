@@ -5,6 +5,8 @@ import ThemedSpinner from "../components/spinners/ThemedSpinner";
 
 const AuthContext = createContext({
     user: null,
+    signup: () => null,
+    login: () => null,
     logout: () => null
 });
 
