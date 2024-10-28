@@ -16,22 +16,26 @@ export default function AuthProvider({children}) {
   const [loading, setLoading] = useState(true);
   const [user, setUser] = useState();
 
+  // Set user to current cookie if it exists.
   useEffect(() => {
     handleUserRefresh();
     setLoading(false);
   }, [])
 
+  // Set the auth token cookie.
   const setAuthCookie = (jwt) => {
     const jwtJSONString = JSON.stringify(jwt)
     Cookies.set("auth", jwtJSONString, { expires: 3600 })
     handleUserRefresh();
   }
 
+  // Remove the auth token cookie.
   const removeAuthCookie = () => {
     Cookies.remove("auth");
     handleUserRefresh();
   }
 
+  // Refresh the user state with the current auth token cookie if it exists, else set the user to null.
   const handleUserRefresh = () => {
     const authCookie = Cookies.get("auth");
 
@@ -43,6 +47,7 @@ export default function AuthProvider({children}) {
     }
   }
 
+  // Function that signs up a user with the API and then stores the jwt in a cookie.
   const signup = async (username, email, password) => {
     try {
       const res = await fetch(endpoints.auth.register, {
@@ -73,10 +78,12 @@ export default function AuthProvider({children}) {
     }
   }
 
+  // Function that logins a user with the API and then stores the jwt in a cookie.
   const login = () => {
     // Put login code here, should be pretty simular to sign up.
   }
 
+  // Function to logout the user, removes the cookoie.
   const logout = () => {
     removeAuthCookie();
   }
