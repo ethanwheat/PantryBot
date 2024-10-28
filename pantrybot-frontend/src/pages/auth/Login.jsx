@@ -2,7 +2,7 @@ import React from "react";
 import { Container } from "react-bootstrap";
 
 export default function Login() {
-  // This page should be pretty simular to Signup.jsx
+  // This page should be simular to Signup.jsx
 
   return (
     <Container>
