@@ -20,13 +20,13 @@ import AuthProvider from './providers/AuthProvider';
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path="/" element={<RootLayout />} errorElement={<Error />}>
-      <Route path="/" element={<WelcomeLayout />} errorElement={<Error />}>
+      <Route path="/" element={<WelcomeLayout />}>
         <Route path="/" element={<Welcome />} />
         <Route path="login" element={<Login />} />
         <Route path="signup" element={<Signup />} />
       </Route>
       <Route path="/" element={<AppLayout />}>
-        <Route path="dashboard" element={<Dashboard />} errorElement={<Error />}/>
+        <Route path="dashboard" element={<Dashboard />}/>
       </Route>
     </Route>
   )
