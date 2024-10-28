@@ -44,29 +44,33 @@ export default function AuthProvider({children}) {
   }
 
   const signup = async (username, email, password) => {
-    const res = await fetch(endpoints.auth.register, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ username, email, password })
-    });
-
-    if (!res.ok) {
-      if (res.status === 400) {
-        const { msg } = await res.json();
-
-        return {errorMessage: msg}
+    try {
+      const res = await fetch(endpoints.auth.register, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ username, email, password })
+      });
+  
+      if (!res.ok) {
+        if (res.status === 400) {
+          const { msg } = await res.json();
+  
+          return {errorMessage: msg}
+        }
+  
+        throw new Error(res.statusText)
       }
-
+  
+      const jwt = await res.json();
+  
+      setAuthCookie(jwt);
+  
+      return { errorMessage: null }
+    } catch (e) {
       return { errorMessage: "Something went wrong." }
     }
-
-    const jwt = await res.json();
-
-    setAuthCookie(jwt);
-
-    return { errorMessage: null }
   }
 
   const login = () => {
