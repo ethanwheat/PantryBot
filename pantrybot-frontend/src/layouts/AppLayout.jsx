@@ -9,7 +9,7 @@ export default function AppLayout() {
 
     // Redirect user to login page if not logged in.
     if (!user) {
-        return <Navigate to={routes.login} />;
+        return <Navigate to={routes.index} />;
     }
 
     return (
