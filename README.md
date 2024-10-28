@@ -38,6 +38,10 @@ React hook form is used for form validation.
 
 [React Hook Form Documentation](https://www.react-hook-form.com/)
 
+JS-Cookie is used to create and get cookies.
+
+[JS-Cookie Documentatio](https://github.com/js-cookie/js-cookie)
+
 **Styling Components:**
 
 Use these pre-styled components to create our app in the frontend:
@@ -102,7 +106,6 @@ Start the server:
 ```bash
   node index.js
 ```
-
 
 ## Authors
 
