@@ -168,7 +168,7 @@ export default function Signup() {
                 </Form.Control.Feedback>
               </Form.Group>
               <div className="mt-3 d-flex flex-column align-items-center">
-                <Button type="submit" disabled={loading}>{!loading ? "Sign up" : <ThemedSpinner size="sm"/>}</Button>
+                <Button type="submit" disabled={loading}>{!loading ? "Sign Up" : <ThemedSpinner size="sm"/>}</Button>
                 <Button as={Link} to={routes.login} variant="link" className="text-black">
                   Login
                 </Button>

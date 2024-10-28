@@ -20,7 +20,7 @@ export default function ThemedNavbar() {
             <Navbar.Collapse className="justify-content-end">
                 <Nav className="d-flex gap-3">
                   <Nav.Link as={Link} to={routes.login}>Login</Nav.Link>
-                  <Button variant="primary" as={Link} to={routes.signup}>Signup</Button>
+                  <Button variant="primary" as={Link} to={routes.signup}>Sign Up</Button>
                 </Nav>
             </Navbar.Collapse>
           </>
