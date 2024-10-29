@@ -4,7 +4,7 @@ import Cookies from 'js-cookie'
 import ThemedSpinner from "../components/spinners/ThemedSpinner";
 
 const AuthContext = createContext({
-    user: null,
+    token: null,
     signup: () => null,
     login: () => null,
     logout: () => null
@@ -24,26 +24,14 @@ export default function AuthProvider({children}) {
     setLoading(false);
   }, [])
 
-  // Set the auth token cookie.
-  const setAuthCookie = (jwt) => {
-    const jwtJSONString = JSON.stringify(jwt)
-    Cookies.set("auth", jwtJSONString, { expires: 3600 })
-    handleUserRefresh();
-  }
-
-  // Remove the auth token cookie.
-  const removeAuthCookie = () => {
-    Cookies.remove("auth");
-    handleUserRefresh();
-  }
-
   // Refresh the user state with the current auth token cookie if it exists, else set the user to null.
   const handleUserRefresh = () => {
-    const authCookie = Cookies.get("auth");
+    const userCookie = Cookies.get("authToken");
 
-    if (authCookie) {
-      const authCookieJSON = JSON.parse(authCookie);
-      setUser(authCookieJSON);
+    if (userCookie) {
+      const userData = JSON.parse(userCookie);
+
+      setUser(userData);
 
       return;
     }
@@ -51,11 +39,17 @@ export default function AuthProvider({children}) {
     setUser(null);
   }
 
+  const removeAuthCookie = () => {
+    Cookies.remove("authToken");
+    handleUserRefresh();
+  }
+
   // Function that signs up a user with the API and then stores the jwt in a cookie.
   const signup = async (username, email, password) => {
     try {
       const res = await fetch(endpoints.auth.register, {
         method: "POST",
+        credentials: "include",
         headers: {
           "Content-Type": "application/json",
         },
@@ -71,10 +65,8 @@ export default function AuthProvider({children}) {
   
         throw new Error(res.statusText)
       }
-  
-      const jwt = await res.json();
-  
-      setAuthCookie(jwt);
+
+      handleUserRefresh();
   
       return { errorMessage: null }
     } catch (e) {

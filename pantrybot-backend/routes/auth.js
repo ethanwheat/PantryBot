@@ -34,10 +34,18 @@ router.post('/register', async (req, res) => {
             user: { id: user.id }
         };
 
-        jwt.sign(payload, config.jwtSecret, { expiresIn: 3600 }, 
+        // In seconds
+        const expiresIn = 3600
+
+        jwt.sign(payload, config.jwtSecret, { expiresIn }, 
         (err, token) => {
             if (err) throw err;
-            res.json({ token });
+            const stringifiedToken = JSON.stringify(token);
+            res.cookie("authToken", stringifiedToken, {
+                maxAge: expiresIn * 100,
+                secure: true
+            });
+            res.json({ msg: "User created successfully."});
         });
     } catch (err) {
         console.error(err.message);
@@ -76,10 +84,18 @@ router.post('/login', async (req, res) => {
             }
         };
 
-        jwt.sign(payload, config.jwtSecret, { expiresIn: 3600 }, 
+        // In seconds
+        const expiresIn = 3600
+
+        jwt.sign(payload, config.jwtSecret, { expiresIn }, 
         (err, token) => {
             if (err) throw err;
-            res.json({ token });
+            const stringifiedToken = JSON.stringify(token);
+            res.cookie("authToken", stringifiedToken, {
+                maxAge: expiresIn * 100,
+                secure: true
+            });
+            res.json({ msg: "User logged in successfully."});
         });
     } catch (err) {
         console.error(err.message);

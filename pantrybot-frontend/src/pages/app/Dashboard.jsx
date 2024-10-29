@@ -8,7 +8,7 @@ export default function Dashboard() {
   return (
     <Container>
       <h1>Dashboard</h1>
-      <p>User jwt: {user?.token}</p>
+      <p>User jwt: {user}</p>
       <p>Put dashboard here.</p>
       <Button variant="primary" onClick={logout}>
         Logout

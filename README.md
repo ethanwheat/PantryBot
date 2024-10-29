@@ -72,6 +72,12 @@ Install node packages:
   npm install
 ```
 
+Add a .env file and populate the following fields:
+
+```bash
+  API_URL=<url_here>
+```
+
 Run development server:
 
 ```bash
@@ -97,10 +103,12 @@ Install node packages:
 ```
 
 Add a .env file and populate the following fields:
+Client url is only required in production, it will default to http://localhost:5173 if left empty.
 
 ```bash
   MONGO_URI=<uri_here>
   JWT_SECRET=<secret_here>
+  CLIENT_URL=http://localhost:5173
 ```
 
 Start the server:
