@@ -5,16 +5,15 @@ import Cookies from "js-cookie"
 import ThemedNavbar from "../components/navigation/ThemedNavbar";
 
 export default function WelcomeLayout() {
-  const authCookie = Cookies.get("auth");
+  const { user } = useAuth();
 
-  // Redirect user to dashboard if logged in.
-  if (authCookie) {
+  // Redirect user to login page if not logged in.
+  if (user) {
     return <Navigate to={routes.dashboard} />;
   }
 
   return (
     <>
-      <ThemedNavbar />
       <Outlet />
     </>
   );
