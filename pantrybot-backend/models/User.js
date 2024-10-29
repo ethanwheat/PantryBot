@@ -1,4 +1,4 @@
-// backend/models/User.js
+// pantrybot-backend/models/User.js
 const mongoose = require('mongoose');
 
 const UserSchema = new mongoose.Schema({
