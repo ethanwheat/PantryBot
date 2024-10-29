@@ -1,4 +1,4 @@
-// backend/config.js
+// pantrybot-backend/config.js
 require('dotenv').config()
 
 module.exports = {
