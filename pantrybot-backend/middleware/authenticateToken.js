@@ -4,8 +4,7 @@ const config = require('../config');
 
 const authenticateToken = (req, res, next) => {
     // Get the token from cookies
-    const cookie = req.cookies.auth;
-    const token = JSON.parse(cookie).token
+    const token = req.cookies.auth;
 
     if (!token) {
         return res.status(401).json({ msg: 'No token, authorization denied' });

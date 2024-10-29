@@ -5,6 +5,12 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const config = require('../config');
 const User = require('../models/User');
+const authenticateToken = require('../middleware/authenticateToken');
+
+// Validate Token
+router.post("/validateToken", authenticateToken, async (req, res) => {
+    return res.json({ msg: "Valid jwt token." });
+})
 
 // Register Route
 router.post('/register', async (req, res) => {
@@ -40,8 +46,7 @@ router.post('/register', async (req, res) => {
         jwt.sign(payload, config.jwtSecret, { expiresIn }, 
         (err, token) => {
             if (err) throw err;
-            const stringifiedToken = JSON.stringify(token);
-            res.cookie("auth", stringifiedToken, {
+            res.cookie("auth", token, {
                 maxAge: expiresIn * 100,
                 secure: true
             });
@@ -90,8 +95,7 @@ router.post('/login', async (req, res) => {
         jwt.sign(payload, config.jwtSecret, { expiresIn }, 
         (err, token) => {
             if (err) throw err;
-            const stringifiedToken = JSON.stringify(token);
-            res.cookie("auth", stringifiedToken, {
+            res.cookie("auth", token, {
                 maxAge: expiresIn * 100,
                 secure: true
             });
@@ -103,10 +107,14 @@ router.post('/login', async (req, res) => {
     }
 });
 
-router.post("/test", async (req, res) => {
-    console.log("Cookie cleared");
-    res.clearCookie("auth");
-    res.json({ msg: "Success" });
+router.post("/logout", authenticateToken, async (req, res) => {
+    try {
+        res.clearCookie("auth");
+        res.json({ msg: "Successfully logged out." });
+    } catch (err) {
+        console.error(err.message);
+        res.status(500).send('Server Error');
+    }
 })
 
 module.exports = router;
