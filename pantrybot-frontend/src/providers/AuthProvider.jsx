@@ -1,13 +1,15 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import endpoints from "../constants/endpoints";
-import Cookies from 'js-cookie'
+import Cookies from "js-cookie"
 import ThemedSpinner from "../components/spinners/ThemedSpinner";
+import { useNavigate } from "react-router-dom";
+import routes from "../constants/routes";
 
 const AuthContext = createContext({
     token: null,
     signup: () => null,
     login: () => null,
-    logout: () => null
+    logout: () => null,
 });
 
 export const useAuth = () => {
@@ -15,35 +17,33 @@ export const useAuth = () => {
 }
 
 export default function AuthProvider({children}) {
-  const [loading, setLoading] = useState(true);
-  const [user, setUser] = useState();
+  const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
+  const [token, setToken] = useState(Cookies.get("auth"));
 
-  // Set user to current cookie if it exists.
   useEffect(() => {
-    setLoading(true);
-    handleUserRefresh();
-    setLoading(false);
-  }, [])
+    // Check to see if the session is valid and delete token if not valid.
+    const checkSession = async () => {
+      setLoading(true);
 
-  // Refresh the user state with the current auth token cookie if it exists, else set the user to null.
-  const handleUserRefresh = () => {
-    const userCookie = Cookies.get("auth");
+      const res = await fetch(endpoints.auth.validateToken, {
+        method: "POST",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
 
-    if (userCookie) {
-      const userData = JSON.parse(userCookie);
+      if (!res.ok) {
+        setToken(null);
+        navigate(routes.welcome)
+      }
 
-      setUser(userData);
-
-      return;
+      setLoading(false);
     }
 
-    setUser(null);
-  }
-
-  const removeAuthCookie = () => {
-    Cookies.remove("authToken");
-    handleUserRefresh();
-  }
+    checkSession();
+  }, [])
 
   // Function that signs up a user with the API and then stores the jwt in a cookie.
   const signup = async (username, email, password) => {
@@ -66,8 +66,6 @@ export default function AuthProvider({children}) {
   
         throw new Error(res.statusText)
       }
-
-      handleUserRefresh();
   
       return { errorMessage: null }
     } catch (e) {
@@ -81,12 +79,21 @@ export default function AuthProvider({children}) {
   }
 
   // Function to logout the user, removes the cookie, and redirects to the welcome page.
-  const logout = () => {
-    removeAuthCookie();
+  const logout = async () => {
+    await fetch(endpoints.auth.logout, {
+      method: "POST",
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    setToken(null);
+    navigate(routes.welcome);
   }
 
   return (
-    <AuthContext.Provider value={{ user, signup, login, logout }}>
+    <AuthContext.Provider value={{ token, signup, login, logout }}>
         { loading ? 
         <div className="position-absolute top-50 start-50 translate-middle">
           <ThemedSpinner variant="primary"/>

@@ -6,8 +6,10 @@ if (!apiUrl) {
 
 const endpoints = {
     auth: {
+        validateToken: apiUrl + "/api/auth/validateToken",
         register: apiUrl + "/api/auth/register",
-        login: apiUrl + "/api/auth/login"
+        login: apiUrl + "/api/auth/login",
+        logout: apiUrl + "/api/auth/logout"
     }
 }
 

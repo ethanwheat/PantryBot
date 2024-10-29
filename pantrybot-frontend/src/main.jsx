@@ -15,7 +15,6 @@ import Error from './pages/error/Error';
 import Dashboard from './pages/app/Dashboard';
 import AppLayout from './layouts/AppLayout';
 import WelcomeLayout from './layouts/WelcomeLayout';
-import AuthProvider from './providers/AuthProvider';
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -34,8 +33,6 @@ const router = createBrowserRouter(
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-      <AuthProvider>
-        <RouterProvider router={router} />
-      </AuthProvider>
+      <RouterProvider router={router} />
   </StrictMode>,
 )
