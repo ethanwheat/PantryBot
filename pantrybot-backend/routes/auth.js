@@ -41,7 +41,7 @@ router.post('/register', async (req, res) => {
         (err, token) => {
             if (err) throw err;
             const stringifiedToken = JSON.stringify(token);
-            res.cookie("authToken", stringifiedToken, {
+            res.cookie("auth", stringifiedToken, {
                 maxAge: expiresIn * 100,
                 secure: true
             });
@@ -91,7 +91,7 @@ router.post('/login', async (req, res) => {
         (err, token) => {
             if (err) throw err;
             const stringifiedToken = JSON.stringify(token);
-            res.cookie("authToken", stringifiedToken, {
+            res.cookie("auth", stringifiedToken, {
                 maxAge: expiresIn * 100,
                 secure: true
             });
@@ -102,5 +102,11 @@ router.post('/login', async (req, res) => {
         res.status(500).send('Server Error');
     }
 });
+
+router.post("/test", async (req, res) => {
+    console.log("Cookie cleared");
+    res.clearCookie("auth");
+    res.json({ msg: "Success" });
+})
 
 module.exports = router;

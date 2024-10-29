@@ -20,13 +20,14 @@ export default function AuthProvider({children}) {
 
   // Set user to current cookie if it exists.
   useEffect(() => {
+    setLoading(true);
     handleUserRefresh();
     setLoading(false);
   }, [])
 
   // Refresh the user state with the current auth token cookie if it exists, else set the user to null.
   const handleUserRefresh = () => {
-    const userCookie = Cookies.get("authToken");
+    const userCookie = Cookies.get("auth");
 
     if (userCookie) {
       const userData = JSON.parse(userCookie);
