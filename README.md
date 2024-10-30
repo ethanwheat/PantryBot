@@ -16,7 +16,7 @@ Web application that lets users search pantry-based recipes with filters, add mi
 
 **Documentation:**
 
-PantryBot frontend uses React, Vite, Bootstrap, React Router, React Hook Form, and JS-Cookie.
+PantryBot frontend uses React, Vite, Bootstrap, React Router, React Hook Form, and React-Cookie.
 
 Frontend uses React.
 
@@ -40,9 +40,9 @@ React hook form is used for form validation.
 
 [React Hook Form Documentation](https://www.react-hook-form.com/)
 
-JS-Cookie is used to create and get cookies.
+React-Cookie is used to create and get cookies.
 
-[JS-Cookie Documentation](https://github.com/js-cookie/js-cookie)
+[React-Cookie Documentation](https://www.npmjs.com/package/react-cookie)
 
 **Styling Components:**
 
