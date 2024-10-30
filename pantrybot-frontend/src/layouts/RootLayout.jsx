@@ -1,10 +1,11 @@
 import { Outlet } from "react-router-dom";
-import AuthProvider from "../providers/AuthProvider";
+import ThemedNavbar from "../components/navigation/ThemedNavbar";
 
 export default function RootLayout() {
     return (
-    <AuthProvider>
-        <Outlet />
-    </AuthProvider>
-    )
+    <>
+      <ThemedNavbar />
+      <Outlet />
+    </>
+  )
 }

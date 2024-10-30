@@ -1,9 +1,7 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import endpoints from "../constants/endpoints";
-import Cookies from "js-cookie"
 import ThemedSpinner from "../components/spinners/ThemedSpinner";
-import { useNavigate } from "react-router-dom";
-import routes from "../constants/routes";
+import { useCookies } from 'react-cookie';
 
 const AuthContext = createContext({
     token: null,
@@ -17,16 +15,16 @@ export const useAuth = () => {
 }
 
 export default function AuthProvider({children}) {
-  const navigate = useNavigate();
+  const [ cookies ] = useCookies(['auth'])
   const [loading, setLoading] = useState(false);
-  const [token, setToken] = useState(Cookies.get("auth"));
+  const [token, setToken] = useState(cookies.auth);
 
   useEffect(() => {
     // Check to see if the session is valid and delete token if not valid.
     const checkSession = async () => {
       setLoading(true);
 
-      const res = await fetch(endpoints.auth.validateToken, {
+      await fetch(endpoints.auth.validateToken, {
         method: "POST",
         credentials: "include",
         headers: {
@@ -34,16 +32,15 @@ export default function AuthProvider({children}) {
         },
       });
 
-      if (!res.ok) {
-        setToken(null);
-        navigate(routes.welcome)
-      }
-
       setLoading(false);
     }
 
-    checkSession();
-  }, [])
+    setToken(cookies.auth);
+
+    if (cookies.auth) {
+      checkSession();
+    }
+  }, [cookies.auth])
 
   // Function that signs up a user with the API and then stores the jwt in a cookie.
   const signup = async (username, email, password) => {
@@ -87,9 +84,6 @@ export default function AuthProvider({children}) {
         "Content-Type": "application/json",
       },
     });
-
-    setToken(null);
-    navigate(routes.welcome);
   }
 
   return (

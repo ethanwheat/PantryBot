@@ -1,13 +1,13 @@
 import React from 'react'
-import { Outlet } from 'react-router-dom'
-import AuthProvider from '../providers/AuthProvider';
-import ThemedNavbar from '../components/navigation/ThemedNavbar';
+import { Navigate, Outlet } from 'react-router-dom'
+import { useAuth } from '../providers/AuthProvider';
+import routes from '../constants/routes';
 
 export default function AppLayout() {
-    const { user } = useAuth();
+    const { token } = useAuth();
 
     // Redirect user to login page if not logged in.
-    if (!user) {
+    if (!token) {
         return <Navigate to={routes.index} />;
     }
 
