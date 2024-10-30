@@ -89,10 +89,11 @@ export default function AuthProvider({children}) {
   return (
     <AuthContext.Provider value={{ token, signup, login, logout }}>
         { loading ? 
-        <div className="position-absolute top-50 start-50 translate-middle">
-          <ThemedSpinner variant="primary"/>
-        </div> :
-        children}
+          <div className="position-absolute top-50 start-50 translate-middle">
+            <ThemedSpinner variant="primary"/>
+          </div> :
+          children
+        }
     </AuthContext.Provider>
   )
 }
