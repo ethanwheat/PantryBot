@@ -10,3 +10,5 @@ router.post('/onboard', authenticateToken, async (req, res) => {
     const { firstname, lastname, zipcode, diets, allergies } = req.body;
     // Add data to database here
 });
+
+module.exports = router;

@@ -10,3 +10,5 @@ router.get('/getprice', authenticateToken, (req, res) => {
     const { item } = req.body; // may need more info included in request
     // Access third party API and return pricing/location here
 });
+
+module.exports = router;
