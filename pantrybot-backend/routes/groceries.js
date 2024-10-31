@@ -11,4 +11,4 @@ router.get('/getprice', authenticateToken, (req, res) => {
     // Access third party API and return pricing/location here
 });
 
-module.exports = route;
+module.exports = router;
