@@ -117,6 +117,19 @@ Start the server:
   node index.js
 ```
 
+Endpoints: 
+
+```bash
+  POST:
+  <API_URL>/api/auth/register
+  <API_URL>/api/auth/login
+  <API_URL>/api/auth/logout
+  <API_URL>/api/auth/validateToken
+  <API_URL>/api/profile/onboard
+  GET:
+  <API_URL>/api/groceries/getprice
+```
+
 ## Authors
 
 - Gavin Kirwan [@gkirwan](https://www.github.com/gkirwan43)
