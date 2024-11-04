@@ -11,11 +11,13 @@ import Signup from './pages/auth/Signup';
 import Welcome from './pages/Welcome';
 import RootLayout from './layouts/RootLayout';
 import './app.scss';
-import Error from './pages/error/Error';
+import Error from './pages/Error';
 import Dashboard from './pages/app/Dashboard';
 import AppLayout from './layouts/AppLayout';
 import WelcomeLayout from './layouts/WelcomeLayout';
 import AuthProvider from './providers/AuthProvider';
+import Onboarding from './pages/Onboarding';
+import OnboardingLayout from './layouts/OnboardingLayout';
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -24,6 +26,9 @@ const router = createBrowserRouter(
         <Route path="/" element={<Welcome />} />
         <Route path="login" element={<Login />} />
         <Route path="signup" element={<Signup />} />
+      </Route>
+      <Route path="/" element={<OnboardingLayout />}>
+        <Route path="onboarding" element={<Onboarding />} />
       </Route>
       <Route path="/" element={<AppLayout />}>
         <Route path="dashboard" element={<Dashboard />}/>

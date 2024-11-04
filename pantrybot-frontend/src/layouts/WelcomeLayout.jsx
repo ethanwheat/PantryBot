@@ -4,10 +4,10 @@ import routes from "../constants/routes";
 import { useAuth } from "../providers/AuthProvider";
 
 export default function WelcomeLayout() {
-  const { token } = useAuth();
+  const { session } = useAuth();
 
-  // Redirect user to login page if not logged in.
-  if (token) {
+  // Redirect user to login page if logged in.
+  if (session) {
     return <Navigate to={routes.dashboard} />;
   }
 

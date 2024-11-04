@@ -7,9 +7,16 @@ const config = require('../config');
 const User = require('../models/User');
 const authenticateToken = require('../middleware/authenticateToken');
 
-// Validate Token
-router.post("/validateToken", authenticateToken, async (req, res) => {
-    return res.json({ msg: "Valid jwt token." });
+// Validate token and get session
+router.get("/getSession", authenticateToken, async (req, res) => {
+    try {
+        const { _id, onboarded } = await User.findOne({ uid: req.uid });
+
+        res.json({ _id, username, email, onboarded });
+    } catch (err) {
+        console.error(err.message);
+        res.status(500).send('Server Error');
+    }
 })
 
 // Register Route

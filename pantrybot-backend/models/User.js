@@ -19,7 +19,7 @@ const UserSchema = new mongoose.Schema({
         required: true,
         minlength: 6
     },
-    oboarded: {
+    onboarded: {
         type: Boolean,
         default: false
     },

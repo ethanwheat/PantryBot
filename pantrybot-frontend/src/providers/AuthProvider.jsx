@@ -4,7 +4,8 @@ import ThemedSpinner from "../components/spinners/ThemedSpinner";
 import { useCookies } from 'react-cookie';
 
 const AuthContext = createContext({
-    token: null,
+    session: null,
+    refreshSession: () => null,
     signup: () => null,
     login: () => null,
     logout: () => null,
@@ -16,31 +17,36 @@ export const useAuth = () => {
 
 export default function AuthProvider({children}) {
   const [ cookies ] = useCookies(['auth'])
+  const [session, setSession] = useState();
   const [loading, setLoading] = useState(false);
-  const [token, setToken] = useState(cookies.auth);
 
   useEffect(() => {
-    // Check to see if the session is valid and delete token if not valid.
-    const checkSession = async () => {
-      setLoading(true);
-
-      await fetch(endpoints.auth.validateToken, {
-        method: "POST",
-        credentials: "include",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-
-      setLoading(false);
-    }
-
-    setToken(cookies.auth);
-
     if (cookies.auth) {
-      checkSession();
+      refreshSession();
+
+      return;
     }
+
+    setSession(null);
   }, [cookies.auth])
+
+  // Refresh the session
+  const refreshSession = async () => {
+    setLoading(true);
+
+    const res = await fetch(endpoints.auth.getSession, {
+      method: "GET",
+      credentials: "include",
+    });
+
+    if (res.ok) {
+      const data = await res.json();
+
+      setSession(data);
+    }
+
+    setLoading(false);
+  }
 
   // Function that signs up a user with the API and then stores the jwt in a cookie.
   const signup = async (username, email, password) => {
@@ -72,7 +78,7 @@ export default function AuthProvider({children}) {
 
   // Function that logins a user with the API and then stores the jwt in a cookie.
   const login = () => {
-    // Put login code here, should be simular to login.
+    // Put login code here, should be similar to login.
   }
 
   // Function to logout the user, removes the cookie, and redirects to the welcome page.
@@ -87,7 +93,7 @@ export default function AuthProvider({children}) {
   }
 
   return (
-    <AuthContext.Provider value={{ token, signup, login, logout }}>
+    <AuthContext.Provider value={{ session, refreshSession, signup, login, logout }}>
         { loading ? 
           <div className="position-absolute top-50 start-50 translate-middle">
             <ThemedSpinner variant="primary"/>

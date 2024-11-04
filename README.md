@@ -108,6 +108,7 @@ Client url is only required in production, it will default to http://localhost:5
 ```bash
   MONGO_URI=<uri_here>
   JWT_SECRET=<secret_here>
+  OPENAI_API_KEY=<openai_api_key_here>
   CLIENT_URL=http://localhost:5173
 ```
 
@@ -117,16 +118,16 @@ Start the server:
   node index.js
 ```
 
-Endpoints: 
+Endpoints:
 
 ```bash
   POST:
   <API_URL>/api/auth/register
   <API_URL>/api/auth/login
   <API_URL>/api/auth/logout
-  <API_URL>/api/auth/validateToken
   <API_URL>/api/profile/onboard
   GET:
+  <API_URL>/api/auth/getSession
   <API_URL>/api/groceries/getprice
 ```
 
