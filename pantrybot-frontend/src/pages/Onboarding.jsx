@@ -13,7 +13,7 @@ export default function Onboarding() {
       credentials: "include",
     });
 
-    // If response is ok, then refresh the user session on the frontend.
+    // If response is ok, then refresh the auth session on the frontend.
     if (res.ok) {
       refreshSession();
     }
