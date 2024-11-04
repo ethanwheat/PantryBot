@@ -78,7 +78,7 @@ export default function AuthProvider({children}) {
 
   // Function that logins a user with the API and then stores the jwt in a cookie.
   const login = () => {
-    // Put login code here, should be similar to login.
+    // Put login code here, should be similar to signup.
   }
 
   // Function to logout the user, removes the cookie, and redirects to the welcome page.
