@@ -20,6 +20,7 @@ export default function AuthProvider({children}) {
   const [session, setSession] = useState();
   const [loading, setLoading] = useState(false);
 
+  // Refresh session when auth cookie is updated, set session to null if auth cookie is invalid
   useEffect(() => {
     if (cookies.auth) {
       refreshSession();
@@ -30,7 +31,7 @@ export default function AuthProvider({children}) {
     setSession(null);
   }, [cookies.auth])
 
-  // Refresh the session
+  // Function that refreshes the session
   const refreshSession = async () => {
     setLoading(true);
 
