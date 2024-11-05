@@ -22,15 +22,15 @@ import OnboardingLayout from './layouts/OnboardingLayout';
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path="/" element={<RootLayout />} errorElement={<Error />}>
-      <Route path="/" element={<WelcomeLayout />}>
+      <Route element={<WelcomeLayout />}>
         <Route path="/" element={<Welcome />} />
         <Route path="login" element={<Login />} />
         <Route path="signup" element={<Signup />} />
       </Route>
-      <Route path="/" element={<OnboardingLayout />}>
+      <Route element={<OnboardingLayout />}>
         <Route path="onboarding" element={<Onboarding />} />
       </Route>
-      <Route path="/" element={<AppLayout />}>
+      <Route element={<AppLayout />}>
         <Route path="dashboard" element={<Dashboard />}/>
       </Route>
     </Route>
