@@ -10,7 +10,7 @@ const authenticateToken = require('../middleware/authenticateToken');
 // Validate token and get session
 router.get("/getSession", authenticateToken, async (req, res) => {
     try {
-        const { _id, username, email, onboarded } = await User.findOne({ uid: req.uid });
+        const { _id, username, email, onboarded } = await User.findOne({ _id: req.user.id });
 
         res.json({ _id, username, email, onboarded });
     } catch (err) {
