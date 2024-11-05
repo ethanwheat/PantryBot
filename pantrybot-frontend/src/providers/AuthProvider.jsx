@@ -29,25 +29,31 @@ export default function AuthProvider({children}) {
     }
 
     setSession(null);
-    setLoading(null)
+    setLoading(false)
   }, [cookies.auth])
 
   // Function that refreshes the session
   const refreshSession = async () => {
     setLoading(true);
 
-    const res = await fetch(endpoints.auth.getSession, {
-      method: "GET",
-      credentials: "include",
-    });
-
-    if (res.ok) {
-      const data = await res.json();
-
-      setSession(data);
+    try {
+      const res = await fetch(endpoints.auth.getSession, {
+        method: "GET",
+        credentials: "include",
+      });
+  
+      if (res.ok) {
+        const data = await res.json();
+  
+        setSession(data);
+      } else {
+        throw new Error("Session is invalid or expired.")
+      }
+    } catch (e) {
+      throw new Error("Failed to refresh session: " + e.message);
+    } finally {
+      setLoading(false);
     }
-
-    setLoading(false);
   }
 
   // Function that signs up a user with the API and then stores the jwt in a cookie.
@@ -85,13 +91,17 @@ export default function AuthProvider({children}) {
 
   // Function to logout the user, removes the cookie, and redirects to the welcome page.
   const logout = async () => {
-    await fetch(endpoints.auth.logout, {
-      method: "POST",
-      credentials: "include",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
+    try {
+      await fetch(endpoints.auth.logout, {
+        method: "POST",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+    } catch (e) {
+      throw new Error("Failed to logout session: " + e.message);
+    }
   }
 
   return (
