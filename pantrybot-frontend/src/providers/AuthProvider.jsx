@@ -84,10 +84,34 @@ export default function AuthProvider({children}) {
     }
   }
 
-  // Function that logins a user with the API and then stores the jwt in a cookie.
-  const login = () => {
-    // Put login code here, should be similar to signup.
+// Function that logs in a user with the API and then stores the JWT in a cookie.
+const login = async (username, password) => {
+  try {
+    const res = await fetch(endpoints.auth.login, {
+      method: "POST",
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ userORemail: username, password })
+    });
+
+    if (!res.ok) {
+      if (res.status === 400) {
+        const { msg } = await res.json();
+
+        return { errorMessage: msg };
+      }
+
+      throw new Error(res.statusText);
+    }
+
+    return { errorMessage: null }; // Login was successful, no error message
+  } catch (e) {
+    return { errorMessage: "Something went wrong." };
   }
+};
+
 
   // Function to logout the user, removes the cookie, and redirects to the welcome page.
   const logout = async () => {
