@@ -15,7 +15,7 @@ export default function Login() {
     formState: { errors },
   } = useForm({
     defaultValues: {
-      username: "",
+      usernameOrEmail: "",
       password: "",
     },
   });
@@ -25,13 +25,13 @@ export default function Login() {
   const [loading, setLoading] = useState(false);
 
   // Function to handle when the form is submitted without errors on the client side
-  const onSubmit = async ({ username, password }) => {
+  const onSubmit = async ({ usernameOrEmail, password }) => {
     setLoading(true);
 
-    const { errorMessage } = await login(username, password);
+    const { errorMessage } = await login(usernameOrEmail, password);
 
     if (errorMessage) {
-      setError("username");
+      setError("usernameOrEmail");
       setError("password", {
         type: "manual",
         message: errorMessage
@@ -56,30 +56,26 @@ export default function Login() {
               className="d-flex flex-column gap-2"
             >
               <Form.Group id="formUsername">
-                <Form.Label>Username</Form.Label>
+                <Form.Label>Username or Email</Form.Label>
                 <Controller
-                  name="username"
+                  name="usernameOrEmail"
                   control={control}
                   rules={{
-                    required: "A username is required.",
-                    minLength: {
-                      value: 6,
-                      message: "Username must be 6 characters or longer.",
-                    },
+                    required: "A username or email is required.",
                   }}
                   render={({ field }) => (
                     <Form.Control
                       type="text"
-                      placeholder="Username here"
-                      maxLength={12}
+                      placeholder="Username or email here"
+                      maxLength={256}
                       disabled={loading}
-                      isInvalid={errors.username ? true : false}
+                      isInvalid={errors.usernameOrEmail ? true : false}
                       {...field}
                     />
                   )}
                 />
                 <Form.Control.Feedback type="invalid">
-                  {errors?.username?.message}
+                  {errors?.usernameOrEmail?.message}
                 </Form.Control.Feedback>
               </Form.Group>
               <Form.Group id="formPassword">
@@ -89,10 +85,6 @@ export default function Login() {
                   control={control}
                   rules={{
                     required: "A password is required.",
-                    minLength: {
-                      value: 6,
-                      message: "Password must be 6 characters or longer.",
-                    },
                   }}
                   render={({ field }) => (
                     <Form.Control
