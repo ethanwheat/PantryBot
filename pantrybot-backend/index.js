@@ -12,7 +12,7 @@ const recipeLookupRoutes = require('./routes/recipeLookup');
 const app = express();
 
 const corsOptions = {
-    origin: process.env.CLIENT_URL || "http://localhost:5173",
+    origin: config.clientURL || "http://localhost:5173",
     credentials: true
 }
 
