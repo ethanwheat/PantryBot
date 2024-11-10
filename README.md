@@ -109,6 +109,7 @@ Client url is only required in production, it will default to http://localhost:5
   MONGO_URI=<uri_here>
   JWT_SECRET=<secret_here>
   OPENAI_API_KEY=<openai_api_key_here>
+  FDC_API=<fdc_api_key_here>
   CLIENT_URL=http://localhost:5173
 ```
 
@@ -128,7 +129,9 @@ Endpoints:
   <API_URL>/api/profile/onboard
   GET:
   <API_URL>/api/auth/getSession
+  <API_URL>/api/groceries/search
   <API_URL>/api/groceries/getprice
+  <API_URL>/api/recipeLookup
 ```
 
 ## Authors
