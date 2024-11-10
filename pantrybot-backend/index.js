@@ -5,6 +5,7 @@ const cors = require('cors');
 const cookieParser = require("cookie-parser");
 const config = require('./config');
 const authRoutes = require('./routes/auth');
+const placesRoutes = require('./routes/placesRoutes');
 const profileRoutes = require('./routes/profile');
 const groceryRoutes = require('./routes/groceries');
 const recipeLookupRoutes = require('./routes/recipeLookup');
@@ -25,6 +26,7 @@ mongoose.connect(config.mongoURI)
     .catch(err => console.error(err));
 
 app.use('/api/auth', authRoutes);
+app.use('/api/places', placesRoutes);  // API route for Google Places
 app.use('/api/profile', profileRoutes);
 app.use('/api/groceries', groceryRoutes);
 app.use('/api/recipeLookup', recipeLookupRoutes);
