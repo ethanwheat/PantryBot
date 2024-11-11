@@ -24,10 +24,12 @@ const UserSchema = new mongoose.Schema({
         default: false
     },
     profile: {
-        firstname: String,
-        lastname: String,
-        zipcode: String,
-    }
+        firstname: { type: String },
+        lastname: { type: String },
+        zipcode: { type: String },
+        diet_res: { type: Array, default: [] },
+        allergies: { type: Array, default: [] },
+    },
 });
 
 module.exports = mongoose.model('User', UserSchema);

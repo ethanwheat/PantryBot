@@ -40,8 +40,15 @@ export default function Signup() {
         type: "manual",
         message: errorMessage
       });
+    }else {
+      // Redirect based on the onboarded status
+      if (onboarded) {
+        navigate("/dashboard"); // User is onboarded, go to dashboard
+      } else {
+        navigate("/onboarding"); // User is not onboarded, go to onboarding
+      }
     }
-
+    
     setLoading(false);
   };
 
