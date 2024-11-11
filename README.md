@@ -102,6 +102,8 @@ Install node packages:
   npm install
 ```
 
+Add a .env file and populate the following fields:
+
 ```bash
   MONGO_URI=<uri_here>
   JWT_SECRET=<secret_here>
