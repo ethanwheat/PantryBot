@@ -5,7 +5,7 @@ const User = require('../models/User');
 const authenticateToken = require('../middleware/authenticateToken');
 
 router.post('/onboard', authenticateToken, async (req, res) => {
-    const { firstname, lastname, zipcode, diets, allergies } = req.body;
+    const { firstName, lastName, zipCode, diets, allergies } = req.body;
 
     console.log("Received data:", req.body); // Log the incoming data
 
@@ -15,9 +15,9 @@ router.post('/onboard', authenticateToken, async (req, res) => {
         const updateData = {
             onboarded: true,
             profile: {
-                firstname,
-                lastname,
-                zipcode,
+                firstName,
+                lastName,
+                zipCode,
                 diet_res: diets || [],
                 allergies: allergies || []
             }

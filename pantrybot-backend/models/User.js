@@ -24,9 +24,9 @@ const UserSchema = new mongoose.Schema({
         default: false
     },
     profile: {
-        firstname: { type: String },
-        lastname: { type: String },
-        zipcode: { type: String },
+        firstName: { type: String },
+        lastName: { type: String },
+        zipCode: { type: String },
         diet_res: { type: Array, default: [] },
         allergies: { type: Array, default: [] },
     },
