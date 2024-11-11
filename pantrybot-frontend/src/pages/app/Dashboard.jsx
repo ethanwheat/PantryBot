@@ -3,10 +3,13 @@ import { Button, Container } from "react-bootstrap";
 import { useAuth } from "../../providers/AuthProvider";
 
 export default function Dashboard() {
-  const { session: { _id, username, email, onboarded }, logout } = useAuth();
+  const {
+    session: { _id, username, email, onboarded },
+    logout,
+  } = useAuth();
 
   return (
-    <Container>
+    <Container style={{ height: "100rem" }}>
       <h1>Dashboard</h1>
       <p>Id: {_id}</p>
       <p>Username: {username}</p>
