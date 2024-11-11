@@ -1,10 +1,23 @@
-// backend/routes/auth.js
+// pantrybot-backend/routes/auth.js
 const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const config = require('../config');
 const User = require('../models/User');
+const authenticateToken = require('../middleware/authenticateToken');
+
+// Validate token and get session
+router.get("/getSession", authenticateToken, async (req, res) => {
+    try {
+        const { _id, username, email, onboarded } = await User.findOne({ _id: req.user.id });
+
+        res.json({ _id, username, email, onboarded });
+    } catch (err) {
+        console.error(err.message);
+        res.status(500).send('Server Error');
+    }
+})
 
 // Register Route
 router.post('/register', async (req, res) => {
@@ -34,10 +47,17 @@ router.post('/register', async (req, res) => {
             user: { id: user.id }
         };
 
-        jwt.sign(payload, config.jwtSecret, { expiresIn: 3600 }, 
+        // In seconds
+        const expiresIn = 3600
+
+        jwt.sign(payload, config.jwtSecret, { expiresIn }, 
         (err, token) => {
             if (err) throw err;
-            res.json({ token });
+            res.cookie("auth", token, {
+                maxAge: expiresIn * 100,
+                secure: true
+            });
+            res.json({ msg: "User created successfully."});
         });
     } catch (err) {
         console.error(err.message);
@@ -76,15 +96,32 @@ router.post('/login', async (req, res) => {
             }
         };
 
-        jwt.sign(payload, config.jwtSecret, { expiresIn: 3600 }, 
+        // In seconds
+        const expiresIn = 3600
+
+        jwt.sign(payload, config.jwtSecret, { expiresIn }, 
         (err, token) => {
             if (err) throw err;
-            res.json({ token });
+            res.cookie("auth", token, {
+                maxAge: expiresIn * 100,
+                secure: true
+            });
+            res.json({ msg: "User logged in successfully."});
         });
     } catch (err) {
         console.error(err.message);
         res.status(500).send('Server Error');
     }
 });
+
+router.post("/logout", authenticateToken, async (req, res) => {
+    try {
+        res.clearCookie("auth");
+        res.json({ msg: "Successfully logged out." });
+    } catch (err) {
+        console.error(err.message);
+        res.status(500).send('Server Error');
+    }
+})
 
 module.exports = router;
