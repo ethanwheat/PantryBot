@@ -108,9 +108,10 @@ Client url is only required in production, it will default to http://localhost:5
 ```bash
   MONGO_URI=<uri_here>
   JWT_SECRET=<secret_here>
+  CLIENT_URL=http://localhost:5173
   OPENAI_API_KEY=<openai_api_key_here>
   FDC_API_KEY=<fdc_api_key_here>
-  CLIENT_URL=http://localhost:5173
+  GOOGLE_PLACES_API_KEY=<google_places_api_key_here>
 ```
 
 Start the server:
