@@ -9,10 +9,10 @@ const endpoints = {
         getSession: apiUrl + "/api/auth/getSession",
         register: apiUrl + "/api/auth/register",
         login: apiUrl + "/api/auth/login",
-        logout: apiUrl + "/api/auth/logout"
+        logout: apiUrl + "/api/auth/logout",
     },
     profile: {
-        tempOnboard: apiUrl + "/api/profile/tempOnboard",
+        onboard: apiUrl + "/api/profile/onboard"
     }
 }
 
