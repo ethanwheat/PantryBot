@@ -1,4 +1,4 @@
-// pantrybot-backend/models/User.js
+// backend/models/User.js
 const mongoose = require('mongoose');
 
 const UserSchema = new mongoose.Schema({
@@ -19,7 +19,7 @@ const UserSchema = new mongoose.Schema({
         required: true,
         minlength: 6
     },
-    onboarded: {
+    oboarded: {
         type: Boolean,
         default: false
     },

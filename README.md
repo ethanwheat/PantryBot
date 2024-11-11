@@ -16,7 +16,7 @@ Web application that lets users search pantry-based recipes with filters, add mi
 
 **Documentation:**
 
-PantryBot frontend uses React, Vite, Bootstrap, React Router, React Hook Form, and React-Cookie.
+PantryBot frontend uses React, Vite, Bootstrap, React Router, React Hook Form, and JS-Cookie.
 
 Frontend uses React.
 
@@ -40,9 +40,9 @@ React hook form is used for form validation.
 
 [React Hook Form Documentation](https://www.react-hook-form.com/)
 
-React-Cookie is used to create and get cookies.
+JS-Cookie is used to create and get cookies.
 
-[React-Cookie Documentation](https://www.npmjs.com/package/react-cookie)
+[JS-Cookie Documentation](https://github.com/js-cookie/js-cookie)
 
 **Styling Components:**
 
@@ -72,12 +72,6 @@ Install node packages:
   npm install
 ```
 
-Add a .env file and populate the following fields:
-
-```bash
-  API_URL=<url_here>
-```
-
 Run development server:
 
 ```bash
@@ -103,35 +97,16 @@ Install node packages:
 ```
 
 Add a .env file and populate the following fields:
-Client url is only required in production, it will default to http://localhost:5173 if left empty.
 
 ```bash
   MONGO_URI=<uri_here>
   JWT_SECRET=<secret_here>
-  OPENAI_API_KEY=<openai_api_key_here>
-  FDC_API_KEY=<fdc_api_key_here>
-  CLIENT_URL=http://localhost:5173
 ```
 
 Start the server:
 
 ```bash
   node index.js
-```
-
-Endpoints:
-
-```bash
-  POST:
-  <API_URL>/api/auth/register
-  <API_URL>/api/auth/login
-  <API_URL>/api/auth/logout
-  <API_URL>/api/profile/onboard
-  GET:
-  <API_URL>/api/auth/getSession
-  <API_URL>/api/groceries/search
-  <API_URL>/api/groceries/getprice
-  <API_URL>/api/recipeLookup
 ```
 
 ## Authors

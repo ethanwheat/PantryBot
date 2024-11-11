@@ -6,13 +6,8 @@ if (!apiUrl) {
 
 const endpoints = {
     auth: {
-        getSession: apiUrl + "/api/auth/getSession",
         register: apiUrl + "/api/auth/register",
-        login: apiUrl + "/api/auth/login",
-        logout: apiUrl + "/api/auth/logout"
-    },
-    profile: {
-        tempOnboard: apiUrl + "/api/profile/tempOnboard",
+        login: apiUrl + "/api/auth/login"
     }
 }
 

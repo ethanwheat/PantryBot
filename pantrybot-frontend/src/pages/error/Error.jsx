@@ -1,6 +1,6 @@
 import { useRouteError } from "react-router-dom";
 import { Container } from "react-bootstrap";
-import ThemedNavbar from "../components/navigation/ThemedNavbar";
+import ThemedNavbar from "../../components/navigation/ThemedNavbar";
 
 export default function Error() {
   const error = useRouteError();

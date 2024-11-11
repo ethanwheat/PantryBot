@@ -8,13 +8,13 @@ import images from '../../constants/images';
 import { useAuth } from '../../providers/AuthProvider';
 
 export default function ThemedNavbar() {
-  const { session } = useAuth();
+  const { user } = useAuth();
 
   return (
     <Navbar expand="sm" className="bg-body-tertiary shadow" style={{ minHeight: "75px" }}>
       <Container>
         <Navbar.Brand as={Link} to={routes.index}><Image src={images.logo} style={{ width: "10rem" }} /></Navbar.Brand>
-        { !session && (
+        { !user && (
           <>
             <Navbar.Toggle aria-controls="navbarScroll" />
             <Navbar.Collapse className="justify-content-end">
