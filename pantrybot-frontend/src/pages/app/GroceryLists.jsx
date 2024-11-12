@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 import { Button } from "react-bootstrap";
 import { ThreeDotsVertical } from "react-bootstrap-icons";
-import ThemedAccordian from "../../components/accordian/ThemedAccordian";
+import ThemedAccordian from "../../components/accordians/ThemedAccordian";
 
 export default function GroceryLists() {
   const mockGroceryLists = [
