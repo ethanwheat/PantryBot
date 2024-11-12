@@ -20,7 +20,7 @@ export default function GroceryLists() {
     },
     {
       id: 1,
-      name: "Grocery List 1",
+      name: "Grocery List 2",
       date: "11/12/24",
       items: [
         {
@@ -33,7 +33,7 @@ export default function GroceryLists() {
     },
     {
       id: 2,
-      name: "Grocery List 1",
+      name: "Grocery List 3",
       date: "11/12/24",
       items: [
         {
