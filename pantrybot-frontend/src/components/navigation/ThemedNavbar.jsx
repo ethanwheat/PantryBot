@@ -46,14 +46,14 @@ export default function ThemedNavbar() {
           )}
         </Container>
       </Navbar>
-      <Offcanvas show={show} onHide={() => setShow(false)}>
+      <Offcanvas show={show} onHide={() => setShow(false)} className="bg-body-tertiary">
         <Offcanvas.Header closeButton>
           <Offcanvas.Title>
             <Image src={images.logo} style={{ width: "10rem" }} />
           </Offcanvas.Title>
         </Offcanvas.Header>
         <Offcanvas.Body>
-          <Sidebar />
+          <Sidebar onSelect={() => setShow(false)}/>
         </Offcanvas.Body>
       </Offcanvas>
     </>
