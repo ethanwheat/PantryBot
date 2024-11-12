@@ -16,7 +16,7 @@ Web application that lets users search pantry-based recipes with filters, add mi
 
 **Documentation:**
 
-PantryBot frontend uses React, Vite, Bootstrap, React Router, React Hook Form, and React-Cookie.
+PantryBot frontend uses React, Vite, Bootstrap, React Router, React Hook Form, React-Cookie, React-Bootstrap-Icons.
 
 Frontend uses React.
 
@@ -49,6 +49,16 @@ React-Cookie is used to create and get cookies.
 Use these pre-styled components to create our app in the frontend:
 
 [React Bootstrap Components](https://react-bootstrap.netlify.app/docs/components/accordion)
+
+React-Bootstrap-Icons is used for icons:
+
+React-Bootstrap-Icons Documentation:
+
+[React-Bootstrap-Icons Documentation](https://www.npmjs.com/package/react-bootstrap-icons)
+
+Use icons listed here:
+
+[Bootstrap Icons](https://icons.getbootstrap.com/)
 
 **Other Info:**
 

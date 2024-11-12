@@ -1,6 +1,20 @@
 $theme-colors: (
   'primary': #406b19,
-  'secondary': #b4c4a6
+  'secondary': #b4c4a6,
+  'gray': #f8f9fa,
 );
 
 @import "../node_modules/bootstrap/scss/bootstrap";
+
+.btn-inactive {
+  background-color: map-get($theme-colors, 'gray');
+  color: black;
+  
+  &:hover {
+    background-color: darken(map-get($theme-colors, 'gray'), 10%);
+  }
+  
+  &:focus {
+    box-shadow: 0 0 0 0.2rem rgba(black, 0.5);
+  }
+}

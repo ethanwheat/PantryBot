@@ -9,16 +9,13 @@ export default function Dashboard() {
   } = useAuth();
 
   return (
-    <Container style={{ height: "100rem" }}>
+    <Container fluid>
       <h1>Dashboard</h1>
       <p>Id: {_id}</p>
       <p>Username: {username}</p>
       <p>Email: {email}</p>
       <p>Onboarded: {onboarded ? "true" : "false"}</p>
       <p>Put dashboard here.</p>
-      <Button variant="primary" onClick={logout}>
-        Logout
-      </Button>
     </Container>
   );
 }

@@ -13,7 +13,7 @@ export default function OnboardingLayout() {
 
     // Redirect user if onboarded.
     if (session.onboarded) {
-        return <Navigate to={routes.dashboard} />;
+        return <Navigate to={routes.app.dashboard} />;
     }
 
     return (

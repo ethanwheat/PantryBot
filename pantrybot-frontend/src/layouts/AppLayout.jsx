@@ -30,7 +30,7 @@ export default function AppLayout() {
           className="d-none d-sm-block"
           style={{ minWidth: "17.5rem", width: "15%" }}
         />
-        <div className="flex-grow-1">
+        <div className="flex-grow-1 px-5 py-4">
           <Outlet />
         </div>
       </div>
