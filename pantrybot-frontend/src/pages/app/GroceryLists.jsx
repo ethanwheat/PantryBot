@@ -27,7 +27,7 @@ export default function GroceryLists() {
           id: 1,
           name: "Chicken",
           quantity: 1,
-          unit: "lbs,
+          unit: "lbs",
         },
       ],
     },
