@@ -18,20 +18,27 @@ import WelcomeLayout from './layouts/WelcomeLayout';
 import AuthProvider from './providers/AuthProvider';
 import Onboarding from './pages/Onboarding';
 import OnboardingLayout from './layouts/OnboardingLayout';
+import routes from './constants/routes';
+import GroceryLists from './pages/app/GroceryLists';
+import Pantry from './pages/app/Pantry';
+import Recipes from './pages/app/Recipes';
 
 const router = createBrowserRouter(
   createRoutesFromElements(
-    <Route path="/" element={<RootLayout />} errorElement={<Error />}>
+    <Route path={routes.index} element={<RootLayout />} errorElement={<Error />}>
       <Route element={<WelcomeLayout />}>
-        <Route path="/" element={<Welcome />} />
-        <Route path="login" element={<Login />} />
-        <Route path="signup" element={<Signup />} />
+        <Route path={routes.index} element={<Welcome />} />
+        <Route path={routes.login} element={<Login />} />
+        <Route path={routes.signup} element={<Signup />} />
       </Route>
       <Route element={<OnboardingLayout />}>
-        <Route path="onboarding" element={<Onboarding />} />
+        <Route path={routes.onboarding} element={<Onboarding />} />
       </Route>
       <Route element={<AppLayout />}>
-        <Route path="dashboard" element={<Dashboard />}/>
+        <Route path={routes.app.dashboard} element={<Dashboard />}/>
+        <Route path={routes.app.groceryLists} element={<GroceryLists />} />
+        <Route path={routes.app.pantry} element={<Pantry />} />
+        <Route path={routes.app.recipes} element={<Recipes />} />
       </Route>
     </Route>
   )

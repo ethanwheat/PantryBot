@@ -8,7 +8,7 @@ export default function WelcomeLayout() {
 
   // Redirect user to login page if logged in.
   if (session) {
-    return <Navigate to={routes.dashboard} />;
+    return <Navigate to={routes.app.dashboard} />;
   }
 
   return (
