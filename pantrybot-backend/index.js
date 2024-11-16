@@ -9,6 +9,8 @@ const placesRoutes = require('./routes/placesRoutes');
 const profileRoutes = require('./routes/profile');
 const groceryRoutes = require('./routes/groceries');
 const recipeLookupRoutes = require('./routes/recipeLookup');
+const groceryListRoutes = require('./routes/groceryList');
+const pantryRoutes = require('./routes/pantryRoutes');
 
 const app = express();
 
@@ -30,6 +32,7 @@ app.use('/api/places', placesRoutes);  // API route for Google Places
 app.use('/api/profile', profileRoutes);
 app.use('/api/groceries', groceryRoutes);
 app.use('/api/recipeLookup', recipeLookupRoutes);
-
+app.use('/api/groceryList', groceryListRoutes);
+app.use('/api/pantry', pantryRoutes);
 const PORT = process.env.PORT || 5001;
 app.listen(PORT, () => console.log(`Server started on port ${PORT}`));
