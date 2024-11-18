@@ -11,22 +11,40 @@ import {
   ChevronDown,
   ChevronUp,
   ThreeDotsVertical,
-  Trash,
   TrashFill,
 } from "react-bootstrap-icons";
-import EllipsisButton from "../buttons/EllipsisButton";
 import DeleteModal from "../modals/DeleteModal";
 
-export default function GroceryListAccordian({ open, list, onDelete, children }) {
+export default function GroceryListAccordian({
+  open,
+  list,
+  onDelete,
+  children,
+}) {
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+
   return (
-    <Accordion defaultActiveKey={open && 0}>
-      <Card>
-        <GroceryListAccordian.Header eventKey={0} list={list} onDelete={onDelete} />
-        <Accordion.Collapse eventKey={0}>
-          <Card.Body>{children}</Card.Body>
-        </Accordion.Collapse>
-      </Card>
-    </Accordion>
+    <>
+      <Accordion defaultActiveKey={open && 0}>
+        <Card>
+          <GroceryListAccordian.Header
+            eventKey={0}
+            list={list}
+            onDelete={() => setShowDeleteModal(true)}
+          />
+          <Accordion.Collapse eventKey={0}>
+            <Card.Body>{children}</Card.Body>
+          </Accordion.Collapse>
+        </Card>
+      </Accordion>
+      <DeleteModal
+        showModal={showDeleteModal}
+        onHideModal={() => setShowDeleteModal(false)}
+        onDelete={onDelete}
+        title={list.name}
+        text={`Are you sure you want to delete ${list.name}?`}
+      />
+    </>
   );
 }
 
@@ -36,8 +54,6 @@ GroceryListAccordian.Header = function GroceryListAccordianHeader({
   onDelete,
   list,
 }) {
-  const [showModal, setShowModal] = useState(false);
-
   const { activeEventKey } = useContext(AccordionContext);
 
   const decoratedOnClick = useAccordionButton(
@@ -71,9 +87,15 @@ GroceryListAccordian.Header = function GroceryListAccordianHeader({
           <div className="d-flex justify-content-between align-items-center">
             <div className="text-start">
               <h4 className="m-0">{list.name}</h4>
-              <p className="m-0">{new Date(list.dateCreated).toLocaleDateString()}</p>
+              <p className="m-0">
+                {new Date(list.dateCreated).toLocaleDateString()}
+              </p>
             </div>
-            {isCurrentEventKey ? <ChevronUp size={25} /> : <ChevronDown size={25} />}
+            {isCurrentEventKey ? (
+              <ChevronUp size={25} />
+            ) : (
+              <ChevronDown size={25} />
+            )}
           </div>
         </button>
         <Dropdown>
@@ -88,7 +110,7 @@ GroceryListAccordian.Header = function GroceryListAccordianHeader({
             <Dropdown.Item
               eventKey="1"
               className="d-flex align-items-center gap-2 text-danger"
-              onClick={() => setShowModal(true)}
+              onClick={onDelete}
             >
               <TrashFill />
               <p className="m-0">Delete</p>
@@ -96,13 +118,6 @@ GroceryListAccordian.Header = function GroceryListAccordianHeader({
           </Dropdown.Menu>
         </Dropdown>
       </Card.Header>
-      <DeleteModal
-        showModal={showModal}
-        onHideModal={() => setShowModal(false)}
-        onDelete={onDelete}
-        title={list.name}
-        text={`Are you sure you want to delete ${list.name}?`}
-      />
     </>
   );
 };

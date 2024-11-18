@@ -12,7 +12,7 @@ import CreateGroceryListModal from "../../components/modals/CreateGroceryListMod
 export default function GroceryLists() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [showCreateGroceryListModal, setShowCreateGroceryListModal] = useState(false);
+  const [showCreateModal, setShowCreateModal] = useState(false);
   const [groceryLists, setGroceryLists] = useState([]);
 
   const getGroceryLists = async () => {
@@ -35,13 +35,8 @@ export default function GroceryLists() {
     }
   };
 
-  const handleOnCreateGroceryList = async (
-    name = "test",
-    dateCreated = new Date(),
-    items = []
-  ) => {
+  const handleCreateGroceryList = async ({ name }) => {
     // Fetch api to create grocery list
-    try {
       const res = await fetch(endpoints.groceryLists, {
         method: "POST",
         credentials: "include",
@@ -50,28 +45,21 @@ export default function GroceryLists() {
         },
         body: JSON.stringify({
           name,
-          dateCreated,
-          items,
+          dateCreated: new Date(),
+          items: [],
         }),
       });
 
       if (res.ok) {
-        console.log("Ran");
-
         const data = await res.json();
 
         // Create grocery list
         setGroceryLists((prev) => [data, ...prev]);
       }
-    } catch (e) {
-      setError({
-        type: "modal",
-        message: "Could not create grocery list.",
-      });
-    }
+
   };
 
-  const handleOnDeleteGroceryList = async (groceryListId) => {
+  const handleDeleteGroceryList = async (groceryListId) => {
     // Fetch api to delete grocery list
     try {
       const res = await fetch(`${endpoints.groceryLists}/${groceryListId}`, {
@@ -81,7 +69,9 @@ export default function GroceryLists() {
 
       if (res.ok) {
         // Remove grocery list
-        setGroceryLists((prev) => prev.filter((list) => list._id !== groceryListId));
+        setGroceryLists((prev) =>
+          prev.filter((list) => list._id !== groceryListId)
+        );
       }
     } catch (e) {
       setError({
@@ -92,6 +82,9 @@ export default function GroceryLists() {
   };
 
   const handleQuantityChange = async (groceryListId, groceryItem, quantity) => {
+    // Store original quantity
+    let originalQuantity = quantity;
+
     // Set state to updated quantity
     setGroceryLists((prev) =>
       prev.map((list) =>
@@ -109,19 +102,43 @@ export default function GroceryLists() {
     );
 
     // Fetch api with updated quantity
-    await fetch(
-      `${endpoints.groceryLists}/${groceryListId}/items/${groceryItem._id}/quantity`,
-      {
-        method: "PUT",
-        credentials: "include",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          quantity: quantity,
-        }),
-      }
-    );
+    try {
+      await fetch(
+        `${endpoints.groceryLists}/${groceryListId}/items/${groceryItem._id}/quantity`,
+        {
+          method: "PUT",
+          credentials: "include",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            quantity: quantity,
+          }),
+        }
+      );
+    } catch (e) {
+      // Set error
+      setError({
+        type: "modal",
+        message: "Could not edit quantity.",
+      });
+
+      // Reset quantity back to what it was
+      setGroceryLists((prev) =>
+        prev.map((list) =>
+          list._id === groceryListId
+            ? {
+                ...list,
+                items: list.items.map((item) =>
+                  item._id === groceryItem._id
+                    ? { ...groceryItem, quantity: originalQuantity }
+                    : item
+                ),
+              }
+            : list
+        )
+      );
+    }
   };
 
   // Load all grocery lists
@@ -141,7 +158,7 @@ export default function GroceryLists() {
     <>
       <div className="d-flex justify-content-between align-items-center">
         <h1>Grocery Lists</h1>
-        <Button onClick={() => setShowCreateGroceryListModal(true)}>
+        <Button onClick={() => setShowCreateModal(true)}>
           Create Grocery List
         </Button>
       </div>
@@ -161,7 +178,9 @@ export default function GroceryLists() {
         ) : groceryLists.length === 0 ? (
           <div className="d-flex flex-column align-items-center py-5">
             <p className="fs-2 m-2">No grocery lists created.</p>
-            <p>Click "Create Grocery List" to create your first grocery list!</p>
+            <p>
+              Click "Create Grocery List" to create your first grocery list!
+            </p>
           </div>
         ) : (
           groceryLists.map((list, index) => (
@@ -169,12 +188,14 @@ export default function GroceryLists() {
               key={`${list._id}${index}`}
               open={index === 0}
               list={{ name: list.name, dateCreated: list.dateCreated }}
-              onDelete={() => handleOnDeleteGroceryList(list._id)}
+              onDelete={() => handleDeleteGroceryList(list._id)}
             >
               {list.items.length === 0 ? (
                 <div className="d-flex flex-column align-items-center py-1">
                   <p className="fs-4 m-2">No items in grocery list.</p>
-                  <p>Click "Add" to add your first item to your grocery list!</p>
+                  <p>
+                    Click "Add" to add your first item to your grocery list!
+                  </p>
                 </div>
               ) : (
                 <GroceryListTable>
@@ -197,9 +218,9 @@ export default function GroceryLists() {
         )}
       </div>
       <CreateGroceryListModal
-        showModal={showCreateGroceryListModal}
-        onHideModal={() => setShowCreateGroceryListModal(false)}
-        onSubmit={handleOnCreateGroceryList}
+        showModal={showCreateModal}
+        onHideModal={() => setShowCreateModal(false)}
+        onCreate={handleCreateGroceryList}
       />
       <ErrorModal
         showModal={error?.type == "modal"}
