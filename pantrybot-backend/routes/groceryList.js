@@ -6,10 +6,11 @@ const authenticateToken = require('../middleware/authenticateToken');
 
 // Create a new grocery list
 router.post('/', authenticateToken, async (req, res) => {
-    const { name, items } = req.body;
+    const { name, dateCreated, items } = req.body;
     const groceryList = new GroceryList({
         user: req.user.id, // Ensure this sets the correct user ID
         name,
+        dateCreated,
         items,
     });
 
@@ -25,7 +26,7 @@ router.post('/', authenticateToken, async (req, res) => {
 router.get('/', authenticateToken, async (req, res) => {
     try {
         // Only return grocery lists for the authenticated user
-        const groceryLists = await GroceryList.find({ user: req.user.id });
+        const groceryLists = await GroceryList.find({ user: req.user.id }).sort({ dateCreated: -1 });
         res.json(groceryLists);
     } catch (error) {
         res.status(500).json({ message: error.message });

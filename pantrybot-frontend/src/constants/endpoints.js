@@ -13,7 +13,8 @@ const endpoints = {
     },
     profile: {
         onboard: apiUrl + "/api/profile/onboard"
-    }
+    },
+    groceryLists: apiUrl + "/api/groceryList",
 }
 
 export default endpoints;
