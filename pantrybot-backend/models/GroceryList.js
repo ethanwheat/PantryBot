@@ -31,7 +31,7 @@ const GroceryListSchema = new mongoose.Schema({
     },
     dateCreated: {
         type: Date,
-        default: Date.now
+        required: true
     },
     items: [ItemSchema] 
 });
