@@ -9,31 +9,9 @@ export default function DeleteModal({ modal }) {
     error,
     show,
     data: { name },
-    onSubmit: onDelete,
+    onSubmit,
     hideModal,
-    setLoading,
-    setError,
   } = modal;
-
-  const handleDelete = async () => {
-    setError(false);
-    setLoading(true);
-
-    try {
-      await onDelete();
-      hideModal();
-    } catch (e) {
-      setError(true);
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    if (show) {
-      setError(false);
-      setLoading(false);
-    }
-  }, [show]);
 
   return (
     <>
@@ -47,7 +25,7 @@ export default function DeleteModal({ modal }) {
             <Button variant="gray" onClick={hideModal}>
               Cancel
             </Button>
-            <Button variant="danger" disabled={loading} onClick={handleDelete}>
+            <Button variant="danger" disabled={loading} onClick={onSubmit}>
               {!loading ? "Delete" : <ThemedSpinner size="sm" />}
             </Button>
           </div>

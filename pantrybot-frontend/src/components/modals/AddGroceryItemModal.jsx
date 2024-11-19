@@ -23,30 +23,17 @@ export default function addGroceryItemModal({ modal }) {
     error,
     show,
     data: { listId, listName },
-    onSubmit: addGroceryItem,
+    onSubmit,
     hideModal,
-    setLoading,
-    setError,
   } = modal;
 
-  const onSubmit = async () => {
-    setError(false);
-    setLoading(true);
-
-    try {
-      await addGroceryItem({ listId });
-      hideModal();
-    } catch (e) {
-      setError(true);
-      setLoading(false);
-    }
+  const handleAddItem = () => {
+    onSubmit({ listId });
   };
 
   useEffect(() => {
     if (show) {
       reset();
-      setError(false);
-      setLoading(false);
     }
   }, [show]);
 
@@ -88,7 +75,11 @@ export default function addGroceryItemModal({ modal }) {
             <Button variant="gray" onClick={hideModal}>
               Cancel
             </Button>
-            <Button variant="primary" disabled={loading} onClick={handleSubmit(onSubmit)}>
+            <Button
+              variant="primary"
+              disabled={loading}
+              onClick={handleSubmit(handleAddItem)}
+            >
               {!loading ? "Add" : <ThemedSpinner size="sm" />}
             </Button>
           </div>

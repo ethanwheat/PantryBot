@@ -18,34 +18,11 @@ export default function CreateGroceryListModal({ modal }) {
     },
   });
 
-  const {
-    loading,
-    error,
-    show,
-    onSubmit: createGroceryList,
-    hideModal,
-    setLoading,
-    setError,
-  } = modal;
-
-  const onSubmit = async ({ name }) => {
-    setError(false);
-    setLoading(true);
-
-    try {
-      await createGroceryList({ name });
-      hideModal();
-    } catch (e) {
-      setError(true);
-      setLoading(false);
-    }
-  };
+  const { loading, error, show, onSubmit, hideModal } = modal;
 
   useEffect(() => {
     if (show) {
       reset();
-      setError(false);
-      setLoading(false);
     }
   }, [show]);
 
@@ -87,7 +64,11 @@ export default function CreateGroceryListModal({ modal }) {
             <Button variant="gray" onClick={hideModal}>
               Cancel
             </Button>
-            <Button variant="primary" disabled={loading} onClick={handleSubmit(onSubmit)}>
+            <Button
+              variant="primary"
+              disabled={loading}
+              onClick={handleSubmit(onSubmit)}
+            >
               {!loading ? "Create" : <ThemedSpinner size="sm" />}
             </Button>
           </div>
