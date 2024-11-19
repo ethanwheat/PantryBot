@@ -91,6 +91,55 @@ export default function useGroceryLists() {
     );
   };
 
+  const changeQuantity = async ({ initialList, initialItem, quantity }) => {
+    // Change quantity of grocery item
+    setGroceryLists((prev) =>
+      prev.map((list) => {
+        if (list._id === initialList._id) {
+          return {
+            ...list,
+            items: list.items.map((item) =>
+              item._id === initialItem._id ? { ...item, quantity } : item
+            ),
+          };
+        }
+        return list;
+      })
+    );
+
+    try {
+      // Fetch api to change quantity on grocery item
+      await fetch(
+        `${endpoints.groceryLists}/${initialList._id}/items/${initialItem._id}/quantity`,
+        {
+          method: "PUT",
+          credentials: "include",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            quantity,
+          }),
+        }
+      );
+    } catch (e) {
+      // Reset quantity if there is an error
+      setGroceryLists((prev) =>
+        prev.map((list) => {
+          if (list._id === initialList._id) {
+            return {
+              ...list,
+              items: list.items.map((item) =>
+                item._id === initialItem._id ? initialItem : item
+              ),
+            };
+          }
+          return list;
+        })
+      );
+    }
+  };
+
   useEffect(() => {
     const loadGroceryLists = async () => {
       setLoading(true);
@@ -121,5 +170,6 @@ export default function useGroceryLists() {
     deleteGroceryList,
     addGroceryItem,
     deleteGroceryItem,
+    changeQuantity,
   };
 }
