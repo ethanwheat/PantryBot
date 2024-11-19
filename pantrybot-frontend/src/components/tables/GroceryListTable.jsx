@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { Button, Form, Table } from "react-bootstrap";
-import EllipsisButton from "../buttons/EllipsisButton";
+import { Dropdown, Form, Table } from "react-bootstrap";
+import { ThreeDotsVertical, TrashFill } from "react-bootstrap-icons";
 
 export default function GroceryListTable({ children }) {
   return <Table striped="columns">{children}</Table>;
@@ -24,16 +24,12 @@ GroceryListTable.Body = function GroceryListTableBody({ children }) {
   return <tbody>{children}</tbody>;
 };
 
-GroceryListTable.Item = function GroceryListTableItem({
-  item,
-  onQuantityChange,
-  onDelete,
-}) {
-  const [quantity, setQuantity] = useState(item.quantity);
+GroceryListTable.Item = function GroceryListTableItem({ item, onDeleteClick }) {
+  // const [quantity, setQuantity] = useState(item.quantity);
 
-  useEffect(() => {
-    onQuantityChange(quantity || 1);
-  }, [quantity]);
+  // useEffect(() => {
+  //   onQuantityChange(quantity || 1);
+  // }, [quantity]);
 
   return (
     <tr>
@@ -43,7 +39,7 @@ GroceryListTable.Item = function GroceryListTableItem({
         </div>
       </td>
       <td>
-        <div
+        {/* <div
           className="d-flex justify-content-center align-items-center gap-2"
           style={{ height: "2.5rem" }}
         >
@@ -69,7 +65,7 @@ GroceryListTable.Item = function GroceryListTableItem({
           >
             +
           </Button>
-        </div>
+        </div> */}
       </td>
       <td>
         <div
@@ -92,7 +88,25 @@ GroceryListTable.Item = function GroceryListTableItem({
           className="d-flex justify-content-center align-items-center"
           style={{ height: "2.5rem" }}
         >
-          <EllipsisButton size={15} />
+          <Dropdown>
+            <Dropdown.Toggle
+              variant="link"
+              className="text-black p-0 dropdown-toggle-hide"
+              id="dropdown"
+            >
+              <ThreeDotsVertical size={15} />
+            </Dropdown.Toggle>
+            <Dropdown.Menu>
+              <Dropdown.Item
+                eventKey="1"
+                className="d-flex align-items-center gap-2 text-danger"
+                onClick={onDeleteClick}
+              >
+                <TrashFill />
+                <p className="m-0">Delete</p>
+              </Dropdown.Item>
+            </Dropdown.Menu>
+          </Dropdown>
         </div>
       </td>
     </tr>

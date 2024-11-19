@@ -5,7 +5,7 @@ import Modal from "react-bootstrap/Modal";
 import { Controller, useForm } from "react-hook-form";
 import ThemedSpinner from "../spinners/ThemedSpinner";
 
-export default function CreateGroceryListModal({ modal }) {
+export default function addGroceryItemModal({ modal }) {
   // Import useForm hook and set default values to empty strings
   const {
     control,
@@ -22,18 +22,19 @@ export default function CreateGroceryListModal({ modal }) {
     loading,
     error,
     show,
-    onSubmit: createGroceryList,
+    data: { listId, listName },
+    onSubmit: addGroceryItem,
     hideModal,
     setLoading,
     setError,
   } = modal;
 
-  const onSubmit = async ({ name }) => {
+  const onSubmit = async () => {
     setError(false);
     setLoading(true);
 
     try {
-      await createGroceryList({ name });
+      await addGroceryItem({ listId });
       hideModal();
     } catch (e) {
       setError(true);
@@ -53,10 +54,10 @@ export default function CreateGroceryListModal({ modal }) {
     <>
       <Modal show={show} onHide={hideModal}>
         <Modal.Header closeButton>
-          <Modal.Title>Create Grocery List</Modal.Title>
+          <Modal.Title>Add Item to {listName}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <Form noValidate className="d-flex flex-column gap-2 px-1">
+          {/* <Form noValidate className="d-flex flex-column gap-2 px-1">
             <Form.Group id="formName">
               <Form.Label>Grocery List Name</Form.Label>
               <Controller
@@ -80,7 +81,7 @@ export default function CreateGroceryListModal({ modal }) {
                 {errors?.name?.message}
               </Form.Control.Feedback>
             </Form.Group>
-          </Form>
+          </Form> */}
         </Modal.Body>
         <Modal.Footer className="d-flex flex-column align-items-end">
           <div className="d-flex gap-2">
@@ -88,7 +89,7 @@ export default function CreateGroceryListModal({ modal }) {
               Cancel
             </Button>
             <Button variant="primary" disabled={loading} onClick={handleSubmit(onSubmit)}>
-              {!loading ? "Create" : <ThemedSpinner size="sm" />}
+              {!loading ? "Add" : <ThemedSpinner size="sm" />}
             </Button>
           </div>
           {error && <p className="text-danger">Something went wrong!</p>}
