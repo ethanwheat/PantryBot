@@ -13,41 +13,12 @@ import {
   ThreeDotsVertical,
   TrashFill,
 } from "react-bootstrap-icons";
-import GroceryListTable from "../tables/GroceryListTable";
 
-export default function GroceryListAccordian({ open, list, onDeleteClick }) {
-  const items = list.items;
-  const noItems = items.length === 0;
-
+export default function GroceryListAccordian({ open, children }) {
   return (
     <>
       <Accordion defaultActiveKey={open && 0}>
-        <Card>
-          <GroceryListAccordian.Header
-            eventKey={0}
-            list={list}
-            onDeleteClick={onDeleteClick}
-          />
-          <Accordion.Collapse eventKey={0}>
-            <Card.Body>
-              {noItems ? (
-                <div className="d-flex flex-column align-items-center py-1">
-                  <p className="fs-4 m-2">No items in grocery list.</p>
-                  <p>Click "Add" to add your first item to your grocery list!</p>
-                </div>
-              ) : (
-                <GroceryListTable>
-                  <GroceryListTable.Header />
-                  <GroceryListTable.Body>
-                    {items.map((item) => {
-                      <GroceryListTable.Item key={item._id} item={item} />;
-                    })}
-                  </GroceryListTable.Body>
-                </GroceryListTable>
-              )}
-            </Card.Body>
-          </Accordion.Collapse>
-        </Card>
+        <Card>{children}</Card>
       </Accordion>
     </>
   );
@@ -75,8 +46,7 @@ GroceryListAccordian.Header = function GroceryListAccordianHeader({
           isCurrentEventKey && "bg-secondary"
         }`}
       >
-        <button
-          type="button"
+        <Button
           className="h-100 w-100"
           style={{
             background: "none",
@@ -96,7 +66,7 @@ GroceryListAccordian.Header = function GroceryListAccordianHeader({
             </div>
             {isCurrentEventKey ? <ChevronUp size={25} /> : <ChevronDown size={25} />}
           </div>
-        </button>
+        </Button>
         <Dropdown>
           <Dropdown.Toggle
             variant="link"
@@ -119,4 +89,23 @@ GroceryListAccordian.Header = function GroceryListAccordianHeader({
       </Card.Header>
     </>
   );
+};
+
+GroceryListAccordian.Collapse = function GroceryListAccordianCollapse({
+  children,
+  ...otherProps
+}) {
+  return (
+    <Accordion.Collapse {...otherProps}>
+      <div>{children}</div>
+    </Accordion.Collapse>
+  );
+};
+
+GroceryListAccordian.Body = function GroceryListAccordianBody({ children }) {
+  return <Card.Body>{children}</Card.Body>;
+};
+
+GroceryListAccordian.Footer = function GroceryListAccordianFooter({ children }) {
+  return <Card.Footer>{children}</Card.Footer>;
 };

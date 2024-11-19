@@ -38,6 +38,59 @@ export default function useGroceryLists() {
     setGroceryLists((prev) => prev.filter((list) => list._id !== id));
   };
 
+  const addGroceryItem = async ({ listId }) => {
+    // Fetch api to add grocery item
+    const res = await fetch(`${endpoints.groceryLists}/${listId}/items`, {
+      method: "POST",
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        name: "test",
+        quantity: 1,
+        unit: "l",
+      }),
+    });
+
+    const data = await res.json();
+    const items = data.items;
+
+    // Add grocery item
+    setGroceryLists((prev) =>
+      prev.map((list) => {
+        if (list._id === listId) {
+          return {
+            ...list,
+            items,
+          };
+        }
+        return list;
+      })
+    );
+  };
+
+  const deleteGroceryItem = async ({ listId, itemId }) => {
+    // Fetch api to delete grocery item
+    await fetch(`${endpoints.groceryLists}/${listId}/items/${itemId}`, {
+      method: "DELETE",
+      credentials: "include",
+    });
+
+    // Remove grocery item
+    setGroceryLists((prev) =>
+      prev.map((list) => {
+        if (list._id === listId) {
+          return {
+            ...list,
+            items: list.items.filter((item) => item._id !== itemId),
+          };
+        }
+        return list;
+      })
+    );
+  };
+
   useEffect(() => {
     const loadGroceryLists = async () => {
       setLoading(true);
@@ -60,5 +113,13 @@ export default function useGroceryLists() {
     loadGroceryLists();
   }, []);
 
-  return { loading, error, groceryLists, createGroceryList, deleteGroceryList };
+  return {
+    loading,
+    error,
+    groceryLists,
+    createGroceryList,
+    deleteGroceryList,
+    addGroceryItem,
+    deleteGroceryItem,
+  };
 }
