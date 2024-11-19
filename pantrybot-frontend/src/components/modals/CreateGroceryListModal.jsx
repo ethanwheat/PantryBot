@@ -5,17 +5,12 @@ import Modal from "react-bootstrap/Modal";
 import { Controller, useForm } from "react-hook-form";
 import ThemedSpinner from "../spinners/ThemedSpinner";
 
-export default function CreateGroceryListModal({
-  showModal,
-  onHideModal,
-  onCreate,
-}) {
+export default function CreateGroceryListModal({ show, onHide, onCreate }) {
   // Import useForm hook and set default values to empty strings
   const {
     control,
     handleSubmit,
     reset,
-    setError,
     formState: { errors },
   } = useForm({
     defaultValues: {
@@ -24,30 +19,32 @@ export default function CreateGroceryListModal({
   });
 
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(false);
 
   const onSubmit = async ({ name }) => {
+    setError(false);
     setLoading(true);
 
     try {
-      await onCreate({name});
-      reset();
+      await onCreate({ name });
+      onHide();
     } catch (e) {
-      setError("name", "Something went wrong")
-    } finally {
+      setError(true);
       setLoading(false);
     }
   };
 
-  // useEffect(() => {
-  //   if (showModal) {
-  //     reset();
-  //     setLoading(false);
-  //   }
-  // }, [showModal])
+  useEffect(() => {
+    if (show) {
+      reset();
+      setError(false);
+      setLoading(false);
+    }
+  }, [show]);
 
   return (
     <>
-      <Modal show={showModal} onHide={onHideModal}>
+      <Modal show={show} onHide={onHide}>
         <Modal.Header closeButton>
           <Modal.Title>Create Grocery List</Modal.Title>
         </Modal.Header>
@@ -78,17 +75,16 @@ export default function CreateGroceryListModal({
             </Form.Group>
           </Form>
         </Modal.Body>
-        <Modal.Footer>
-          <Button variant="gray" onClick={onHideModal}>
-            Cancel
-          </Button>
-          <Button
-            type="primary"
-            disabled={loading}
-            onClick={handleSubmit(onSubmit)}
-          >
-            {!loading ? "Create" : <ThemedSpinner size="sm" />}
-          </Button>
+        <Modal.Footer className="d-flex flex-column align-items-end">
+          <div className="d-flex gap-2">
+            <Button variant="gray" onClick={onHide}>
+              Cancel
+            </Button>
+            <Button variant="primary" disabled={loading} onClick={handleSubmit(onSubmit)}>
+              {!loading ? "Create" : <ThemedSpinner size="sm" />}
+            </Button>
+          </div>
+          {error && <p className="text-danger">Something went wrong!</p>}
         </Modal.Footer>
       </Modal>
     </>

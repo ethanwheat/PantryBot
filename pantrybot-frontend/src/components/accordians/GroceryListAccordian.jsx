@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext } from "react";
 import {
   Accordion,
   AccordionContext,
@@ -13,15 +13,11 @@ import {
   ThreeDotsVertical,
   TrashFill,
 } from "react-bootstrap-icons";
-import DeleteModal from "../modals/DeleteModal";
+import GroceryListTable from "../tables/GroceryListTable";
 
-export default function GroceryListAccordian({
-  open,
-  list,
-  onDelete,
-  children,
-}) {
-  const [showDeleteModal, setShowDeleteModal] = useState(false);
+export default function GroceryListAccordian({ open, list, onDeleteClick }) {
+  const items = list.items;
+  const noItems = items.length === 0;
 
   return (
     <>
@@ -30,20 +26,29 @@ export default function GroceryListAccordian({
           <GroceryListAccordian.Header
             eventKey={0}
             list={list}
-            onDelete={() => setShowDeleteModal(true)}
+            onDeleteClick={onDeleteClick}
           />
           <Accordion.Collapse eventKey={0}>
-            <Card.Body>{children}</Card.Body>
+            <Card.Body>
+              {noItems ? (
+                <div className="d-flex flex-column align-items-center py-1">
+                  <p className="fs-4 m-2">No items in grocery list.</p>
+                  <p>Click "Add" to add your first item to your grocery list!</p>
+                </div>
+              ) : (
+                <GroceryListTable>
+                  <GroceryListTable.Header />
+                  <GroceryListTable.Body>
+                    {items.map((item) => {
+                      <GroceryListTable.Item key={item._id} item={item} />;
+                    })}
+                  </GroceryListTable.Body>
+                </GroceryListTable>
+              )}
+            </Card.Body>
           </Accordion.Collapse>
         </Card>
       </Accordion>
-      <DeleteModal
-        showModal={showDeleteModal}
-        onHideModal={() => setShowDeleteModal(false)}
-        onDelete={onDelete}
-        title={list.name}
-        text={`Are you sure you want to delete ${list.name}?`}
-      />
     </>
   );
 }
@@ -51,7 +56,7 @@ export default function GroceryListAccordian({
 GroceryListAccordian.Header = function GroceryListAccordianHeader({
   eventKey,
   callback,
-  onDelete,
+  onDeleteClick,
   list,
 }) {
   const { activeEventKey } = useContext(AccordionContext);
@@ -87,15 +92,9 @@ GroceryListAccordian.Header = function GroceryListAccordianHeader({
           <div className="d-flex justify-content-between align-items-center">
             <div className="text-start">
               <h4 className="m-0">{list.name}</h4>
-              <p className="m-0">
-                {new Date(list.dateCreated).toLocaleDateString()}
-              </p>
+              <p className="m-0">{new Date(list.dateCreated).toLocaleDateString()}</p>
             </div>
-            {isCurrentEventKey ? (
-              <ChevronUp size={25} />
-            ) : (
-              <ChevronDown size={25} />
-            )}
+            {isCurrentEventKey ? <ChevronUp size={25} /> : <ChevronDown size={25} />}
           </div>
         </button>
         <Dropdown>
@@ -110,7 +109,7 @@ GroceryListAccordian.Header = function GroceryListAccordianHeader({
             <Dropdown.Item
               eventKey="1"
               className="d-flex align-items-center gap-2 text-danger"
-              onClick={onDelete}
+              onClick={onDeleteClick}
             >
               <TrashFill />
               <p className="m-0">Delete</p>
