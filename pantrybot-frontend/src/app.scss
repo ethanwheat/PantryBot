@@ -10,6 +10,19 @@ $theme-colors: (
 @import "../node_modules/bootstrap/scss/bootstrap";
 
 .btn-inactive {
+  background-color: white;
+  color: black;
+  
+  &:hover {
+    background-color: map-get($theme-colors, 'gray');
+  }
+  
+  &:focus {
+    box-shadow: 0 0 0 0.2rem rgba(black, 0.5);
+  }
+}
+
+.btn-sidebar-inactive {
   background-color: map-get($theme-colors, 'light-gray');
   color: black;
   

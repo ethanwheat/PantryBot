@@ -15,6 +15,9 @@ const endpoints = {
         onboard: apiUrl + "/api/profile/onboard"
     },
     groceryLists: apiUrl + "/api/groceryList",
+    groceries: {
+        search: apiUrl + "/api/groceries/search"
+    }
 }
 
 export default endpoints;

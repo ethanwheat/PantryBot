@@ -3,7 +3,7 @@ import endpoints from "../constants/endpoints";
 
 export default function useGroceryLists() {
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState();
+  const [error, setError] = useState(false);
   const [groceryLists, setGroceryLists] = useState([]);
 
   const createGroceryList = async ({ name }) => {
@@ -38,7 +38,7 @@ export default function useGroceryLists() {
     setGroceryLists((prev) => prev.filter((list) => list._id !== id));
   };
 
-  const addGroceryItem = async ({ listId }) => {
+  const addGroceryItem = async ({ listId, name }) => {
     // Fetch api to add grocery item
     const res = await fetch(`${endpoints.groceryLists}/${listId}/items`, {
       method: "POST",
@@ -47,7 +47,7 @@ export default function useGroceryLists() {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        name: "test",
+        name,
         quantity: 1,
         unit: "l",
       }),
@@ -107,37 +107,20 @@ export default function useGroceryLists() {
       })
     );
 
-    try {
-      // Fetch api to change quantity on grocery item
-      await fetch(
-        `${endpoints.groceryLists}/${initialList._id}/items/${initialItem._id}/quantity`,
-        {
-          method: "PUT",
-          credentials: "include",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            quantity,
-          }),
-        }
-      );
-    } catch (e) {
-      // Reset quantity if there is an error
-      setGroceryLists((prev) =>
-        prev.map((list) => {
-          if (list._id === initialList._id) {
-            return {
-              ...list,
-              items: list.items.map((item) =>
-                item._id === initialItem._id ? initialItem : item
-              ),
-            };
-          }
-          return list;
-        })
-      );
-    }
+    // Fetch api to change quantity on grocery item
+    await fetch(
+      `${endpoints.groceryLists}/${initialList._id}/items/${initialItem._id}/quantity`,
+      {
+        method: "PUT",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          quantity,
+        }),
+      }
+    );
   };
 
   useEffect(() => {
