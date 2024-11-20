@@ -21,6 +21,7 @@ export default function GroceryItemInputBox({
   const hasGroceries = groceryItems.length !== 0;
   const showPopup = hasQuery && isFocused;
 
+  // Lookup new grocery items when value is changed.
   const handleChange = (e) => {
     const search = e.target.value;
 
@@ -38,19 +39,23 @@ export default function GroceryItemInputBox({
     }, 500);
   };
 
+  // Set focused to true.
   const handleFocus = () => {
     setIsFocused(true);
   };
 
+  // Reset input when blurred.
   const handleBlur = () => {
     setIsFocused(false);
     setSearchQuery(value);
   };
 
+  // Update input with value when changed.
   useEffect(() => {
     setSearchQuery(value);
   }, [value]);
 
+  // Set loading to false when grocery items loaded.
   useEffect(() => {
     setLoading(false);
   }, [groceryItems]);
