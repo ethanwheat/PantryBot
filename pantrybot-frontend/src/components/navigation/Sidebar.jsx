@@ -51,7 +51,7 @@ export default function Sidebar({ onSelect }) {
             onClick={onSelect}
             size="lg"
             variant={
-              location.pathname.startsWith(link.route) ? "primary" : "inactive"
+              location.pathname.startsWith(link.route) ? "primary" : "sidebar-inactive"
             }
             className="d-flex align-items-center gap-3 rounded-0 w-100"
             style={{ height: "4rem" }}
@@ -65,12 +65,12 @@ export default function Sidebar({ onSelect }) {
         {bottomLinks.map((link) => (
           <Button
             key={link.text}
+            variant="btn-sidebar-inactive"
             onClick={() => {
               link.onClick();
               onSelect();
             }}
             size="lg"
-            variant="inactive"
             className="d-flex align-items-center gap-3 rounded-0 w-100"
             style={{ height: "4rem" }}
           >

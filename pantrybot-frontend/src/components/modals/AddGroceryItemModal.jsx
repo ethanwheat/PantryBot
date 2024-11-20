@@ -4,6 +4,7 @@ import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import { Controller, useForm } from "react-hook-form";
 import ThemedSpinner from "../spinners/ThemedSpinner";
+import GroceryItemInputBox from "../inputs/inputBoxes/GroceryItemInputBox";
 
 export default function addGroceryItemModal({ modal }) {
   // Import useForm hook and set default values to empty strings
@@ -15,6 +16,8 @@ export default function addGroceryItemModal({ modal }) {
   } = useForm({
     defaultValues: {
       name: "",
+      quantity: "",
+      unit: "",
     },
   });
 
@@ -27,8 +30,8 @@ export default function addGroceryItemModal({ modal }) {
     hideModal,
   } = modal;
 
-  const handleAddItem = () => {
-    onSubmit({ listId });
+  const handleAddItem = ({ name }) => {
+    onSubmit({ listId, name });
   };
 
   useEffect(() => {
@@ -44,31 +47,24 @@ export default function addGroceryItemModal({ modal }) {
           <Modal.Title>Add Item to {listName}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          {/* <Form noValidate className="d-flex flex-column gap-2 px-1">
-            <Form.Group id="formName">
-              <Form.Label>Grocery List Name</Form.Label>
-              <Controller
-                name="name"
-                control={control}
-                rules={{
-                  required: "A grocery list name is required.",
-                }}
-                render={({ field }) => (
-                  <Form.Control
-                    type="text"
-                    placeholder="Grocery list name here"
-                    maxLength={256}
-                    disabled={loading}
-                    isInvalid={errors.name ? true : false}
-                    {...field}
-                  />
-                )}
-              />
-              <Form.Control.Feedback type="invalid">
-                {errors?.name?.message}
-              </Form.Control.Feedback>
-            </Form.Group>
-          </Form> */}
+          <Form noValidate className="d-flex flex-column gap-2 px-1">
+            <Controller
+              name="name"
+              control={control}
+              rules={{
+                required: "A grocery list name is required.",
+              }}
+              render={({ field }) => (
+                <GroceryItemInputBox
+                  label="Grocery Item"
+                  error={errors.name}
+                  disabled={loading}
+                  value={field.value}
+                  onChange={field.onChange}
+                />
+              )}
+            />
+          </Form>
         </Modal.Body>
         <Modal.Footer className="d-flex flex-column align-items-end">
           <div className="d-flex gap-2">
