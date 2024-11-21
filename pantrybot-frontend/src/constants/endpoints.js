@@ -14,6 +14,10 @@ const endpoints = {
     profile: {
         onboard: apiUrl + "/api/profile/onboard"
     },
+    groceryLists: apiUrl + "/api/groceryList",
+    groceries: {
+        search: apiUrl + "/api/groceries/search"
+    },
     recipes: {
       add: apiUrl + "/api/recipes/add",
       get: apiUrl + "/api/recipes/"

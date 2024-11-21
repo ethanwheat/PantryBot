@@ -21,11 +21,15 @@ export default function AppLayout() {
     <>
       <div
         className="d-none d-sm-block position-fixed bg-body-tertiary shadow"
-        style={{ height: "calc(100vh - 83px)", minWidth: "17.5rem", width: "15%" }}
+        style={{
+          height: "calc(100vh - 83px)",
+          minWidth: "17.5rem",
+          width: "15%",
+        }}
       >
         <Sidebar />
       </div>
-      <div className="d-flex">
+      <div className="d-flex w-100">
         <div
           className="d-none d-sm-block"
           style={{ minWidth: "17.5rem", width: "15%" }}

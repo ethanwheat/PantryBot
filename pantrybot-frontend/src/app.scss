@@ -1,33 +1,46 @@
 $theme-colors: (
   'primary': #406b19,
   'secondary': #b4c4a6,
-  'gray': #f8f9fa,
+  'danger': #dc3545,
+  'light-gray': #f8f9fa,
+  'gray': #dae0e5,
+  'dark-gray': #bdc6d0
 );
 
 @import "../node_modules/bootstrap/scss/bootstrap";
 
 .btn-inactive {
-  background-color: map-get($theme-colors, 'gray');
+  background-color: white;
   color: black;
   
   &:hover {
-    background-color: darken(map-get($theme-colors, 'gray'), 10%);
+    background-color: map-get($theme-colors, 'gray');
   }
   
   &:focus {
     box-shadow: 0 0 0 0.2rem rgba(black, 0.5);
   }
 }
-.custom-checkbox .custom-control-input:checked ~ .custom-control-label::before {
-  background-color: green!important;
+
+.btn-sidebar-inactive {
+  background-color: map-get($theme-colors, 'light-gray');
+  color: black;
+  
+  &:hover {
+    background-color: map-get($theme-colors, 'gray');
+  }
+  
+  &:focus {
+    box-shadow: 0 0 0 0.2rem rgba(black, 0.5);
+  }
 }
 
-.custom-checkbox .custom-control-input:checked:focus ~ .custom-control-label::before {
-  box-shadow: 0 0 0 1px #fff, 0 0 0 0.2rem rgba(0, 255, 0, 0.25)
+.dropdown-item:active {
+  background-color: map-get($theme-colors, 'dark-gray');
 }
-.custom-checkbox .custom-control-input:focus ~ .custom-control-label::before {
-  box-shadow: 0 0 0 1px #fff, 0 0 0 0.2rem rgba(0, 0, 0, 0.25)
-}
-.custom-checkbox .custom-control-input:active ~ .custom-control-label::before {
-  background-color: #C8FFC8; 
+
+.dropdown-toggle-hide {
+  &::after {
+    display: none;
+  }
 }
