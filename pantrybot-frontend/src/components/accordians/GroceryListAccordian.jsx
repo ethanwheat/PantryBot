@@ -55,7 +55,9 @@ export default function GroceryListAccordian({
                 {noItems ? (
                   <div className="d-flex flex-column align-items-center py-1">
                     <p className="fs-2 m-2">No items in grocery list.</p>
-                    <p>Click "Add" to add your first item to your grocery list!</p>
+                    <p>
+                      Click "Add" to add your first item to your grocery list!
+                    </p>
                   </div>
                 ) : (
                   <GroceryListTable
@@ -109,12 +111,12 @@ GroceryListAccordian.Header = function GroceryListAccordianHeader({
   return (
     <>
       <Card.Header
-        className={`d-flex justify-content-between align-items-center gap-3 ${
+        className={`d-flex align-items-center gap-3 ${
           isCurrentEventKey && "bg-secondary"
         }`}
       >
         <Button
-          className="h-100 w-100"
+          className="flex-grow-1"
           style={{
             background: "none",
             color: "inherit",
@@ -126,12 +128,20 @@ GroceryListAccordian.Header = function GroceryListAccordianHeader({
           }}
           onClick={decoratedOnClick}
         >
-          <div className="d-flex justify-content-between align-items-center">
-            <div className="text-start">
-              <h4 className="m-0">{list.name}</h4>
-              <p className="m-0">{new Date(list.dateCreated).toLocaleDateString()}</p>
+          <div className="d-flex align-items-center gap-3">
+            <div className="flex-grow-1 text-start" style={{ width: "0rem" }}>
+              <h4 className="m-0 text-truncate">{list.name}</h4>
+              <p className="m-0 text-truncate">
+                {new Date(list.dateCreated).toLocaleDateString()}
+              </p>
             </div>
-            {isCurrentEventKey ? <ChevronUp size={25} /> : <ChevronDown size={25} />}
+            <div>
+              {isCurrentEventKey ? (
+                <ChevronUp size={25} />
+              ) : (
+                <ChevronDown size={25} />
+              )}
+            </div>
           </div>
         </Button>
         <Dropdown>

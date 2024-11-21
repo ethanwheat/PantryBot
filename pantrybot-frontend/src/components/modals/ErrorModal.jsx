@@ -12,9 +12,13 @@ export default function DeleteModal({ modal }) {
     <>
       <Modal show={show} onHide={hideModal}>
         <Modal.Header closeButton>
-          <Modal.Title className="text-danger">Something went wrong!</Modal.Title>
+          <Modal.Title className="text-danger">
+            Something went wrong!
+          </Modal.Title>
         </Modal.Header>
-        <Modal.Body>{message}</Modal.Body>
+        <Modal.Body>
+          <p className="m-0">{message}</p>
+        </Modal.Body>
         <Modal.Footer className="d-flex flex-column align-items-end">
           <div className="d-flex gap-2">
             <Button variant="gray" onClick={hideModal}>
