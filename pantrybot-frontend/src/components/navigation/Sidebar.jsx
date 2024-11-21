@@ -7,6 +7,7 @@ import {
   Box,
   BoxArrowLeft,
   HouseDoorFill,
+  Journal,
   ListTask,
 } from "react-bootstrap-icons";
 
@@ -33,7 +34,7 @@ export default function Sidebar({ onSelect }) {
     {
       text: "Recipes",
       route: routes.app.recipes,
-      icon: <ListTask size={25} />,
+      icon: <Journal size={25} />,
     },
   ];
 
