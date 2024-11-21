@@ -21,6 +21,12 @@ export default function useGroceryLists() {
       }),
     });
 
+    // Throw error if response is invalid
+    if (!res.ok) {
+      const errorMessage = await res.statusText;
+      throw new Error(errorMessage);
+    }
+
     const data = await res.json();
 
     // Create grocery list
@@ -29,16 +35,22 @@ export default function useGroceryLists() {
 
   const deleteGroceryList = async ({ id }) => {
     // Fetch api to delete grocery list
-    await fetch(`${endpoints.groceryLists}/${id}`, {
+    const res = await fetch(`${endpoints.groceryLists}/${id}`, {
       method: "DELETE",
       credentials: "include",
     });
+
+    // Throw error if response is invalid
+    if (!res.ok) {
+      const errorMessage = await res.statusText;
+      throw new Error(errorMessage);
+    }
 
     // Remove grocery list
     setGroceryLists((prev) => prev.filter((list) => list._id !== id));
   };
 
-  const addGroceryItem = async ({ listId, name }) => {
+  const addGroceryItem = async ({ listId, name, quantity, unit }) => {
     // Fetch api to add grocery item
     const res = await fetch(`${endpoints.groceryLists}/${listId}/items`, {
       method: "POST",
@@ -48,10 +60,16 @@ export default function useGroceryLists() {
       },
       body: JSON.stringify({
         name,
-        quantity: 1,
-        unit: "l",
+        quantity,
+        unit,
       }),
     });
+
+    // Throw error if response is invalid
+    if (!res.ok) {
+      const errorMessage = await res.statusText;
+      throw new Error(errorMessage);
+    }
 
     const data = await res.json();
     const items = data.items;
@@ -72,10 +90,16 @@ export default function useGroceryLists() {
 
   const deleteGroceryItem = async ({ listId, itemId }) => {
     // Fetch api to delete grocery item
-    await fetch(`${endpoints.groceryLists}/${listId}/items/${itemId}`, {
+    const res = await fetch(`${endpoints.groceryLists}/${listId}/items/${itemId}`, {
       method: "DELETE",
       credentials: "include",
     });
+
+    // Throw error if response is invalid
+    if (!res.ok) {
+      const errorMessage = await res.statusText;
+      throw new Error(errorMessage);
+    }
 
     // Remove grocery item
     setGroceryLists((prev) =>
@@ -91,15 +115,15 @@ export default function useGroceryLists() {
     );
   };
 
-  const changeQuantity = async ({ initialList, initialItem, quantity }) => {
+  const changeQuantity = async ({ listId, itemId, quantity }) => {
     // Change quantity of grocery item
     setGroceryLists((prev) =>
       prev.map((list) => {
-        if (list._id === initialList._id) {
+        if (list._id === listId) {
           return {
             ...list,
             items: list.items.map((item) =>
-              item._id === initialItem._id ? { ...item, quantity } : item
+              item._id === itemId ? { ...item, quantity } : item
             ),
           };
         }
@@ -108,8 +132,8 @@ export default function useGroceryLists() {
     );
 
     // Fetch api to change quantity on grocery item
-    await fetch(
-      `${endpoints.groceryLists}/${initialList._id}/items/${initialItem._id}/quantity`,
+    const res = await fetch(
+      `${endpoints.groceryLists}/${listId}/items/${itemId}/quantity`,
       {
         method: "PUT",
         credentials: "include",
@@ -121,6 +145,50 @@ export default function useGroceryLists() {
         }),
       }
     );
+
+    // Throw error if response is invalid
+    if (!res.ok) {
+      const errorMessage = await res.statusText;
+      throw new Error(errorMessage);
+    }
+  };
+
+  const changeInCart = async ({ listId, itemId, inCart }) => {
+    // Change inCart of grocery item
+    setGroceryLists((prev) =>
+      prev.map((list) => {
+        if (list._id === listId) {
+          return {
+            ...list,
+            items: list.items.map((item) =>
+              item._id === itemId ? { ...item, inCart } : item
+            ),
+          };
+        }
+        return list;
+      })
+    );
+
+    // Fetch api to change inCart on grocery item
+    const res = await fetch(
+      `${endpoints.groceryLists}/${listId}/items/${itemId}/inCart`,
+      {
+        method: "PUT",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          inCart,
+        }),
+      }
+    );
+
+    // Throw error if response is invalid
+    if (!res.ok) {
+      const errorMessage = await res.statusText;
+      throw new Error(errorMessage);
+    }
   };
 
   useEffect(() => {
@@ -132,6 +200,12 @@ export default function useGroceryLists() {
           method: "GET",
           credentials: "include",
         });
+
+        // Throw error if response is invalid
+        if (!res.ok) {
+          const errorMessage = await res.statusText;
+          throw new Error(errorMessage);
+        }
 
         const data = await res.json();
         setGroceryLists(data);
@@ -154,5 +228,6 @@ export default function useGroceryLists() {
     addGroceryItem,
     deleteGroceryItem,
     changeQuantity,
+    changeInCart,
   };
 }

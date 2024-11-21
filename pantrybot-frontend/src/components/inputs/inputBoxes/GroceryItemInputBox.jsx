@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { Button, Card, Dropdown, Form } from "react-bootstrap";
+import { Button, Card, Form } from "react-bootstrap";
 import { Search } from "react-bootstrap-icons";
 import useGroceryItems from "../../../hooks/UseGroceryItems";
 import ThemedSpinner from "../../spinners/ThemedSpinner";
@@ -9,23 +9,33 @@ export default function GroceryItemInputBox({
   error,
   value,
   onChange,
+  className,
+  style,
   ...otherProps
 }) {
-  const { groceryItems, error: lookupError, searchGroceryItems } = useGroceryItems();
+  const {
+    error: groceryItemsError,
+    groceryItems,
+    searchGroceryItems,
+  } = useGroceryItems();
+
   const [loading, setLoading] = useState(false);
   const [isFocused, setIsFocused] = useState(false);
   const [searchQuery, setSearchQuery] = useState(value);
   const timeoutRef = useRef(null);
 
-  const hasQuery = searchQuery !== "";
-  const hasGroceries = groceryItems.length !== 0;
-  const showPopup = hasQuery && isFocused;
+  // Determine is popup can be shown.
+  const showPopup = isFocused && searchQuery !== "" && value !== searchQuery;
 
-  // Lookup new grocery items when value is changed.
+  // Determine if there are groceries.
+  const hasGroceries = groceryItems.length !== 0;
+
+  // Set the search query.
   const handleChange = (e) => {
+    setLoading(true);
+
     const search = e.target.value;
 
-    setLoading(true);
     setSearchQuery(search);
 
     if (timeoutRef.current) {
@@ -39,32 +49,36 @@ export default function GroceryItemInputBox({
     }, 500);
   };
 
+  const handleClick = ({ item }) => {
+    onChange(item);
+  };
+
   // Set focused to true.
   const handleFocus = () => {
     setIsFocused(true);
   };
 
-  // Reset input when blurred.
+  // Set focused to false and reset search query to intial value.
   const handleBlur = () => {
     setIsFocused(false);
     setSearchQuery(value);
   };
 
-  // Update input with value when changed.
+  // Set search query to initial value when it changes.
   useEffect(() => {
     setSearchQuery(value);
   }, [value]);
 
-  // Set loading to false when grocery items loaded.
+  // Set loading to false when new grocery items are loaded.
   useEffect(() => {
     setLoading(false);
   }, [groceryItems]);
 
   return (
-    <div className="d-flex flex-column gap-1">
-      <Form.Group id="formItem">
-        {label && <Form.Label>{label}</Form.Label>}
-        <div className="position-relative">
+    <>
+      {label && <Form.Label>{label}</Form.Label>}
+      <div className="d-flex flex-column gap-1">
+        <div className={`position-relative ${className}`} style={style}>
           <Form.Control
             type="text"
             placeholder="Search grocery item"
@@ -82,33 +96,35 @@ export default function GroceryItemInputBox({
               style={{ right: ".25rem" }}
             />
           )}
-          <Form.Control.Feedback type="invalid">{error?.message}</Form.Control.Feedback>
+          {error && !showPopup && (
+            <Form.Control.Feedback type="invalid">{error?.message}</Form.Control.Feedback>
+          )}
         </div>
-      </Form.Group>
-      <div className="position-relative">
-        {showPopup && (
-          <Card className="position-absolute w-100 d-flex justify-content-center align-items-center flex-column py-1">
-            {loading ? (
-              <ThemedSpinner className="text-primary m-3" />
-            ) : lookupError ? (
-              <p className="m-3">Something went wrong!</p>
-            ) : hasGroceries ? (
-              groceryItems.map((item, index) => (
-                <Button
-                  key={index}
-                  variant="inactive"
-                  className="w-100 text-start rounded-0"
-                  onMouseDown={() => onChange(item)}
-                >
-                  {item}
-                </Button>
-              ))
-            ) : (
-              <p className="m-3">No grocery items found.</p>
-            )}
-          </Card>
-        )}
+        <div className="position-relative">
+          {showPopup && (
+            <Card className="position-absolute w-100 d-flex justify-content-center align-items-center flex-column py-1">
+              {loading ? (
+                <ThemedSpinner className="text-primary m-3" />
+              ) : groceryItemsError ? (
+                <p className="m-3">Something went wrong!</p>
+              ) : hasGroceries ? (
+                groceryItems.map((item, index) => (
+                  <Button
+                    key={index}
+                    variant="inactive"
+                    className="w-100 text-start rounded-0"
+                    onMouseDown={() => handleClick({ item })}
+                  >
+                    {item}
+                  </Button>
+                ))
+              ) : (
+                <p className="m-3">No grocery items found.</p>
+              )}
+            </Card>
+          )}
+        </div>
       </div>
-    </div>
+    </>
   );
 }

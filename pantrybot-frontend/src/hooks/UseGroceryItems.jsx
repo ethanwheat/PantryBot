@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import endpoints from "../constants/endpoints";
 
 export default function useGroceryItems() {
@@ -6,25 +6,27 @@ export default function useGroceryItems() {
   const [groceryItems, setGroceryItems] = useState([]);
 
   const searchGroceryItems = async ({ item }) => {
-    setError(false);
-
     try {
       // Fetch endpoint for search
       const res = await fetch(`${endpoints.groceries.search}/${item}`, {
         method: "GET",
       });
 
+      // Throw error if response is invalid
       if (!res.ok) {
-        throw new Error(res.statusText);
+        const errorMessage = await res.statusText;
+        throw new Error(errorMessage);
       }
 
       const data = await res.json();
 
+      setError(false);
       setGroceryItems(data);
     } catch (e) {
-      setError(true);
+      setError(e);
+      setGroceryItems([]);
     }
   };
 
-  return { groceryItems, error, searchGroceryItems };
+  return { error, groceryItems, searchGroceryItems };
 }

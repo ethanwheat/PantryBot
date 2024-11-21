@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import { Button, Dropdown, Form, Table } from "react-bootstrap";
+import React from "react";
+import { Dropdown, Form, Table } from "react-bootstrap";
 import { ThreeDotsVertical, TrashFill } from "react-bootstrap-icons";
 import DeleteModal from "../modals/DeleteModal";
 import ErrorModal from "../modals/ErrorModal";
@@ -10,23 +10,32 @@ export default function GroceryListTable({
   list,
   onDeleteGroceryItem,
   onQuantityChange,
+  onInCartChange,
 }) {
   const deleteModal = useModal();
   const errorModal = useModal();
 
   const items = list.items;
 
-  const handleQuantityChange = async (list, item, quantity) => {
+  const handleQuantityChange = async (listId, itemId, quantity) => {
     try {
-      await onQuantityChange({
-        initialList: list,
-        initialItem: item,
-        quantity,
-      });
+      await onQuantityChange({ listId, itemId, quantity });
     } catch (e) {
       errorModal.showModal({
         data: {
           message: "Could not edit quantity of grocery item.",
+        },
+      });
+    }
+  };
+
+  const handleInCartChange = async (listId, itemId, inCart) => {
+    try {
+      await onInCartChange({ listId, itemId, inCart });
+    } catch (e) {
+      errorModal.showModal({
+        data: {
+          message: "Could not edit in cart of grocery item.",
         },
       });
     }
@@ -52,18 +61,30 @@ export default function GroceryListTable({
                   className="d-flex align-items-center"
                   style={{ minHeight: "2.5rem" }}
                 >
-                  {item.name}
+                  <p className={`m-0 ${item.inCart && "text-decoration-line-through"}`}>
+                    {item.name}
+                  </p>
                 </div>
               </td>
-              <td>
-                <QuantityInputBox
-                  quantity={item.quantity}
-                  onQuantityChange={(quantity) =>
-                    handleQuantityChange(list, item, quantity)
-                  }
-                />
+              <td style={{ minWidth: "8rem" }}>
+                <div
+                  className="d-flex justify-content-center align-items-center"
+                  style={{ minHeight: "2.5rem" }}
+                >
+                  {item.inCart ? (
+                    <p className="m-0">{item.quantity}</p>
+                  ) : (
+                    <QuantityInputBox
+                      value={item.quantity}
+                      onChange={(quantity) =>
+                        handleQuantityChange(list._id, item._id, quantity)
+                      }
+                      disabled={item.inCart}
+                    />
+                  )}
+                </div>
               </td>
-              <td>
+              <td style={{ minWidth: "5rem" }}>
                 <div
                   className="d-flex justify-content-center align-items-center"
                   style={{ height: "2.5rem" }}
@@ -71,12 +92,18 @@ export default function GroceryListTable({
                   <p className="m-0">{item.unit}</p>
                 </div>
               </td>
-              <td>
+              <td style={{ minWidth: "5rem" }}>
                 <div
                   className="d-flex justify-content-center align-items-center"
                   style={{ height: "2.5rem" }}
                 >
-                  <Form.Check name="group1" type="checkbox" />
+                  <Form.Check
+                    type="checkbox"
+                    checked={item.inCart}
+                    onChange={(e) =>
+                      handleInCartChange(list._id, item._id, e.target.checked)
+                    }
+                  />
                 </div>
               </td>
               <td>

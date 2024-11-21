@@ -25,6 +25,7 @@ export default function GroceryListAccordian({
   onAddGroceryItem,
   onDeleteGroceryItem,
   onQuantityChange,
+  onInCartChange,
 }) {
   const deleteModal = useModal();
   const addModal = useModal();
@@ -54,15 +55,14 @@ export default function GroceryListAccordian({
                 {noItems ? (
                   <div className="d-flex flex-column align-items-center py-1">
                     <p className="fs-2 m-2">No items in grocery list.</p>
-                    <p>
-                      Click "Add" to add your first item to your grocery list!
-                    </p>
+                    <p>Click "Add" to add your first item to your grocery list!</p>
                   </div>
                 ) : (
                   <GroceryListTable
                     list={list}
                     onDeleteGroceryItem={onDeleteGroceryItem}
                     onQuantityChange={onQuantityChange}
+                    onInCartChange={onInCartChange}
                   />
                 )}
               </Card.Body>
@@ -129,15 +129,9 @@ GroceryListAccordian.Header = function GroceryListAccordianHeader({
           <div className="d-flex justify-content-between align-items-center">
             <div className="text-start">
               <h4 className="m-0">{list.name}</h4>
-              <p className="m-0">
-                {new Date(list.dateCreated).toLocaleDateString()}
-              </p>
+              <p className="m-0">{new Date(list.dateCreated).toLocaleDateString()}</p>
             </div>
-            {isCurrentEventKey ? (
-              <ChevronUp size={25} />
-            ) : (
-              <ChevronDown size={25} />
-            )}
+            {isCurrentEventKey ? <ChevronUp size={25} /> : <ChevronDown size={25} />}
           </div>
         </Button>
         <Dropdown>

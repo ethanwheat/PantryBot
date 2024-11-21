@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { Button } from "react-bootstrap";
 import ThemedSpinner from "../../components/spinners/ThemedSpinner";
 import useGroceryLists from "../../hooks/useGroceryLists";
@@ -16,6 +16,7 @@ export default function GroceryLists() {
     addGroceryItem,
     deleteGroceryItem,
     changeQuantity,
+    changeInCart,
   } = useGroceryLists();
   const createModal = useModal();
 
@@ -25,9 +26,7 @@ export default function GroceryLists() {
     <>
       <div className="d-flex justify-content-between align-items-center">
         <h1>Grocery Lists</h1>
-        <Button
-          onClick={() => createModal.showModal({ onSubmit: createGroceryList })}
-        >
+        <Button onClick={() => createModal.showModal({ onSubmit: createGroceryList })}>
           Create Grocery List
         </Button>
       </div>
@@ -57,6 +56,7 @@ export default function GroceryLists() {
                 onAddGroceryItem={addGroceryItem}
                 onDeleteGroceryItem={deleteGroceryItem}
                 onQuantityChange={changeQuantity}
+                onInCartChange={changeInCart}
               />
             );
           })
