@@ -13,6 +13,10 @@ const endpoints = {
     },
     profile: {
         onboard: apiUrl + "/api/profile/onboard"
+    },
+    recipes: {
+      add: apiUrl + "/api/recipes/add",
+      get: apiUrl + "/api/recipes/"
     }
 }
 

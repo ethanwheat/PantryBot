@@ -11,6 +11,7 @@ const groceryRoutes = require('./routes/groceries');
 const recipeLookupRoutes = require('./routes/recipeLookup');
 const groceryListRoutes = require('./routes/groceryList');
 const pantryRoutes = require('./routes/pantryRoutes');
+const recipeRoutes = require('./routes/recipes');
 
 const app = express();
 
@@ -34,5 +35,7 @@ app.use('/api/groceries', groceryRoutes);
 app.use('/api/recipeLookup', recipeLookupRoutes);
 app.use('/api/groceryList', groceryListRoutes);
 app.use('/api/pantry', pantryRoutes);
+app.use('/api/recipes', recipeRoutes);
+
 const PORT = process.env.PORT || 5001;
 app.listen(PORT, () => console.log(`Server started on port ${PORT}`));
