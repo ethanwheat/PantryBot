@@ -6,8 +6,8 @@ export default function QuantityInputBox({
   error,
   value,
   onChange,
-  disabled,
-  hideIncrementDecrement,
+  disabled = false,
+  hideIncrementDecrement = false,
   className,
   style,
   ...otherProps
@@ -22,7 +22,9 @@ export default function QuantityInputBox({
           <Button
             variant="none"
             className="p-0"
-            onClick={() => onChange(valueToInt > 1 ? valueToInt - 1 : valueToInt)}
+            onClick={() =>
+              onChange(valueToInt > 1 ? valueToInt - 1 : valueToInt)
+            }
           >
             -
           </Button>
@@ -38,10 +40,16 @@ export default function QuantityInputBox({
             isInvalid={error ? true : false}
             {...otherProps}
           />
-          <Form.Control.Feedback type="invalid">{error?.message}</Form.Control.Feedback>
+          <Form.Control.Feedback type="invalid">
+            {error?.message}
+          </Form.Control.Feedback>
         </div>
         {!hideIncrementDecrement && !disabled && (
-          <Button variant="none" className="p-0" onClick={() => onChange(valueToInt + 1)}>
+          <Button
+            variant="none"
+            className="p-0"
+            onClick={() => onChange(valueToInt + 1)}
+          >
             +
           </Button>
         )}
