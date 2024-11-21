@@ -65,10 +65,13 @@ export default function Sidebar({ onSelect }) {
         {bottomLinks.map((link) => (
           <Button
             key={link.text}
-            variant="btn-sidebar-inactive"
+            variant="sidebar-inactive"
             onClick={() => {
               link.onClick();
-              onSelect();
+
+              if (onSelect) {
+                onSelect();
+              }
             }}
             size="lg"
             className="d-flex align-items-center gap-3 rounded-0 w-100"

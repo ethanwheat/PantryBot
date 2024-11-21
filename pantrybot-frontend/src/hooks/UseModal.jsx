@@ -26,9 +26,12 @@ export default function useModal() {
 
     try {
       await onSubmitFn(args);
+
       hideModal();
     } catch (e) {
-      setError(true);
+      console.log(e);
+
+      setError(e);
       setLoading(false);
     }
   };

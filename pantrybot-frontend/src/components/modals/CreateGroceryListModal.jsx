@@ -33,7 +33,11 @@ export default function CreateGroceryListModal({ modal }) {
           <Modal.Title>Create Grocery List</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <Form noValidate className="d-flex flex-column gap-2 px-1">
+          <Form
+            noValidate
+            className="d-flex flex-column gap-2 px-1"
+            onSubmit={handleSubmit(onSubmit)}
+          >
             <Form.Group id="formName">
               <Form.Label>Grocery List Name</Form.Label>
               <Controller
@@ -64,11 +68,7 @@ export default function CreateGroceryListModal({ modal }) {
             <Button variant="gray" onClick={hideModal}>
               Cancel
             </Button>
-            <Button
-              variant="primary"
-              disabled={loading}
-              onClick={handleSubmit(onSubmit)}
-            >
+            <Button variant="primary" disabled={loading} onClick={handleSubmit(onSubmit)}>
               {!loading ? "Create" : <ThemedSpinner size="sm" />}
             </Button>
           </div>

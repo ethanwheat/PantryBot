@@ -117,4 +117,28 @@ router.put('/:id/items/:itemId/quantity', authenticateToken, async (req, res) =>
     }
 });
 
+// Check the inCart of an item in a grocery list
+router.put('/:id/items/:itemId/inCart', authenticateToken, async (req, res) => {
+    const { id, itemId } = req.params;
+    const { inCart } = req.body;
+
+    try {
+        const groceryList = await GroceryList.findById(id);
+        if (!groceryList) return res.status(404).json({ message: 'Grocery list not found' });
+
+        const item = groceryList.items.id(itemId);
+        if (!item) return res.status(404).json({ message: 'Item not found' });
+
+        // Update inCart
+        if (inCart !== undefined) {
+            item.inCart = inCart; // Update the inCart
+        }
+
+        await groceryList.save();
+        res.status(200).json(groceryList);
+    } catch (error) {
+        res.status(400).json({ message: error.message });
+    }
+});
+
 module.exports = router;
