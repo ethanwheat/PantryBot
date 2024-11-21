@@ -29,7 +29,7 @@ export default function CreateGroceryListModal({ modal }) {
   return (
     <>
       <Modal show={show} onHide={hideModal}>
-        <Modal.Header closeButton>
+        <Modal.Header className="text-truncate" closeButton>
           <Modal.Title>Create Grocery List</Modal.Title>
         </Modal.Header>
         <Modal.Body>
