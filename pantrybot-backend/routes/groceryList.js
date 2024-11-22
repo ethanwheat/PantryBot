@@ -6,10 +6,11 @@ const authenticateToken = require('../middleware/authenticateToken');
 
 // Create a new grocery list
 router.post('/', authenticateToken, async (req, res) => {
-    const { name, items } = req.body;
+    const { name, dateCreated, items } = req.body;
     const groceryList = new GroceryList({
         user: req.user.id, // Ensure this sets the correct user ID
         name,
+        dateCreated,
         items,
     });
 
@@ -25,7 +26,7 @@ router.post('/', authenticateToken, async (req, res) => {
 router.get('/', authenticateToken, async (req, res) => {
     try {
         // Only return grocery lists for the authenticated user
-        const groceryLists = await GroceryList.find({ user: req.user.id });
+        const groceryLists = await GroceryList.find({ user: req.user.id }).sort({ dateCreated: -1 });
         res.json(groceryLists);
     } catch (error) {
         res.status(500).json({ message: error.message });
@@ -107,6 +108,30 @@ router.put('/:id/items/:itemId/quantity', authenticateToken, async (req, res) =>
         // Update the item's quantity
         if (quantity !== undefined) {
             item.quantity = quantity; // Update the quantity
+        }
+
+        await groceryList.save();
+        res.status(200).json(groceryList);
+    } catch (error) {
+        res.status(400).json({ message: error.message });
+    }
+});
+
+// Check the inCart of an item in a grocery list
+router.put('/:id/items/:itemId/inCart', authenticateToken, async (req, res) => {
+    const { id, itemId } = req.params;
+    const { inCart } = req.body;
+
+    try {
+        const groceryList = await GroceryList.findById(id);
+        if (!groceryList) return res.status(404).json({ message: 'Grocery list not found' });
+
+        const item = groceryList.items.id(itemId);
+        if (!item) return res.status(404).json({ message: 'Item not found' });
+
+        // Update inCart
+        if (inCart !== undefined) {
+            item.inCart = inCart; // Update the inCart
         }
 
         await groceryList.save();

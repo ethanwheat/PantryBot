@@ -3,7 +3,13 @@ import { Button } from "react-bootstrap";
 import { Link, useLocation } from "react-router-dom";
 import routes from "../../constants/routes";
 import { useAuth } from "../../providers/AuthProvider";
-import { BoxArrowLeft, HouseDoorFill, ListTask } from "react-bootstrap-icons";
+import {
+  Box,
+  BoxArrowLeft,
+  HouseDoorFill,
+  Journal,
+  ListTask,
+} from "react-bootstrap-icons";
 
 export default function Sidebar({ onSelect }) {
   const location = useLocation();
@@ -23,12 +29,12 @@ export default function Sidebar({ onSelect }) {
     {
       text: "Pantry",
       route: routes.app.pantry,
-      icon: <ListTask size={25} />,
+      icon: <Box size={25} />,
     },
     {
       text: "Recipes",
       route: routes.app.recipes,
-      icon: <ListTask size={25} />,
+      icon: <Journal size={25} />,
     },
   ];
 
@@ -51,7 +57,9 @@ export default function Sidebar({ onSelect }) {
             onClick={onSelect}
             size="lg"
             variant={
-              location.pathname.startsWith(link.route) ? "primary" : "inactive"
+              location.pathname.startsWith(link.route)
+                ? "primary"
+                : "sidebar-inactive"
             }
             className="d-flex align-items-center gap-3 rounded-0 w-100"
             style={{ height: "4rem" }}
@@ -65,12 +73,15 @@ export default function Sidebar({ onSelect }) {
         {bottomLinks.map((link) => (
           <Button
             key={link.text}
+            variant="sidebar-inactive"
             onClick={() => {
               link.onClick();
-              onSelect();
+
+              if (onSelect) {
+                onSelect();
+              }
             }}
             size="lg"
-            variant="inactive"
             className="d-flex align-items-center gap-3 rounded-0 w-100"
             style={{ height: "4rem" }}
           >

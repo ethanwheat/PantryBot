@@ -7,13 +7,13 @@ const User = require('../models/User');
 const authenticateToken = require('../middleware/authenticateToken');
 // may need more or less imports
 
-router.get('/getprice', authenticateToken, (req, res) => {
-    const { item } = req.body; // may need more info included in request
+router.get('/getprice/:item', authenticateToken, (req, res) => {
+    const { item } = req.params; // may need more info included in request
     // Access third party API and return pricing/location here
 });
 
-router.get('/search', async (req, res) => {
-    const { item } = req.body;
+router.get('/search/:item', async (req, res) => {
+    const { item } = req.params;
 
     if (!item) {
         return res.status(400).json({ error: 'Please provide an item to search for.' });
@@ -23,7 +23,7 @@ router.get('/search', async (req, res) => {
         const response = await axios.get('https://api.nal.usda.gov/fdc/v1/foods/search', {
             params: {
                 query: item,
-                pageSize: 50, 
+                pageSize: 10, 
                 api_key: config.fdcKey
             }
         });

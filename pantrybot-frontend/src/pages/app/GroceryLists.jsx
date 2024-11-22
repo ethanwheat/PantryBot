@@ -1,78 +1,77 @@
-import React, { useContext } from "react";
+import React from "react";
 import { Button } from "react-bootstrap";
-import { ThreeDotsVertical } from "react-bootstrap-icons";
-import ThemedAccordian from "../../components/accordians/ThemedAccordian";
+import ThemedSpinner from "../../components/spinners/ThemedSpinner";
+import useGroceryLists from "../../hooks/useGroceryLists";
+import GroceryListAccordian from "../../components/accordians/GroceryListAccordian";
+import CreateGroceryListModal from "../../components/modals/CreateGroceryListModal";
+import useModal from "../../hooks/UseModal";
 
 export default function GroceryLists() {
-  const mockGroceryLists = [
-    {
-      id: 0,
-      name: "Grocery List 1",
-      date: "11/12/24",
-      items: [
-        {
-          id: 0,
-          name: "Chicken",
-          quantity: 1,
-          unit: "lbs",
-        },
-      ],
-    },
-    {
-      id: 1,
-      name: "Grocery List 2",
-      date: "11/12/24",
-      items: [
-        {
-          id: 1,
-          name: "Chicken",
-          quantity: 1,
-          unit: "lbs",
-        },
-      ],
-    },
-    {
-      id: 2,
-      name: "Grocery List 3",
-      date: "11/12/24",
-      items: [
-        {
-          id: 2,
-          name: "Chicken",
-          quantity: 1,
-          unit: "lbs",
-        },
-      ],
-    },
-  ];
+  const {
+    loading,
+    error,
+    groceryLists,
+    createGroceryList,
+    deleteGroceryList,
+    addGroceryItem,
+    deleteGroceryItem,
+    changeQuantity,
+    changeInCart,
+  } = useGroceryLists();
+  const createModal = useModal();
+
+  const noLists = groceryLists.length === 0;
 
   return (
     <>
       <div className="d-flex justify-content-between align-items-center">
         <h1>Grocery Lists</h1>
-        <Button>Create Grocery List</Button>
+        <Button onClick={() => createModal.showModal({ onSubmit: createGroceryList })}>
+          Create Grocery List
+        </Button>
       </div>
       <div className="my-2 d-flex flex-column gap-2">
-        {mockGroceryLists.map((list, index) => (
-          <ThemedAccordian
-            key={index}
-            open={index == 0}
-            title={
-              <div className="text-start">
-                <h4 className="m-0">{list.name}</h4>
-                <p className="m-0">{list.date}</p>
-              </div>
-            }
-            right={
-              <Button variant="link" className="text-black">
-                <ThreeDotsVertical size={25} />
-              </Button>
-            }
+        {loading ? (
+          <div
+            className="d-flex flex-column justify-content-center align-items-center"
+            style={{ height: "50vh" }}
           >
-            <h1>Test</h1>
-          </ThemedAccordian>
-        ))}
+            <ThemedSpinner variant="primary" />
+          </div>
+        ) : error ? (
+          <GroceryLists.Message title="Something went wrong!" text={error} />
+        ) : noLists ? (
+          <GroceryLists.Message
+            title="No grocery lists created."
+            text='Click "Create Grocery List" to create your first grocery list!'
+          />
+        ) : (
+          groceryLists.map((list, index) => {
+            return (
+              <GroceryListAccordian
+                key={`${list._id}${index}`}
+                list={list}
+                open={index === 0}
+                onDeleteGroceryList={deleteGroceryList}
+                onAddGroceryItem={addGroceryItem}
+                onDeleteGroceryItem={deleteGroceryItem}
+                onQuantityChange={changeQuantity}
+                onInCartChange={changeInCart}
+              />
+            );
+          })
+        )}
       </div>
+      <CreateGroceryListModal modal={createModal} />
     </>
   );
 }
+
+GroceryLists.Message = function GroceryListMessage({ title, text }) {
+  return (
+    <div className="d-flex flex-column align-items-center py-5">
+      <p className="fs-2 m-2">{title}</p>
+      <p>{text}</p>
+    </div>
+  );
+};

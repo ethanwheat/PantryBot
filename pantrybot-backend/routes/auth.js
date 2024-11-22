@@ -54,7 +54,7 @@ router.post('/register', async (req, res) => {
         (err, token) => {
             if (err) throw err;
             res.cookie("auth", token, {
-                maxAge: expiresIn * 100,
+                maxAge: expiresIn * 1000,
                 secure: true
             });
             res.json({ msg: "User created successfully."});
@@ -103,7 +103,7 @@ router.post('/login', async (req, res) => {
         (err, token) => {
             if (err) throw err;
             res.cookie("auth", token, {
-                maxAge: expiresIn * 100,
+                maxAge: expiresIn * 1000,
                 secure: true
             });
             res.json({ msg: "User logged in successfully."});
