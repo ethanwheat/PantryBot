@@ -7,15 +7,21 @@ const authenticateToken = require('../middleware/authenticateToken');
 // Get all items in the pantry
 router.get('/', authenticateToken, async (req, res) => {
     try {
-        const pantry = await Pantry.findOne({ user: req.user.id });
-        if (!pantry) return res.status(404).json({ message: 'Pantry not found' });
-        
-        res.json(pantry.items);
+      let pantry = await Pantry.findOne({ user: req.user.id });
+  
+      if (!pantry) {
+        // Create a new pantry if one doesn't exist
+        pantry = new Pantry({ user: req.user.id, items: [] });
+        await pantry.save();
+      }
+  
+      res.status(200).json(pantry.items); // Return the items in the pantry
     } catch (error) {
-        res.status(500).json({ message: error.message });
+      console.error("Error fetching pantry:", error);
+      res.status(500).json({ message: "Internal server error" });
     }
-});
-
+  });
+  
 // Add an item to the pantry
 router.post('/items', authenticateToken, async (req, res) => {
     const { name, quantity, unit } = req.body;
