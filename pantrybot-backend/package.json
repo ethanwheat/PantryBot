@@ -19,6 +19,6 @@
     "jsonwebtoken": "^9.0.2",
     "mongodb": "^6.10.0",
     "mongoose": "^8.7.2",
-    "openai": "^4.70.2"
+    "openai": "^4.73.0"
   }
 }
