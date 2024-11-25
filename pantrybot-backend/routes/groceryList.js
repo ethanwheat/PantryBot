@@ -2,6 +2,7 @@
 const express = require('express');
 const router = express.Router();
 const GroceryList = require('../models/GroceryList');
+const Pantry = require('../models/Pantry');
 const authenticateToken = require('../middleware/authenticateToken');
 const { OpenAI } = require('openai');
 require('dotenv').config();
@@ -190,12 +191,12 @@ router.post('/:id/addRecipeItems', authenticateToken, async (req, res) => {
 I have these items in the pantry: {${pantryText}}. 
 I have these items already in my grocery list: {${groceryListText}}. 
 What additional items will I need to purchase to make this recipe: {${recipeText}}? 
-Return the items in the following JSON format: 
+Return the items in JSON, do not do any code formatting or markdown. Include:
 [{ "name": "<item name>", "quantity": <quantity>, "unit": "<unit>" }]
             `;
 
             const response = await openai.chat.completions.create({
-                model: 'gpt-4',
+                model: 'gpt-4o',
                 messages: [
                     { role: 'system', content: 'You are a helpful assistant that processes recipes and grocery data and provides JSON-formatted outputs.' },
                     { role: 'user', content: query },
@@ -203,6 +204,8 @@ Return the items in the following JSON format:
                 max_tokens: 150,
                 temperature: 0.7,
             });
+
+            console.log(response.choices[0].message.content.trim())
 
             itemsToAdd = JSON.parse(response.choices[0].message.content.trim());
         }
