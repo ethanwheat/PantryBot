@@ -77,8 +77,17 @@ export default function Recipes() {
   }
 
   const handleSaveAndAdd = async () => {
-    groceryModal.showModal({});
+    setSaveError(null);
+    try {
+      await saveRecipe();
+      await loadRecipes();
+      groceryModal.showModal({});
+    } catch (e) {
+      setSaveError(e);
+    }
   }
+
+  const [groceryLists, setGroceryLists] = useState({});
 
   return (
     <Container>

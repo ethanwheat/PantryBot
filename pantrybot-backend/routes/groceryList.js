@@ -2,10 +2,14 @@
 const express = require('express');
 const router = express.Router();
 const GroceryList = require('../models/GroceryList');
+const Pantry = require('../models/Pantry');
 const authenticateToken = require('../middleware/authenticateToken');
+const { OpenAI } = require('openai');
+require('dotenv').config();
 
 // Create a new grocery list
 router.post('/', authenticateToken, async (req, res) => {
+    console.log('POST request received at /grocerylist');       //DEBUG
     const { name, dateCreated, items } = req.body;
     const groceryList = new GroceryList({
         user: req.user.id, // Ensure this sets the correct user ID
@@ -138,6 +142,82 @@ router.put('/:id/items/:itemId/inCart', authenticateToken, async (req, res) => {
         res.status(200).json(groceryList);
     } catch (error) {
         res.status(400).json({ message: error.message });
+    }
+});
+
+// Add recipe items to grocery list
+router.post('/:id/addRecipeItems', authenticateToken, async (req, res) => {
+    const { id } = req.params;
+    const { recipeItems, excludePantry, excludeGroceryList } = req.body;
+
+    try {
+        // Fetch user's pantry
+        let pantryItems = [];
+        if (excludePantry) {
+            const pantry = await Pantry.findOne({ user: req.user.id });
+            pantryItems = pantry ? pantry.items.map(item => ({
+                name: item.name.toLowerCase(),
+                quantity: item.quantity,
+                unit: item.unit,
+            })) : [];
+        }
+
+        // Fetch user's grocery list
+        let groceryListItems = [];
+        const groceryList = await GroceryList.findById(id);
+        if (!groceryList) return res.status(404).json({ message: 'Grocery list not found' });
+
+        if (excludeGroceryList) {
+            groceryListItems = groceryList.items.map(item => ({
+                name: item.name.toLowerCase(),
+                quantity: item.quantity,
+                unit: item.unit,
+            }));
+        }
+
+        // If filtering is needed, query OpenAI API
+        let itemsToAdd = recipeItems;
+        if (excludePantry || excludeGroceryList) {
+            const pantryText = pantryItems.map(item => `${item.name} (${item.quantity} ${item.unit})`).join(', ');
+            const groceryListText = groceryListItems.map(item => `${item.name} (${item.quantity} ${item.unit})`).join(', ');
+            const recipeText = recipeItems.map(item => `${item.name} (${item.quantity} ${item.unit})`).join(', ');
+
+            const query = `
+I have these items in the pantry: {${pantryText}}. 
+I have these items already in my grocery list: {${groceryListText}}. 
+What additional items will I need to purchase to make this recipe: {${recipeText}}? 
+Return the items in JSON, do not do any code formatting or markdown. Include:
+[{ "name": "<item name>", "quantity": <quantity>, "unit": "<unit>" }]
+            `;
+
+            const response = await openai.chat.completions.create({
+                model: 'gpt-4o',
+                messages: [
+                    { role: 'system', content: 'You are a helpful assistant that processes recipes and grocery data and provides JSON-formatted outputs.' },
+                    { role: 'user', content: query },
+                ],
+                max_tokens: 150,
+                temperature: 0.7,
+            });
+
+            itemsToAdd = JSON.parse(response.choices[0].message.content.trim());
+        }
+
+        // Add the filtered items to the grocery list
+        itemsToAdd.forEach(item => {
+            groceryList.items.push({
+                name: item.name,
+                quantity: item.quantity,
+                unit: item.unit,
+            });
+        });
+
+        await groceryList.save();
+        res.status(200).json(groceryList);
+
+    } catch (error) {
+        console.error('Error adding recipe items:', error.message);
+        res.status(500).json({ message: error.message });
     }
 });
 

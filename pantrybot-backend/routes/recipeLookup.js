@@ -26,7 +26,7 @@ router.get("/", authenticateToken, async (req, res) => {
                     Return the recipe details in JSON, do not do any code formatting or markdown. Include:
                     - name: the name of the recipe,
                     - description: a brief description of the recipe and steps to make it, 
-                    - ingredients: a list of ingredients needed for the recipe with the units needed (all fields required), put in this format: { name: "ingredient name", quantity: "quantity (as a float)", unit: "unit" }, 
+                    - ingredients: a list of ingredients needed for the recipe with the units needed (all fields required), put in this format: { name: "ingredient name", quantity: "quantity (as a float)", unit: "unit (cannot be empty string)" }, 
                     - estimatedTime: the total time it takes to prepare and cook the dish in minutes.
                     If you run into any errors please return in JSON format including:
                     - error: a breif description of the error. If insufficient supplies, please give the error:

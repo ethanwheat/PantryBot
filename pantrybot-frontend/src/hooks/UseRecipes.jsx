@@ -7,6 +7,7 @@ export default function useRecipes() {
   const [recipes, setRecipes] = useState([]);
   const [recipeDetails, setRecipeDetails] = useState({});
   const [searchResults, setSearchResults] = useState({});
+  const [groceryLists, setGroceryLists] = useState({});
 
   const loadRecipes = async () => {
     setLoading(true);
@@ -130,5 +131,22 @@ export default function useRecipes() {
 
   };
 
-  return { loading, error, recipes, recipeDetails, searchResults, getRecipeById, deleteRecipe, searchRecipe, saveRecipe, loadRecipes };
+  const loadGroceryLists = async () => {
+    setGroceryLists({});
+    const res = await fetch(endpoints.groceryLists, {
+      method: "GET",
+      credentials: "include",
+    });
+
+    // Throw error if response is invalid
+    if (!res.ok) {
+      const errorMessage = await res.statusText;
+      throw new Error(errorMessage);
+    }
+
+    const data = await res.json();
+    setGroceryLists(data);
+  };
+
+  return { loading, error, recipes, recipeDetails, searchResults, groceryLists, getRecipeById, deleteRecipe, searchRecipe, saveRecipe, loadRecipes, loadGroceryLists };
 }
