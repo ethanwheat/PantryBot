@@ -100,7 +100,7 @@ export default function Recipes() {
   const [groceryLists, setGroceryLists] = useState({});
 
   return (
-    <Container>
+    <div>
       <Row>
         <Col md={8} className="border-end">
           {currentContainer === 0 && (
@@ -311,6 +311,6 @@ export default function Recipes() {
       />
       <CreateRecipeModal modal={createModal} />
       <AddRecipeToListModal modal={groceryModal} />
-    </Container>
+    </div>
   );
 }
