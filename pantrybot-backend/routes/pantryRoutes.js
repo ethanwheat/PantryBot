@@ -7,18 +7,24 @@ const authenticateToken = require('../middleware/authenticateToken');
 // Get all items in the pantry
 router.get('/', authenticateToken, async (req, res) => {
     try {
-        const pantry = await Pantry.findOne({ user: req.user.id });
-        if (!pantry) return res.status(404).json({ message: 'Pantry not found' });
-        
-        res.json(pantry.items);
+      let pantry = await Pantry.findOne({ user: req.user.id }).sort({ dateCreated: -1 });
+  
+      if (!pantry) {
+        // Create a new pantry if one doesn't exist
+        pantry = new Pantry({ user: req.user.id, items: [] });
+        await pantry.save();
+      }
+  
+      res.status(200).json(pantry.items); // Return the items in the pantry
     } catch (error) {
-        res.status(500).json({ message: error.message });
+      console.error("Error fetching pantry:", error);
+      res.status(500).json({ message: "Internal server error" });
     }
-});
-
+  });
+  
 // Add an item to the pantry
 router.post('/items', authenticateToken, async (req, res) => {
-    const { name, quantity, unit } = req.body;
+    const { name, quantity, unit, dateCreated } = req.body;
 
     try {
         let pantry = await Pantry.findOne({ user: req.user.id });
@@ -26,8 +32,9 @@ router.post('/items', authenticateToken, async (req, res) => {
             pantry = new Pantry({ user: req.user.id, items: [] });
         }
 
-        pantry.items.push({ name, quantity, unit });
+        pantry.items.push({ name, quantity, unit, dateCreated });
         await pantry.save();
+        pantry.items.sort((a, b) => new Date(b.dateCreated) - new Date(a.dateCreated));
         res.status(201).json(pantry);
     } catch (error) {
         res.status(400).json({ message: error.message });
@@ -56,7 +63,7 @@ router.delete('/items/:itemId', authenticateToken, async (req, res) => {
 // Edit the quantity of an item in the pantry
 router.put('/items/:itemId/quantity', authenticateToken, async (req, res) => {
     const { itemId } = req.params;
-    const { quantity } = req.body;
+    const { increment } = req.body;
 
     try {
         const pantry = await Pantry.findOne({ user: req.user.id });
@@ -65,12 +72,12 @@ router.put('/items/:itemId/quantity', authenticateToken, async (req, res) => {
         const item = pantry.items.id(itemId);
         if (!item) return res.status(404).json({ message: 'Item not found' });
 
-        if (quantity !== undefined) {
-            item.quantity = quantity;
+        if (increment !== undefined) {
+            item.quantity += increment;
         }
 
         await pantry.save();
-        res.status(200).json(pantry);
+        res.status(200).json(pantry.items); // Return the updated items array
     } catch (error) {
         res.status(400).json({ message: error.message });
     }

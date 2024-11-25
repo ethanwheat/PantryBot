@@ -46,9 +46,7 @@ export default function addGroceryItemModal({ modal }) {
     <>
       <Modal show={show} onHide={hideModal}>
         <Modal.Header closeButton>
-          <Modal.Title className="text-truncate">
-            Add Item to {listName}
-          </Modal.Title>
+          <Modal.Title className="text-truncate">Add Item to {listName}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Form

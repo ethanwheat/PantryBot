@@ -20,9 +20,7 @@ export default function DeleteModal({ modal }) {
           <Modal.Title className="text-truncate">Delete {name}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <p className="m-0 text-break">
-            Are you sure you want to delete {name}?
-          </p>
+          <p className="m-0 text-break">Are you sure you want to delete {name}?</p>
         </Modal.Body>
         <Modal.Footer className="d-flex flex-column align-items-end">
           <div className="d-flex gap-2">

@@ -14,6 +14,12 @@ const endpoints = {
     profile: {
         onboard: apiUrl + "/api/profile/onboard"
     },
+    pantry: {
+        get: apiUrl + "/api/pantry",               // GET: fetch pantry items
+        add: apiUrl + "/api/pantry/items",         // POST: add a new item
+        updateQuantity: apiUrl + "/api/pantry/items", // PUT: update item quantity
+        delete: apiUrl + "/api/pantry/items",      // DELETE: remove an item
+    },
     groceryLists: apiUrl + "/api/groceryList",
     groceries: {
         search: apiUrl + "/api/groceries/search"

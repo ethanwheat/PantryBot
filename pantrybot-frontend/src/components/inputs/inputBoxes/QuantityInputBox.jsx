@@ -29,10 +29,12 @@ export default function QuantityInputBox({
         )}
         <div className={className} style={{ width: "4rem", ...style }}>
           <Form.Control
-            className="m-0 text-center w-100"
+            className={`m-0 w-100 ${
+              className?.includes("text-left") ? "text-left" : "text-center"
+            }`}
             value={valueToInt || ""}
             type="text"
-            onChange={(e) => onChange(parseInt(e.target.value))}
+            onClick={() => onChange(valueToInt > 1 ? valueToInt - 1 : valueToInt)}
             disabled={disabled}
             onBlur={() => !valueToInt && onChange(1)}
             isInvalid={error ? true : false}
