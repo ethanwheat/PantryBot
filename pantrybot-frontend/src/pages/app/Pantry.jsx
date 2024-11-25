@@ -22,7 +22,7 @@ export default function Pantry() {
     defaultValues: {
       name: "",
       quantity: "1",
-      unit: "units",
+      unit: "unit(s)",
     },
   });
 

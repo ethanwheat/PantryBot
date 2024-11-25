@@ -15,7 +15,7 @@ const ItemSchema = new mongoose.Schema({
     unit: {
         type: String,
         required: true,
-        enum: ['units', 'kg', 'lb', 'oz', 'g', 'l', 'ml']
+        enum: ['unit(s)', 'kg', 'lb', 'oz', 'g', 'l', 'ml']
     },
     dateCreated: {
         type: Date,

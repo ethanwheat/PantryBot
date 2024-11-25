@@ -19,7 +19,7 @@ export default function addGroceryItemModal({ modal }) {
     defaultValues: {
       name: "",
       quantity: "1",
-      unit: "units",
+      unit: "unit(s)",
     },
   });
 

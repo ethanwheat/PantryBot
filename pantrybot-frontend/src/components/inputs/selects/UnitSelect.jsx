@@ -5,7 +5,7 @@ export default function UnitSelect({ label, error, ...otherProps }) {
     <>
       {label && <Form.Label>{label}</Form.Label>}
       <Form.Select isInvalid={error ? true : false} {...otherProps}>
-        <option value="units">Units</option>
+        <option value="unit(s)">Unit(s)</option>
         <option value="kg">Kilograms (kg)</option>
         <option value="lb">Pounds (lb)</option>
         <option value="oz">Ounces (oz)</option>
