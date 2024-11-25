@@ -18,6 +18,8 @@ export default function GroceryListTable({
   const items = list.items;
 
   const handleQuantityChange = async (listId, itemId, quantity) => {
+    console.log(quantity);
+
     try {
       await onQuantityChange({ listId, itemId, quantity });
     } catch (e) {
