@@ -34,7 +34,7 @@ export default function QuantityInputBox({
             }`}
             value={valueToInt || ""}
             type="text"
-            onClick={() => onChange(valueToInt > 1 ? valueToInt - 1 : valueToInt)}
+            onChange={(e) => onChange(parseInt(e.target.value))}
             disabled={disabled}
             onBlur={() => !valueToInt && onChange(1)}
             isInvalid={error ? true : false}
