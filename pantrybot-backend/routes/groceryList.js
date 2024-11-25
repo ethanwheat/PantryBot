@@ -1,10 +1,12 @@
 // pantrybot-backend/routes/groceryList.js
 const express = require('express');
 const router = express.Router();
+const config = require('../config');
 const GroceryList = require('../models/GroceryList');
 const Pantry = require('../models/Pantry');
 const authenticateToken = require('../middleware/authenticateToken');
-const { OpenAI } = require('openai');
+const OpenAI = require('openai');
+const openai = new OpenAI({ apiKey: config.openAIKey});
 require('dotenv').config();
 
 // Create a new grocery list
