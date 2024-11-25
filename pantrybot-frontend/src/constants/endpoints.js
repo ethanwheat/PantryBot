@@ -20,7 +20,8 @@ const endpoints = {
     },
     recipes: {
       add: apiUrl + "/api/recipes/add",
-      get: apiUrl + "/api/recipes/"
+      get: apiUrl + "/api/recipes/",
+      search: apiUrl + "/api/recipeLookup"
     }
 }
 
