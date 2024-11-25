@@ -24,7 +24,7 @@ export default function AddRecipeToListModal({ modal }) {
       selectedList: "",
     },
   });
-  
+
   const { loading, error, show, onSubmit, hideModal } = modal;
 
   useEffect(() => {
@@ -84,7 +84,7 @@ export default function AddRecipeToListModal({ modal }) {
                     -- Select a List --
                   </option>
                   {groceryLists.map((list) => (
-                    <option key={list.id} value={list.id}>
+                    <option key={list._id} value={list._id}>
                       {list.name}
                     </option>
                   ))}
@@ -93,7 +93,7 @@ export default function AddRecipeToListModal({ modal }) {
             </Form>
           ) : (
             <p>No Grocery Lists Found. Create one in the "Grocery Lists" page.</p>
-          )} 
+          )}
         </Modal.Body>
         <Modal.Footer className="d-flex flex-column align-items-end">
           <div className="d-flex gap-2">
