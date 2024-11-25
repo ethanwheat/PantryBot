@@ -1,15 +1,51 @@
 import React, { useState, useEffect } from "react";
 import { Container, Table, Button, Form } from "react-bootstrap";
 import endpoints from "../../constants/endpoints";
-import GroceryItemInputBox from "../../components/inputs/inputBoxes/GroceryItemInputBox";
 
 export default function Pantry() {
-  const [pantry, setPantry] = useState([]); // Pantry items state
-  const [selectedItem, setSelectedItem] = useState(""); // Selected grocery item
-  const [quantity, setQuantity] = useState(1); // Quantity of the item
-  const [unit, setUnit] = useState("g"); // Unit of the item
+  const [pantry, setPantry] = useState([]); // Pantry data
+  const [rows, setRows] = useState([]); // JSX rows for the table
+  const [itemName, setItemName] = useState("");
+  const [quantity, setQuantity] = useState(1);
+  const [unit, setUnit] = useState("g");
 
-  // Fetch pantry items from the backend
+  // Helper to update rows when pantry changes
+  const updateRows = (updatedPantry) => {
+    if (!Array.isArray(updatedPantry)) {
+      console.error("Error: updateRows expected an array, but got:", updatedPantry);
+      return;
+    }
+
+    const newRows = updatedPantry.map((item) => (
+      <tr key={item._id}>
+        <td>{item.name}</td>
+        <td>{item.quantity}</td>
+        <td>{item.unit}</td>
+        <td>
+          <Button
+            variant="success"
+            onClick={() => handleIncreaseQuantity(item._id)}
+          >
+            +
+          </Button>
+          <Button
+            variant="warning"
+            onClick={() => handleDecreaseQuantity(item._id, item.quantity)}
+          >
+            -
+          </Button>
+          <Button
+            variant="danger"
+            onClick={() => handleDeleteItem(item._id)}
+          >
+            Delete
+          </Button>
+        </td>
+      </tr>
+    ));
+    setRows(newRows);
+  };
+
   const fetchPantry = async () => {
     try {
       const res = await fetch(endpoints.pantry.get, {
@@ -29,16 +65,16 @@ export default function Pantry() {
 
       const pantryItems = await res.json();
       setPantry(pantryItems);
+      updateRows(pantryItems); // Update rows for rendering
     } catch (error) {
       console.error("Error fetching pantry:", error);
       alert("An error occurred while fetching pantry items.");
     }
   };
 
-  // Add an item to the pantry
   const handleAddItem = async () => {
-    if (!selectedItem || quantity <= 0) {
-      alert("Please select an item and enter a valid quantity.");
+    if (!itemName.trim() || quantity <= 0) {
+      alert("Please enter a valid item name and quantity.");
       return;
     }
 
@@ -49,7 +85,7 @@ export default function Pantry() {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ name: selectedItem, quantity, unit }),
+        body: JSON.stringify({ name: itemName, quantity, unit }),
       });
 
       if (!res.ok) {
@@ -59,18 +95,21 @@ export default function Pantry() {
         return;
       }
 
-      const updatedItems = await res.json();
-      setPantry(updatedItems); // Update pantry table
-      setSelectedItem(""); // Clear input
-      setQuantity(1); // Reset quantity
-      setUnit("g"); // Reset unit
+      const updatedPantry = await res.json();
+      console.log("Updated Pantry Response:", updatedPantry); // Log the response
+
+      // Extract the items array from the response object
+      const updatedItems = updatedPantry.items;
+
+      // Update the state with the extracted array
+      setPantry(updatedItems);
+      updateRows(updatedItems); // Update rows for rendering
     } catch (error) {
       console.error("Error adding item:", error);
       alert("An error occurred while adding the item.");
     }
   };
 
-  // Increase the quantity of an item
   const handleIncreaseQuantity = async (itemId) => {
     try {
       const res = await fetch(`${endpoints.pantry.updateQuantity}/${itemId}/quantity`, {
@@ -79,25 +118,28 @@ export default function Pantry() {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ quantity: 1 }),
+        body: JSON.stringify({ increment: 1 }), // Send the increment value
       });
 
       if (!res.ok) {
         const errorText = await res.text();
-        console.error("Error increasing quantity:", errorText);
-        alert("Failed to increase quantity.");
+        console.error("Error updating quantity:", errorText);
+        alert("Failed to update quantity. Please try again.");
         return;
       }
 
       const updatedItems = await res.json();
-      setPantry(updatedItems); // Update pantry table
+      console.log("Updated Pantry Response:", updatedItems); // Log the response
+
+      // Update the state with the extracted array
+      setPantry(updatedItems);
+      updateRows(updatedItems); // Update rows for rendering
     } catch (error) {
-      console.error("Error increasing quantity:", error);
-      alert("An error occurred while increasing the quantity.");
+      console.error("Error updating quantity:", error);
+      alert("An error occurred while updating the quantity.");
     }
   };
 
-  // Decrease the quantity of an item
   const handleDecreaseQuantity = async (itemId, currentQuantity) => {
     if (currentQuantity <= 1) {
       alert("Quantity must be at least 1. Use the delete button to remove the item.");
@@ -111,7 +153,7 @@ export default function Pantry() {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ quantity: -1 }),
+        body: JSON.stringify({ increment: -1 }), // Send the decrement value
       });
 
       if (!res.ok) {
@@ -122,14 +164,17 @@ export default function Pantry() {
       }
 
       const updatedItems = await res.json();
-      setPantry(updatedItems); // Update pantry table
+      console.log("Updated Pantry Response:", updatedItems); // Log the response
+
+      // Update the state with the extracted array
+      setPantry(updatedItems);
+      updateRows(updatedItems); // Update rows for rendering
     } catch (error) {
       console.error("Error decreasing quantity:", error);
       alert("An error occurred while decreasing the quantity.");
     }
   };
 
-  // Delete an item from the pantry
   const handleDeleteItem = async (itemId) => {
     if (!window.confirm("Are you sure you want to delete this item?")) return;
 
@@ -150,14 +195,20 @@ export default function Pantry() {
       }
 
       const updatedItems = await res.json();
-      setPantry(updatedItems); // Update pantry table
+      console.log("Updated Pantry Response:", updatedItems); // Log the response
+
+      // Extract the items array from the response object
+      const updatedItemsArray = updatedItems.items;
+
+      // Update the state with the extracted array
+      setPantry(updatedItemsArray);
+      updateRows(updatedItemsArray); // Update rows for rendering
     } catch (error) {
       console.error("Error deleting item:", error);
       alert("An error occurred while deleting the item.");
     }
   };
 
-  // Fetch pantry items on component mount
   useEffect(() => {
     fetchPantry();
   }, []);
@@ -168,12 +219,15 @@ export default function Pantry() {
 
       {/* Add Item Form */}
       <Form className="d-flex flex-column gap-3">
-        <GroceryItemInputBox
-          label="Search Item"
-          value={selectedItem}
-          onChange={(item) => setSelectedItem(item)}
-          error={selectedItem === "" ? { message: "Please select an item." } : null}
-        />
+        <Form.Group>
+          <Form.Label>Item Name</Form.Label>
+          <Form.Control
+            type="text"
+            placeholder="Enter item name"
+            value={itemName}
+            onChange={(e) => setItemName(e.target.value)}
+          />
+        </Form.Group>
 
         <Form.Group>
           <Form.Label>Quantity</Form.Label>
@@ -212,35 +266,7 @@ export default function Pantry() {
             <th>Actions</th>
           </tr>
         </thead>
-        <tbody>
-          {pantry.map((item) => (
-            <tr key={item._id}>
-              <td>{item.name}</td>
-              <td>{item.quantity}</td>
-              <td>{item.unit}</td>
-              <td>
-                <Button
-                  variant="success"
-                  onClick={() => handleIncreaseQuantity(item._id)}
-                >
-                  +
-                </Button>
-                <Button
-                  variant="warning"
-                  onClick={() => handleDecreaseQuantity(item._id, item.quantity)}
-                >
-                  -
-                </Button>
-                <Button
-                  variant="danger"
-                  onClick={() => handleDeleteItem(item._id)}
-                >
-                  Delete
-                </Button>
-              </td>
-            </tr>
-          ))}
-        </tbody>
+        <tbody>{rows}</tbody>
       </Table>
     </Container>
   );

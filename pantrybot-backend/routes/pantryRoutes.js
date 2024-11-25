@@ -62,7 +62,7 @@ router.delete('/items/:itemId', authenticateToken, async (req, res) => {
 // Edit the quantity of an item in the pantry
 router.put('/items/:itemId/quantity', authenticateToken, async (req, res) => {
     const { itemId } = req.params;
-    const { quantity } = req.body;
+    const { increment } = req.body;
 
     try {
         const pantry = await Pantry.findOne({ user: req.user.id });
@@ -71,12 +71,12 @@ router.put('/items/:itemId/quantity', authenticateToken, async (req, res) => {
         const item = pantry.items.id(itemId);
         if (!item) return res.status(404).json({ message: 'Item not found' });
 
-        if (quantity !== undefined) {
-            item.quantity = quantity;
+        if (increment !== undefined) {
+            item.quantity += increment;
         }
 
         await pantry.save();
-        res.status(200).json(pantry);
+        res.status(200).json(pantry.items); // Return the updated items array
     } catch (error) {
         res.status(400).json({ message: error.message });
     }
