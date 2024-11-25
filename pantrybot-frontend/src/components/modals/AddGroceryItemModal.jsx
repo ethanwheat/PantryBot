@@ -46,9 +46,7 @@ export default function addGroceryItemModal({ modal }) {
     <>
       <Modal show={show} onHide={hideModal}>
         <Modal.Header closeButton>
-          <Modal.Title className="text-truncate">
-            Add Item to {listName}
-          </Modal.Title>
+          <Modal.Title className="text-truncate">Add Item to {listName}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Form
@@ -56,7 +54,7 @@ export default function addGroceryItemModal({ modal }) {
             className="d-flex flex-column gap-2 px-1"
             onSubmit={handleSubmit(handleAddItem)}
           >
-            <Form.Group id="formItem">
+            <Form.Group id="formName">
               <Controller
                 name="name"
                 control={control}
