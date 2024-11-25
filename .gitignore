@@ -1,3 +1,4 @@
 pantrybot-frontend/.env
 pantrybot-backend/node_modules/
+pantrybot-backend/package-lock.json
 pantrybot-backend/.env

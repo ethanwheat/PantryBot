@@ -145,11 +145,6 @@ router.put('/:id/items/:itemId/inCart', authenticateToken, async (req, res) => {
     }
 });
 
-// Excluding items in the pantry or grocery list using an OpenAI API query to filter items
-const openai = new OpenAI({
-    apiKey: process.env.OPENAI_API_KEY,
-});
-
 // Add recipe items to grocery list
 router.post('/:id/addRecipeItems', authenticateToken, async (req, res) => {
     const { id } = req.params;

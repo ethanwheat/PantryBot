@@ -14,7 +14,6 @@ const ItemSchema = new mongoose.Schema({
     unit: {
         type: String,
         required: true,
-        enum: ['units', 'kg', 'lb', 'oz', 'g', 'l', 'ml']
     },
     inCart: {
         type: Boolean,
