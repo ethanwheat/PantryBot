@@ -205,8 +205,6 @@ Return the items in JSON, do not do any code formatting or markdown. Include:
                 temperature: 0.7,
             });
 
-            console.log(response.choices[0].message.content.trim())
-
             itemsToAdd = JSON.parse(response.choices[0].message.content.trim());
         }
 
