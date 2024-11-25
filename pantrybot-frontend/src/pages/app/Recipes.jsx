@@ -294,7 +294,7 @@ export default function Recipes() {
                   }}
                   variant="primary"
                   size="lg"
-                  key={recipe._id}
+                  key={recipe.id}
                 >
                   {recipe.name}
                 </Button>
