@@ -1,13 +1,30 @@
 import React, { useState, useEffect } from "react";
-import { Container, Table, Button, Form } from "react-bootstrap";
+import { Container, Table, Button, Form, Card } from "react-bootstrap";
 import endpoints from "../../constants/endpoints";
+import GroceryItemInputBox from "../../components/inputs/inputBoxes/GroceryItemInputBox";
+import { Controller, useForm } from "react-hook-form";
+import UnitSelect from "../../components/inputs/selects/UnitSelect";
+import QuantityInputBox from "../../components/inputs/inputBoxes/QuantityInputBox";
+import ThemedSpinner from "../../components/spinners/ThemedSpinner";
 
 export default function Pantry() {
   const [pantry, setPantry] = useState([]); // Pantry data
   const [rows, setRows] = useState([]); // JSX rows for the table
-  const [itemName, setItemName] = useState("");
-  const [quantity, setQuantity] = useState(1);
-  const [unit, setUnit] = useState("g");
+  const [loading, setLoading] = useState(false);
+
+  // Import useForm hook and set default values to empty strings
+  const {
+    control,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm({
+    defaultValues: {
+      name: "",
+      quantity: "1",
+      unit: "units",
+    },
+  });
 
   // Helper to update rows when pantry changes
   const updateRows = (updatedPantry) => {
@@ -22,10 +39,7 @@ export default function Pantry() {
         <td>{item.quantity}</td>
         <td>{item.unit}</td>
         <td>
-          <Button
-            variant="success"
-            onClick={() => handleIncreaseQuantity(item._id)}
-          >
+          <Button variant="success" onClick={() => handleIncreaseQuantity(item._id)}>
             +
           </Button>
           <Button
@@ -34,10 +48,7 @@ export default function Pantry() {
           >
             -
           </Button>
-          <Button
-            variant="danger"
-            onClick={() => handleDeleteItem(item._id)}
-          >
+          <Button variant="danger" onClick={() => handleDeleteItem(item._id)}>
             Delete
           </Button>
         </td>
@@ -72,11 +83,8 @@ export default function Pantry() {
     }
   };
 
-  const handleAddItem = async () => {
-    if (!itemName.trim() || quantity <= 0) {
-      alert("Please enter a valid item name and quantity.");
-      return;
-    }
+  const handleAddItem = async ({ name, quantity, unit }) => {
+    setLoading(true);
 
     try {
       const res = await fetch(endpoints.pantry.add, {
@@ -85,7 +93,7 @@ export default function Pantry() {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ name: itemName, quantity, unit }),
+        body: JSON.stringify({ name, quantity, unit, dateCreated: new Date() }),
       });
 
       if (!res.ok) {
@@ -104,9 +112,12 @@ export default function Pantry() {
       // Update the state with the extracted array
       setPantry(updatedItems);
       updateRows(updatedItems); // Update rows for rendering
+      reset();
     } catch (error) {
       console.error("Error adding item:", error);
       alert("An error occurred while adding the item.");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -214,45 +225,74 @@ export default function Pantry() {
   }, []);
 
   return (
-    <Container>
+    <div className="d-flex flex-column gap-3">
       <h1>My Pantry</h1>
 
       {/* Add Item Form */}
-      <Form className="d-flex flex-column gap-3">
-        <Form.Group>
-          <Form.Label>Item Name</Form.Label>
-          <Form.Control
-            type="text"
-            placeholder="Enter item name"
-            value={itemName}
-            onChange={(e) => setItemName(e.target.value)}
+      <Form
+        noValidate
+        onSubmit={handleSubmit(handleAddItem)}
+        className="d-flex flex-column gap-3"
+      >
+        <Form.Group id="formName">
+          <Controller
+            name="name"
+            control={control}
+            rules={{
+              required: "A grocery item is required.",
+            }}
+            render={({ field }) => (
+              <GroceryItemInputBox
+                label="Grocery Item"
+                error={errors.name}
+                value={field.value}
+                onChange={field.onChange}
+                disabled={loading}
+              />
+            )}
           />
         </Form.Group>
 
-        <Form.Group>
-          <Form.Label>Quantity</Form.Label>
-          <Form.Control
-            type="number"
-            value={quantity}
-            min="1"
-            onChange={(e) => setQuantity(Number(e.target.value))}
+        <Form.Group id="formQuantity">
+          <Controller
+            name="quantity"
+            control={control}
+            render={({ field }) => (
+              <QuantityInputBox
+                className="w-100 text-left"
+                label="Quantity"
+                error={errors.quantity}
+                value={field.value}
+                onChange={field.onChange}
+                disabled={loading}
+                hideIncrementDecrement
+              />
+            )}
           />
         </Form.Group>
 
-        <Form.Group>
-          <Form.Label>Unit</Form.Label>
-          <Form.Select value={unit} onChange={(e) => setUnit(e.target.value)}>
-            <option value="g">Grams (g)</option>
-            <option value="kg">Kilograms (kg)</option>
-            <option value="ml">Milliliters (ml)</option>
-            <option value="l">Liters (l)</option>
-            <option value="oz">Ounces (oz)</option>
-            <option value="lb">Pounds (lb)</option>
-          </Form.Select>
+        <Form.Group id="formUnit">
+          <Controller
+            name="unit"
+            control={control}
+            render={({ field }) => (
+              <UnitSelect
+                label="Unit"
+                error={errors.unit}
+                value={field.value}
+                onChange={field.onChange}
+                disabled={loading}
+              />
+            )}
+          />
         </Form.Group>
-
-        <Button onClick={handleAddItem} variant="primary">
-          Add Item
+        <Button
+          type="submit"
+          variant="primary"
+          disabled={loading}
+          onClick={handleSubmit(handleAddItem)}
+        >
+          {!loading ? "Add Item" : <ThemedSpinner size="sm" />}
         </Button>
       </Form>
 
@@ -268,6 +308,6 @@ export default function Pantry() {
         </thead>
         <tbody>{rows}</tbody>
       </Table>
-    </Container>
+    </div>
   );
 }

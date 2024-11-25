@@ -22,16 +22,16 @@ export default function QuantityInputBox({
           <Button
             variant="none"
             className="p-0"
-            onClick={() =>
-              onChange(valueToInt > 1 ? valueToInt - 1 : valueToInt)
-            }
+            onClick={() => onChange(valueToInt > 1 ? valueToInt - 1 : valueToInt)}
           >
             -
           </Button>
         )}
         <div className={className} style={{ width: "4rem", ...style }}>
           <Form.Control
-            className="m-0 text-center w-100"
+            className={`m-0 w-100 ${
+              className?.includes("text-left") ? "text-left" : "text-center"
+            }`}
             value={valueToInt || ""}
             type="text"
             onChange={onChange}
@@ -40,16 +40,10 @@ export default function QuantityInputBox({
             isInvalid={error ? true : false}
             {...otherProps}
           />
-          <Form.Control.Feedback type="invalid">
-            {error?.message}
-          </Form.Control.Feedback>
+          <Form.Control.Feedback type="invalid">{error?.message}</Form.Control.Feedback>
         </div>
         {!hideIncrementDecrement && !disabled && (
-          <Button
-            variant="none"
-            className="p-0"
-            onClick={() => onChange(valueToInt + 1)}
-          >
+          <Button variant="none" className="p-0" onClick={() => onChange(valueToInt + 1)}>
             +
           </Button>
         )}

@@ -15,8 +15,12 @@ const ItemSchema = new mongoose.Schema({
     unit: {
         type: String,
         required: true,
-        enum: ['kg', 'lb', 'oz', 'g', 'l', 'ml']
-    }
+        enum: ['units', 'kg', 'lb', 'oz', 'g', 'l', 'ml']
+    },
+    dateCreated: {
+        type: Date,
+        required: true
+    },
 }, { _id: true }); 
 
 // Define pantry schema
