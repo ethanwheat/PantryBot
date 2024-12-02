@@ -1,8 +1,6 @@
 import React from "react";
-import { Button, Container } from "react-bootstrap";
-import { useNavigate } from "react-router-dom"; // Import useNavigate
+import { Container } from "react-bootstrap";
 import { useAuth } from "../../providers/AuthProvider";
-import routes from "../../constants/routes"; // Import routes
 
 export default function Dashboard() {
   const {
