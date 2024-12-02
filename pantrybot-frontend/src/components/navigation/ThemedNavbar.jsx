@@ -8,6 +8,7 @@ import images from "../../constants/images";
 import { useAuth } from "../../providers/AuthProvider";
 import { useState } from "react";
 import Sidebar from "./Sidebar";
+import { Gear } from "react-bootstrap-icons";
 
 export default function ThemedNavbar() {
   const { session } = useAuth();
@@ -25,9 +26,16 @@ export default function ThemedNavbar() {
           <Navbar.Brand as={Link} to={routes.index}>
             <Image src={images.logo} style={{ width: "10rem" }} />
           </Navbar.Brand>
-          {!session ? (
+          <Navbar.Toggle
+            aria-controls="navbarScroll"
+            onClick={() => session && setShow(true)}
+          />
+          {session ? (
+            <Button as={Link} to={routes.app.settings} variant="none">
+              <Gear size={25} />
+            </Button>
+          ) : (
             <>
-              <Navbar.Toggle aria-controls="navbarScroll" />
               <Navbar.Collapse className="justify-content-end">
                 <Nav className="d-flex gap-3">
                   <Nav.Link as={Link} to={routes.login}>
@@ -39,10 +47,6 @@ export default function ThemedNavbar() {
                 </Nav>
               </Navbar.Collapse>
             </>
-          ) : (
-            <>
-              <Navbar.Toggle onClick={() => setShow(true)} />
-            </>
           )}
         </Container>
       </Navbar>
@@ -53,7 +57,7 @@ export default function ThemedNavbar() {
           </Offcanvas.Title>
         </Offcanvas.Header>
         <Offcanvas.Body>
-          <Sidebar onSelect={() => setShow(false)}/>
+          <Sidebar onSelect={() => setShow(false)} showSettings />
         </Offcanvas.Body>
       </Offcanvas>
     </>

@@ -6,15 +6,8 @@ import routes from "../../constants/routes"; // Import routes
 
 export default function Dashboard() {
   const {
-    session: { _id, username, email, onboarded },
-    logout,
+    session: { _id, username, email, onboarded, profile },
   } = useAuth();
-
-  const navigate = useNavigate(); // Initialize navigate
-
-  const goToPantry = () => {
-    navigate(routes.app.pantry); // Navigate to the Pantry page
-  };
 
   return (
     <Container fluid>
@@ -23,6 +16,7 @@ export default function Dashboard() {
       <p>Username: {username}</p>
       <p>Email: {email}</p>
       <p>Onboarded: {onboarded ? "true" : "false"}</p>
+      <p>{profile.firstName}</p>
       <p>Put dashboard here.</p>
     </Container>
   );

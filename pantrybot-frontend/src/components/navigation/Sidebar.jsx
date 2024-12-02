@@ -6,12 +6,13 @@ import { useAuth } from "../../providers/AuthProvider";
 import {
   Box,
   BoxArrowLeft,
+  Gear,
   HouseDoorFill,
   Journal,
   ListTask,
 } from "react-bootstrap-icons";
 
-export default function Sidebar({ onSelect }) {
+export default function Sidebar({ onSelect, showSettings = false }) {
   const location = useLocation();
   const { logout } = useAuth();
 
@@ -40,6 +41,11 @@ export default function Sidebar({ onSelect }) {
 
   const bottomLinks = [
     {
+      text: "Settings",
+      route: routes.app.settings,
+      icon: <Gear size={25} />,
+    },
+    {
       text: "Logout",
       onClick: logout,
       icon: <BoxArrowLeft size={25} />,
@@ -57,9 +63,7 @@ export default function Sidebar({ onSelect }) {
             onClick={onSelect}
             size="lg"
             variant={
-              location.pathname.startsWith(link.route)
-                ? "primary"
-                : "sidebar-inactive"
+              location.pathname.startsWith(link.route) ? "primary" : "sidebar-inactive"
             }
             className="d-flex align-items-center gap-3 rounded-0 w-100"
             style={{ height: "4rem" }}
@@ -70,25 +74,51 @@ export default function Sidebar({ onSelect }) {
         ))}
       </div>
       <div>
-        {bottomLinks.map((link) => (
-          <Button
-            key={link.text}
-            variant="sidebar-inactive"
-            onClick={() => {
-              link.onClick();
+        {bottomLinks.map((link) => {
+          if (link.text === "Settings" && showSettings) {
+            return (
+              <Button
+                key={link.text}
+                as={Link}
+                to={link.route}
+                onClick={onSelect}
+                size="lg"
+                variant={
+                  location.pathname.startsWith(link.route)
+                    ? "primary"
+                    : "sidebar-inactive"
+                }
+                className="d-flex align-items-center gap-3 rounded-0 w-100"
+                style={{ height: "4rem" }}
+              >
+                {link.icon}
+                {link.text}
+              </Button>
+            );
+          }
 
-              if (onSelect) {
-                onSelect();
-              }
-            }}
-            size="lg"
-            className="d-flex align-items-center gap-3 rounded-0 w-100"
-            style={{ height: "4rem" }}
-          >
-            {link.icon}
-            {link.text}
-          </Button>
-        ))}
+          if (link.text !== "Settings") {
+            return (
+              <Button
+                key={link.text}
+                variant="sidebar-inactive"
+                onClick={() => {
+                  link.onClick();
+
+                  if (onSelect) {
+                    onSelect();
+                  }
+                }}
+                size="lg"
+                className="d-flex align-items-center gap-3 rounded-0 w-100"
+                style={{ height: "4rem" }}
+              >
+                {link.icon}
+                {link.text}
+              </Button>
+            );
+          }
+        })}
       </div>
     </div>
   );

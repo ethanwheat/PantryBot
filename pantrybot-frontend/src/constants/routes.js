@@ -7,7 +7,8 @@ const routes = {
         dashboard: "/dashboard",
         groceryLists: "/groceryLists",
         pantry: "/pantry",
-        recipes: "/recipes"
+        recipes: "/recipes",
+        settings: "/settings"
     }
 }
 
