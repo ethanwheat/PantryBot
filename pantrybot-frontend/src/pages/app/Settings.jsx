@@ -3,7 +3,7 @@ import { useAuth } from "../../providers/AuthProvider";
 import { Button } from "react-bootstrap";
 
 export default function Settings() {
-  // How to get data from the current session.
+  // This is how to get data from the current session.
   // Call the refreshSession function to refresh the session, this will need to be done when saving settings.
   // Refresh session refreshes all user data, including the profile, to the whole app.
   // It is needed to refresh the session after changing values on the user so that the rest of the app is updated.
