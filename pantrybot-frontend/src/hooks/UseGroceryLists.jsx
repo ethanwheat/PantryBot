@@ -6,6 +6,30 @@ export default function useGroceryLists() {
   const [error, setError] = useState(false);
   const [groceryLists, setGroceryLists] = useState([]);
 
+  const refreshGroceryLists = async () => {
+    setLoading(true);
+
+    try {
+      const res = await fetch(endpoints.groceryLists, {
+        method: "GET",
+        credentials: "include",
+      });
+
+      // Throw error if response is invalid
+      if (!res.ok) {
+        const errorMessage = await res.statusText;
+        throw new Error(errorMessage);
+      }
+
+      const data = await res.json();
+      setGroceryLists(data);
+    } catch (e) {
+      setError("Could not load grocery lists.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const createGroceryList = async ({ name }) => {
     // Fetch api to create grocery list
     const res = await fetch(endpoints.groceryLists, {
@@ -195,37 +219,14 @@ export default function useGroceryLists() {
   };
 
   useEffect(() => {
-    const loadGroceryLists = async () => {
-      setLoading(true);
-
-      try {
-        const res = await fetch(endpoints.groceryLists, {
-          method: "GET",
-          credentials: "include",
-        });
-
-        // Throw error if response is invalid
-        if (!res.ok) {
-          const errorMessage = await res.statusText;
-          throw new Error(errorMessage);
-        }
-
-        const data = await res.json();
-        setGroceryLists(data);
-      } catch (e) {
-        setError("Could not load grocery lists.");
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    loadGroceryLists();
+    refreshGroceryLists();
   }, []);
 
   return {
     loading,
     error,
     groceryLists,
+    refreshGroceryLists,
     createGroceryList,
     deleteGroceryList,
     addGroceryItem,

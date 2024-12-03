@@ -8,7 +8,8 @@ import useRecipes from "../../hooks/UseRecipes";
 
 export default function AddRecipeToListModal({ modal }) {
   // Import useForm hook and set default values to empty strings
-  const { groceryLists, searchResults, loadGroceryLists, addRecipeToList } = useRecipes();
+  const { groceryLists, searchResults, loadGroceryLists, addRecipeToList } =
+    useRecipes();
 
   const [listsLoading, setListsLoading] = useState(false);
   const [listError, setListError] = useState(null);
@@ -24,11 +25,17 @@ export default function AddRecipeToListModal({ modal }) {
     reset,
     formState: { errors },
   } = useForm({
-    defaultValues: {
-    },
+    defaultValues: {},
   });
 
-  const { loading, data: ingredients, error, show, onSubmit, hideModal } = modal;
+  const {
+    loading,
+    data: ingredients,
+    error,
+    show,
+    onSubmit,
+    hideModal,
+  } = modal;
 
   useEffect(() => {
     const fetchLists = async () => {
@@ -64,7 +71,13 @@ export default function AddRecipeToListModal({ modal }) {
   const handleAddToList = async () => {
     try {
       setAddLoading(true);
-      await addRecipeToList(selectedList, ingredients, excludePantry, excludeList);
+      await addRecipeToList(
+        selectedList,
+        ingredients,
+        excludePantry,
+        excludeList
+      );
+      onSubmit();
       hideModal();
     } catch (e) {
       console.log(e);
@@ -121,11 +134,12 @@ export default function AddRecipeToListModal({ modal }) {
                   checked={excludeList}
                   onChange={() => setExcludeList(!excludeList)}
                 />
-
               </Form.Group>
             </Form>
           ) : (
-            <p>No Grocery Lists Found. Create one in the "Grocery Lists" page.</p>
+            <p>
+              No Grocery Lists Found. Create one in the "Grocery Lists" page.
+            </p>
           )}
         </Modal.Body>
         <Modal.Footer className="d-flex flex-column align-items-end">
@@ -133,11 +147,21 @@ export default function AddRecipeToListModal({ modal }) {
             <Button variant="gray" onClick={hideModal}>
               Cancel
             </Button>
-            <Button variant="primary" onClick={handleAddToList} disabled={listsLoading || addLoading || !selectedList}>
-              {(!listsLoading && !addLoading) ? "Add Items" : <ThemedSpinner size="sm" />}
+            <Button
+              variant="primary"
+              onClick={handleAddToList}
+              disabled={listsLoading || addLoading || !selectedList}
+            >
+              {!listsLoading && !addLoading ? (
+                "Add Items"
+              ) : (
+                <ThemedSpinner size="sm" />
+              )}
             </Button>
           </div>
-          {addError && <p className="text-danger">Failed to add recipe to list</p>}
+          {addError && (
+            <p className="text-danger">Failed to add recipe to list</p>
+          )}
         </Modal.Footer>
       </Modal>
     </>

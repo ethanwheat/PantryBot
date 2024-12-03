@@ -21,18 +21,20 @@ export default function useModal() {
 
   // onSubmit function.
   const onSubmit = async (args) => {
-    setError(false);
-    setLoading(true);
+    if (onSubmitFn) {
+      setError(false);
+      setLoading(true);
 
-    try {
-      await onSubmitFn(args);
+      try {
+        await onSubmitFn(args);
 
-      hideModal();
-    } catch (e) {
-      console.log(e);
+        hideModal();
+      } catch (e) {
+        console.log(e);
 
-      setError(e);
-      setLoading(false);
+        setError(e);
+        setLoading(false);
+      }
     }
   };
 

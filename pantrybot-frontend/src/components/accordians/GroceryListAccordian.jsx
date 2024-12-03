@@ -51,11 +51,13 @@ export default function GroceryListAccordian({
           />
           <Accordion.Collapse eventKey={0}>
             <>
-              <Card.Body>
+              <Card.Body className="overflow-scroll">
                 {noItems ? (
                   <div className="d-flex flex-column align-items-center py-1">
                     <p className="fs-2 m-2">No items in grocery list.</p>
-                    <p>Click "Add" to add your first item to your grocery list!</p>
+                    <p>
+                      Click "Add" to add your first item to your grocery list!
+                    </p>
                   </div>
                 ) : (
                   <GroceryListTable
@@ -134,7 +136,11 @@ GroceryListAccordian.Header = function GroceryListAccordianHeader({
               </p>
             </div>
             <div>
-              {isCurrentEventKey ? <ChevronUp size={25} /> : <ChevronDown size={25} />}
+              {isCurrentEventKey ? (
+                <ChevronUp size={25} />
+              ) : (
+                <ChevronDown size={25} />
+              )}
             </div>
           </div>
         </Button>

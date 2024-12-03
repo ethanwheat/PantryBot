@@ -11,17 +11,14 @@ import ViewRecipeModal from "../../components/modals/ViewRecipeModal";
 export default function Dashboard() {
   const {
     session: {
-      _id,
-      username,
-      email,
-      onboarded,
-      profile: { firstName, lastName, zipCode, diet_res, allergies },
+      profile: { firstName },
     },
   } = useAuth();
   const {
     loading: groceryListsLoading,
     error: groceryListError,
     groceryLists,
+    refreshGroceryLists,
     deleteGroceryList,
     addGroceryItem,
     deleteGroceryItem,
@@ -33,12 +30,8 @@ export default function Dashboard() {
     error: recipesError,
     recipes,
     recipeDetails,
-    searchResults,
     getRecipeById,
     deleteRecipe,
-    searchRecipe,
-    saveRecipe,
-    loadRecipes,
   } = useRecipes();
   const viewModal = useModal();
 
@@ -61,8 +54,8 @@ export default function Dashboard() {
             <p>Put map here.</p>
           </div>
         </div>
-        <div className="d-flex gap-3">
-          <div style={{ width: "60%" }}>
+        <div className="d-flex flex-column flex-sm-row gap-3">
+          <div className="w-100 w-sm-60">
             <p className="fs-3 fw-semibold">Recent Grocery List</p>
             {groceryListsLoading ? (
               <div
@@ -72,7 +65,10 @@ export default function Dashboard() {
                 <ThemedSpinner variant="primary" />
               </div>
             ) : groceryListError ? (
-              <Dashboard.Message title="Something went wrong!" text={groceryListError} />
+              <Dashboard.Message
+                title="Something went wrong!"
+                text={groceryListError}
+              />
             ) : noLists ? (
               <Dashboard.Message
                 title="No grocery lists created."
@@ -90,7 +86,7 @@ export default function Dashboard() {
               />
             )}
           </div>
-          <div style={{ width: "40%" }}>
+          <div className="w-100 w-sm-40">
             <p className="fs-3 fw-semibold">Recent Saved Recipes</p>
             {recipesLoading ? (
               <div
@@ -100,7 +96,10 @@ export default function Dashboard() {
                 <ThemedSpinner variant="primary" />
               </div>
             ) : recipesError ? (
-              <Dashboard.Message title="Something went wrong!" text={recipesError} />
+              <Dashboard.Message
+                title="Something went wrong!"
+                text={recipesError}
+              />
             ) : noRecipes ? (
               <Dashboard.Message
                 title="No recipes created."
@@ -111,7 +110,9 @@ export default function Dashboard() {
                 {recipes.slice(0, 10).map((recipe) => (
                   <Button
                     onClick={() => {
-                      viewModal.showModal({ data: recipe.id });
+                      viewModal.showModal({
+                        data: recipe.id,
+                      });
                     }}
                     variant="primary"
                     size="lg"
@@ -130,6 +131,7 @@ export default function Dashboard() {
         recipeDetails={recipeDetails}
         getRecipeById={getRecipeById}
         deleteRecipe={deleteRecipe}
+        addItemsToList={refreshGroceryLists}
       />
     </>
   );

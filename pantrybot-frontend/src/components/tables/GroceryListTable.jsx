@@ -61,7 +61,11 @@ export default function GroceryListTable({
                   className="d-flex align-items-center"
                   style={{ minHeight: "2.5rem" }}
                 >
-                  <p className={`m-0 ${item.inCart && "text-decoration-line-through"}`}>
+                  <p
+                    className={`m-0 ${
+                      item.inCart && "text-decoration-line-through"
+                    }`}
+                  >
                     {item.name}
                   </p>
                 </div>

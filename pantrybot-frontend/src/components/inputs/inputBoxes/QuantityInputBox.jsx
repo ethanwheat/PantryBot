@@ -14,6 +14,32 @@ export default function QuantityInputBox({
 }) {
   const [inputValue, setInputValue] = useState(value);
 
+  const handleChange = (e) => {
+    const validInput = /^[0-9]*(\.?)[0-9]*$/.test(e.target.value);
+
+    if (validInput) {
+      setInputValue(e.target.value);
+    }
+  };
+
+  const handleDecrement = () => {
+    setInputValue(inputValue > 1 ? inputValue - 1 : inputValue);
+  };
+
+  const handleIncrement = () => {
+    setInputValue(inputValue + 1);
+  };
+
+  const handleBlur = () => {
+    if (!inputValue) {
+      setInputValue(1);
+
+      return;
+    }
+
+    setInputValue(value);
+  };
+
   useEffect(() => {
     const validFloat = /^\d*\.?\d+$/.test(inputValue);
 
@@ -27,13 +53,7 @@ export default function QuantityInputBox({
       {label && <Form.Label>{label}</Form.Label>}
       <div className="d-flex align-items-center gap-2">
         {!hideIncrementDecrement && !disabled && (
-          <Button
-            variant="none"
-            className="p-0"
-            onClick={() =>
-              setInputValue(inputValue > 1 ? inputValue - 1 : inputValue)
-            }
-          >
+          <Button variant="none" className="p-0" onClick={handleDecrement}>
             -
           </Button>
         )}
@@ -44,11 +64,9 @@ export default function QuantityInputBox({
             }`}
             value={inputValue || ""}
             type="text"
-            onChange={(e) => setInputValue(e.target.value)}
+            onChange={handleChange}
             disabled={disabled}
-            onBlur={() =>
-              inputValue ? setInputValue(value) : setInputValue(1)
-            }
+            onBlur={handleBlur}
             isInvalid={error ? true : false}
             {...otherProps}
           />
@@ -57,11 +75,7 @@ export default function QuantityInputBox({
           </Form.Control.Feedback>
         </div>
         {!hideIncrementDecrement && !disabled && (
-          <Button
-            variant="none"
-            className="p-0"
-            onClick={() => setInputValue(inputValue + 1)}
-          >
+          <Button variant="none" className="p-0" onClick={handleIncrement}>
             +
           </Button>
         )}
