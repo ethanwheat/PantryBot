@@ -9,12 +9,23 @@ router.get("/", authenticateToken, async (req, res) => {
     try {
         const { prompt, usePantry, useDiet, useAllergies, budget } = req.query;
 
-        // These are placeholders, please replace with an access to the database to get pantry items and grocery items
-        // depending on if usePantry or useGroceryList is true.
+        // These are placeholders, please replace with an access to the database to get pantry items
         let pantryItems = ["chicken"]
 
         if (!prompt) {
             return res.status(400).json({ error: 'A valid prompt is required.' });
+        }
+
+        // Initialize budgetModifier
+        let budgetModifier = '';
+
+        // Apply budget logic only if usePantry is false
+        if (usePantry === "false") {
+            if (budget === '0') {
+                budgetModifier = 'Please find a cheap recipe. Use inexpensive ingredients and avoid any premium items.';
+            } else if (budget === '2') {
+                budgetModifier = 'Please find an expensive recipe. Use high-quality and premium ingredients.';
+            }
         }
 
         const completion = await openai.chat.completions.create({
@@ -23,6 +34,7 @@ router.get("/", authenticateToken, async (req, res) => {
                 { role: "system", content: `
                     You are a recipe lookup assistant. Please find a recipe based on the following prompt: ${prompt}. 
                     ${usePantry === "true" ? `Use only items listed here: ${[...pantryItems].join(', ')}.` : ''}
+                    ${budgetModifier}
                     Return the recipe details in JSON, do not do any code formatting or markdown. Include:
                     - name: the name of the recipe,
                     - description: a brief description of the recipe and steps to make it, 

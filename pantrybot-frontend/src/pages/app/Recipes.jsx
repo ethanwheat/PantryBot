@@ -91,7 +91,7 @@ export default function Recipes() {
     try {
       await saveRecipe();
       await loadRecipes();
-      groceryModal.showModal({});
+      groceryModal.showModal({ data: searchResults.ingredients });
     } catch (e) {
       setSaveError(e);
     }

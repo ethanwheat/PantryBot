@@ -198,9 +198,9 @@ Return the items in JSON, do not do any code formatting or markdown. Include:
                     { role: 'system', content: 'You are a helpful assistant that processes recipes and grocery data and provides JSON-formatted outputs.' },
                     { role: 'user', content: query },
                 ],
-                max_tokens: 150,
                 temperature: 0.7,
             });
+            console.log('OpenAI raw response:', response.choices[0].message.content);
 
             itemsToAdd = JSON.parse(response.choices[0].message.content.trim());
         }

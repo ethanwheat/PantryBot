@@ -4,6 +4,8 @@ import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import { Controller, useForm } from "react-hook-form";
 import ThemedSpinner from "../spinners/ThemedSpinner";
+import useModal from "../../hooks/UseModal";
+import AddRecipeToListModal from "../../components/modals/AddRecipeToListModal";
 
 export default function ViewRecipeModal({ modal, recipeDetails, getRecipeById, deleteRecipe }) {
   // Import useForm hook and set default values to empty strings
@@ -17,6 +19,8 @@ export default function ViewRecipeModal({ modal, recipeDetails, getRecipeById, d
       name: "",
     },
   });
+
+  const groceryModal = useModal();
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
@@ -53,6 +57,11 @@ export default function ViewRecipeModal({ modal, recipeDetails, getRecipeById, d
       console.log(e)
       setDeleteError(e);
     }
+  }
+
+  const handleAdd = async () => {
+    hideModal();
+    groceryModal.showModal({ data: recipeDetails.ingredients });
   }
 
   return (
@@ -106,13 +115,14 @@ export default function ViewRecipeModal({ modal, recipeDetails, getRecipeById, d
             <Button variant="danger" onClick={handleDelete}>
               Delete Recipe
             </Button>
-            <Button variant="primary">
+            <Button variant="primary" onClick={handleAdd}>
               Add Items To List 
             </Button>
           </div>
           {deleteError && <p className="text-danger">Failed to delete recipe</p>}
         </Modal.Footer>
       </Modal>
+      <AddRecipeToListModal modal={groceryModal} />
     </>
   );
 }

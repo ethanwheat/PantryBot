@@ -107,7 +107,6 @@ export default function useRecipes() {
 
   const saveRecipe = async () => {
     const { name, description, ingredients, estimatedTime } = searchResults;
-    console.log(ingredients);
 
     const res = await fetch(endpoints.recipes.add, {
       method: "POST",
@@ -148,5 +147,28 @@ export default function useRecipes() {
     setGroceryLists(data);
   };
 
-  return { loading, error, recipes, recipeDetails, searchResults, groceryLists, getRecipeById, deleteRecipe, searchRecipe, saveRecipe, loadRecipes, loadGroceryLists };
+  const addRecipeToList = async (id, ingredients, excludePantry, excludeGroceryList) => {
+    const res = await fetch(`${endpoints.groceryLists}/${id}/addRecipeItems`, {
+      method: "POST",
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        recipeItems: ingredients,
+        excludePantry,
+        excludeGroceryList,
+      }),
+    });
+
+    // Throw error if response is invalid
+    if (!res.ok) {
+      const errorMessage = await res.statusText;
+      throw new Error(errorMessage);
+    }
+
+    console.log('Grocery List Updated');
+  };
+
+  return { loading, error, recipes, recipeDetails, searchResults, groceryLists, getRecipeById, deleteRecipe, searchRecipe, saveRecipe, loadRecipes, loadGroceryLists, addRecipeToList };
 }

@@ -8,11 +8,15 @@ import useRecipes from "../../hooks/UseRecipes";
 
 export default function AddRecipeToListModal({ modal }) {
   // Import useForm hook and set default values to empty strings
-  const { groceryLists, loadGroceryLists } = useRecipes();
+  const { groceryLists, searchResults, loadGroceryLists, addRecipeToList } = useRecipes();
 
   const [listsLoading, setListsLoading] = useState(false);
   const [listError, setListError] = useState(null);
   const [selectedList, setSelectedList] = useState("");
+  const [addError, setAddError] = useState(null);
+  const [addLoading, setAddLoading] = useState(false);
+  const [excludePantry, setExcludePantry] = useState(true);
+  const [excludeList, setExcludeList] = useState(true);
 
   const {
     control,
@@ -21,17 +25,20 @@ export default function AddRecipeToListModal({ modal }) {
     formState: { errors },
   } = useForm({
     defaultValues: {
-      selectedList: "",
     },
   });
 
-  const { loading, error, show, onSubmit, hideModal } = modal;
+  const { loading, data: ingredients, error, show, onSubmit, hideModal } = modal;
 
   useEffect(() => {
     const fetchLists = async () => {
       if (show) {
-        setListError(false);
+        setListError(null);
+        setAddError(null);
         setListsLoading(true);
+        setAddLoading(false);
+        setExcludePantry(true);
+        setExcludeList(true);
 
         try {
           await loadGroceryLists();
@@ -54,8 +61,17 @@ export default function AddRecipeToListModal({ modal }) {
     }
   }, [show]);
 
-  const handleAddToList = (data) => {
-    console.log("Selected Grocery List:", data);
+  const handleAddToList = async () => {
+    try {
+      setAddLoading(true);
+      await addRecipeToList(selectedList, ingredients, excludePantry, excludeList);
+      hideModal();
+    } catch (e) {
+      console.log(e);
+      setAddError(e);
+    } finally {
+      setAddLoading(false);
+    }
   };
 
   return (
@@ -74,7 +90,7 @@ export default function AddRecipeToListModal({ modal }) {
           ) : groceryLists.length > 0 ? (
             <Form>
               <Form.Group>
-                <Form.Label>Select a Grocery List</Form.Label>
+                <Form.Label>Select a Grocery List:</Form.Label>
                 <Form.Control
                   as="select"
                   value={selectedList}
@@ -89,6 +105,23 @@ export default function AddRecipeToListModal({ modal }) {
                     </option>
                   ))}
                 </Form.Control>
+                <hr style={{ margin: "10px 0" }} />
+                <p>Options...</p>
+                <Form.Check
+                  name="group1"
+                  id="any-switch"
+                  label="Exclude Items Already in Pantry"
+                  checked={excludePantry}
+                  onChange={() => setExcludePantry(!excludePantry)}
+                />
+                <Form.Check
+                  name="group1"
+                  id="list-switch"
+                  label="Exclude Items Already in List"
+                  checked={excludeList}
+                  onChange={() => setExcludeList(!excludeList)}
+                />
+
               </Form.Group>
             </Form>
           ) : (
@@ -100,11 +133,11 @@ export default function AddRecipeToListModal({ modal }) {
             <Button variant="gray" onClick={hideModal}>
               Cancel
             </Button>
-            <Button variant="primary" disabled={loading}>
-              {!loading ? "Add Items" : <ThemedSpinner size="sm" />}
+            <Button variant="primary" onClick={handleAddToList} disabled={listsLoading || addLoading || !selectedList}>
+              {(!listsLoading && !addLoading) ? "Add Items" : <ThemedSpinner size="sm" />}
             </Button>
           </div>
-          {error && <p className="text-danger">Something went wrong!</p>}
+          {addError && <p className="text-danger">Failed to add recipe to list</p>}
         </Modal.Footer>
       </Modal>
     </>
