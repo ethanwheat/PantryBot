@@ -56,6 +56,7 @@ router.delete('/items/:itemId', authenticateToken, async (req, res) => {
 
         pantry.items.splice(itemIndex, 1);
         await pantry.save();
+        pantry.items.sort((a, b) => new Date(b.dateCreated) - new Date(a.dateCreated));
         res.status(200).json(pantry);
     } catch (error) {
         res.status(400).json({ message: error.message });
@@ -79,6 +80,7 @@ router.put('/items/:itemId/quantity', authenticateToken, async (req, res) => {
         }
 
         await pantry.save();
+        pantry.items.sort((a, b) => new Date(b.dateCreated) - new Date(a.dateCreated));
         res.status(200).json(pantry.items); // Return the updated items array
     } catch (error) {
         res.status(400).json({ message: error.message });
