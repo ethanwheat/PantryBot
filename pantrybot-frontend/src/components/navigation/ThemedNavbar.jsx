@@ -8,17 +8,19 @@ import images from "../../constants/images";
 import { useAuth } from "../../providers/AuthProvider";
 import { useState } from "react";
 import Sidebar from "./Sidebar";
-import { Gear } from "react-bootstrap-icons";
+import { Gear, List } from "react-bootstrap-icons";
 
 export default function ThemedNavbar() {
   const { session } = useAuth();
 
   const [show, setShow] = useState(false);
+  const [navbarExpanded, setNavbarExpanded] = useState(false);
 
   return (
     <>
       <Navbar
         expand="sm"
+        expanded={navbarExpanded}
         className="bg-body-tertiary shadow px-sm-5"
         style={{ minHeight: "75px" }}
       >
@@ -26,22 +28,41 @@ export default function ThemedNavbar() {
           <Navbar.Brand as={Link} to={routes.index}>
             <Image src={images.logo} style={{ width: "10rem" }} />
           </Navbar.Brand>
-          <Navbar.Toggle
-            aria-controls="navbarScroll"
-            onClick={() => session && setShow(true)}
-          />
           {session ? (
-            <Button as={Link} to={routes.app.settings} variant="none">
-              <Gear size={25} />
-            </Button>
+            <>
+              <Button variant="none" onClick={() => setShow(true)} className="d-sm-none">
+                <List size={30} />
+              </Button>
+              <div className="justify-content-end d-none d-sm-block">
+                <Button as={Link} to={routes.app.settings} variant="none">
+                  <Gear size={25} />
+                </Button>
+              </div>
+            </>
           ) : (
             <>
+              <Button
+                variant="none"
+                onClick={() => setNavbarExpanded(true)}
+                className="d-sm-none"
+              >
+                <List size={30} />
+              </Button>
               <Navbar.Collapse className="justify-content-end">
                 <Nav className="d-flex gap-3">
-                  <Nav.Link as={Link} to={routes.login}>
+                  <Nav.Link
+                    as={Link}
+                    to={routes.login}
+                    onClick={() => setNavbarExpanded(false)}
+                  >
                     Login
                   </Nav.Link>
-                  <Button variant="primary" as={Link} to={routes.signup}>
+                  <Button
+                    variant="primary"
+                    as={Link}
+                    to={routes.signup}
+                    onClick={() => setNavbarExpanded(false)}
+                  >
                     Sign Up
                   </Button>
                 </Nav>
