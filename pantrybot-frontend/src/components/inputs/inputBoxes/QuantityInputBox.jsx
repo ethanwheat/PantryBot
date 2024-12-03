@@ -12,7 +12,7 @@ export default function QuantityInputBox({
   style,
   ...otherProps
 }) {
-  const valueToInt = parseInt(value);
+  const valueToFloat = parseFloat(value);
 
   return (
     <>
@@ -22,7 +22,9 @@ export default function QuantityInputBox({
           <Button
             variant="none"
             className="p-0"
-            onClick={() => onChange(valueToInt > 1 ? valueToInt - 1 : valueToInt)}
+            onClick={() =>
+              onChange(valueToFloat > 1 ? valueToFloat - 1 : valueToFloat)
+            }
           >
             -
           </Button>
@@ -32,18 +34,24 @@ export default function QuantityInputBox({
             className={`m-0 w-100 ${
               className?.includes("text-left") ? "text-left" : "text-center"
             }`}
-            value={valueToInt || ""}
+            value={valueToFloat || ""}
             type="text"
-            onChange={(e) => onChange(parseInt(e.target.value))}
+            onChange={(e) => onChange(parseFloat(e.target.value))}
             disabled={disabled}
-            onBlur={() => !valueToInt && onChange(1)}
+            onBlur={() => !valueToFloat && onChange(1)}
             isInvalid={error ? true : false}
             {...otherProps}
           />
-          <Form.Control.Feedback type="invalid">{error?.message}</Form.Control.Feedback>
+          <Form.Control.Feedback type="invalid">
+            {error?.message}
+          </Form.Control.Feedback>
         </div>
         {!hideIncrementDecrement && !disabled && (
-          <Button variant="none" className="p-0" onClick={() => onChange(valueToInt + 1)}>
+          <Button
+            variant="none"
+            className="p-0"
+            onClick={() => onChange(valueToFloat + 1)}
+          >
             +
           </Button>
         )}
