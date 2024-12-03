@@ -90,10 +90,13 @@ export default function useGroceryLists() {
 
   const deleteGroceryItem = async ({ listId, itemId }) => {
     // Fetch api to delete grocery item
-    const res = await fetch(`${endpoints.groceryLists}/${listId}/items/${itemId}`, {
-      method: "DELETE",
-      credentials: "include",
-    });
+    const res = await fetch(
+      `${endpoints.groceryLists}/${listId}/items/${itemId}`,
+      {
+        method: "DELETE",
+        credentials: "include",
+      }
+    );
 
     // Throw error if response is invalid
     if (!res.ok) {

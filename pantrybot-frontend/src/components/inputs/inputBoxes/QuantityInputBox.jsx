@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Button, Form } from "react-bootstrap";
 
 export default function QuantityInputBox({
@@ -12,7 +12,15 @@ export default function QuantityInputBox({
   style,
   ...otherProps
 }) {
-  const valueToFloat = parseFloat(value);
+  const [inputValue, setInputValue] = useState(value);
+
+  useEffect(() => {
+    const validFloat = /^\d*\.?\d+$/.test(inputValue);
+
+    if (validFloat) {
+      onChange(parseFloat(inputValue));
+    }
+  }, [inputValue]);
 
   return (
     <>
@@ -23,7 +31,7 @@ export default function QuantityInputBox({
             variant="none"
             className="p-0"
             onClick={() =>
-              onChange(valueToFloat > 1 ? valueToFloat - 1 : valueToFloat)
+              setInputValue(inputValue > 1 ? inputValue - 1 : inputValue)
             }
           >
             -
@@ -34,11 +42,13 @@ export default function QuantityInputBox({
             className={`m-0 w-100 ${
               className?.includes("text-left") ? "text-left" : "text-center"
             }`}
-            value={valueToFloat || ""}
+            value={inputValue || ""}
             type="text"
-            onChange={(e) => onChange(parseFloat(e.target.value))}
+            onChange={(e) => setInputValue(e.target.value)}
             disabled={disabled}
-            onBlur={() => !valueToFloat && onChange(1)}
+            onBlur={() =>
+              inputValue ? setInputValue(value) : setInputValue(1)
+            }
             isInvalid={error ? true : false}
             {...otherProps}
           />
@@ -50,7 +60,7 @@ export default function QuantityInputBox({
           <Button
             variant="none"
             className="p-0"
-            onClick={() => onChange(valueToFloat + 1)}
+            onClick={() => setInputValue(inputValue + 1)}
           >
             +
           </Button>
