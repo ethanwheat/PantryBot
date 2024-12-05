@@ -1,9 +1,9 @@
 import React from "react";
 import { Button } from "react-bootstrap";
 import ThemedSpinner from "../../components/spinners/ThemedSpinner";
-import useGroceryLists from "../../hooks/useGroceryLists";
 import GroceryListAccordian from "../../components/accordians/GroceryListAccordian";
 import CreateGroceryListModal from "../../components/modals/CreateGroceryListModal";
+import useGroceryLists from "../../hooks/UseGroceryLists";
 import useModal from "../../hooks/UseModal";
 
 export default function GroceryLists() {
