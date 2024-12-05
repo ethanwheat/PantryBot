@@ -309,7 +309,7 @@ export default function Recipes() {
         getRecipeById={getRecipeById}
         deleteRecipe={deleteRecipe}
       />
-      <CreateRecipeModal modal={createModal} />
+      <CreateRecipeModal modal={createModal} loadRecipes={loadRecipes} />
       <AddRecipeToListModal modal={groceryModal} />
     </div>
   );

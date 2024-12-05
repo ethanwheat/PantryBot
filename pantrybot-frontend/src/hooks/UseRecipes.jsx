@@ -170,5 +170,29 @@ export default function useRecipes() {
     console.log('Grocery List Updated');
   };
 
-  return { loading, error, recipes, recipeDetails, searchResults, groceryLists, getRecipeById, deleteRecipe, searchRecipe, saveRecipe, loadRecipes, loadGroceryLists, addRecipeToList };
+  const createRecipe = async (name, description, estimatedTime, ingredients) => {
+    const res = await fetch(endpoints.recipes.add, {
+      method: "POST",
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        name, 
+        description,
+        estimatedTime,
+        ingredients,
+      }),
+    });
+
+    // Throw error if response is invalid
+    if (!res.ok) {
+      const errorMessage = await res.statusText;
+      throw new Error(errorMessage);
+    }
+
+    console.log('Recipe Created');
+  };
+
+  return { loading, error, recipes, recipeDetails, searchResults, groceryLists, getRecipeById, deleteRecipe, searchRecipe, saveRecipe, loadRecipes, loadGroceryLists, addRecipeToList, createRecipe };
 }
