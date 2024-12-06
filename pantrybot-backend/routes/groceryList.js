@@ -178,31 +178,41 @@ router.post('/:id/addRecipeItems', authenticateToken, async (req, res) => {
         }
 
         // If filtering is needed, query OpenAI API
-        let itemsToAdd = recipeItems;
+        let itemsToAdd = [];
         if (excludePantry || excludeGroceryList) {
-            const pantryText = pantryItems.map(item => `${item.name} (${item.quantity} ${item.unit})`).join(', ');
-            const groceryListText = groceryListItems.map(item => `${item.name} (${item.quantity} ${item.unit})`).join(', ');
-            const recipeText = recipeItems.map(item => `${item.name} (${item.quantity} ${item.unit})`).join(', ');
+            if (pantryItems.length === 0 && groceryListItems.length === 0) {
+                itemsToAdd = recipeItems
+            } else {
+                query = "";
+                if (pantryItems.length != 0) {
+                    const pantryText = pantryItems.map(item => `${item.name} (${item.quantity} ${item.unit})`).join(', ');
+                    query += `I have these items already in my pantry: {${pantryText}}.` 
+                }
 
-            const query = `
-I have these items in the pantry: {${pantryText}}. 
-I have these items already in my grocery list: {${groceryListText}}. 
-What additional items will I need to purchase to make this recipe: {${recipeText}}? 
-Return the items in JSON, do not do any code formatting or markdown. Include:
-[{ "name": "<item name>", "quantity": <quantity>, "unit": "<unit>" }]
-            `;
+                if (groceryListItems.length != 0) {
+                    const groceryListText = groceryListItems.map(item => `${item.name} (${item.quantity} ${item.unit})`).join(', ');
+                    query += `I have these items already in my grocery list: {${groceryListText}}.`
+                }
 
-            const response = await openai.chat.completions.create({
-                model: 'gpt-4o',
-                messages: [
-                    { role: 'system', content: 'You are a helpful assistant that processes recipes and grocery data and provides JSON-formatted outputs.' },
-                    { role: 'user', content: query },
-                ],
-                temperature: 0.7,
-            });
-            console.log('OpenAI raw response:', response.choices[0].message.content);
+                const recipeText = recipeItems.map(item => `${item.name} (${item.quantity} ${item.unit})`).join(', ');
+                query += `
+                    What additional items will I need to purchase to make this recipe: {${recipeText}}? 
+                    Return the items in JSON, do not do any code formatting or markdown. Include:
+                    [{ "name": "<item name>", "quantity": <quantity (as a float)>, "unit": "<unit>" }]`;
 
-            itemsToAdd = JSON.parse(response.choices[0].message.content.trim());
+                const response = await openai.chat.completions.create({
+                    model: 'gpt-4o',
+                    messages: [
+                        { role: 'system', content: 'You are a helpful assistant that processes recipes and grocery data and provides JSON-formatted outputs.' },
+                        { role: 'user', content: query },
+                    ],
+                    temperature: 0.7,
+                });
+
+                itemsToAdd = JSON.parse(response.choices[0].message.content.trim());
+            }
+        } else {
+          itemsToAdd = recipeItems
         }
 
         // Add the filtered items to the grocery list

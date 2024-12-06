@@ -16,8 +16,8 @@ export default function AddRecipeToListModal({ modal }) {
   const [selectedList, setSelectedList] = useState("");
   const [addError, setAddError] = useState(null);
   const [addLoading, setAddLoading] = useState(false);
-  const [excludePantry, setExcludePantry] = useState(true);
-  const [excludeList, setExcludeList] = useState(true);
+  const [excludePantry, setExcludePantry] = useState(false);
+  const [excludeList, setExcludeList] = useState(false);
 
   const {
     control,
@@ -44,15 +44,15 @@ export default function AddRecipeToListModal({ modal }) {
         setAddError(null);
         setListsLoading(true);
         setAddLoading(false);
-        setExcludePantry(true);
-        setExcludeList(true);
+        setExcludePantry(false);
+        setExcludeList(false);
 
         try {
           await loadGroceryLists();
-          setListsLoading(false);
         } catch (e) {
           console.log(e);
           setListError(e);
+        } finally {
           setListsLoading(false);
         }
       }
