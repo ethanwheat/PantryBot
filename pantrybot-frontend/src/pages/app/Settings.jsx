@@ -35,34 +35,38 @@ export default function Settings() {
     e.preventDefault();
     try {
       const res = await fetch(endpoints.profile.onboard, {
-        method: "PUT",
+        method: "POST", // Changed from PUT to POST
         credentials: "include",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(formData),
+        body: JSON.stringify({
+        ...formData,
+        diets: formData.diet_res, // Map `diet_res` to `diets`
+        diet_res: undefined, // Remove `diet_res` key,
+      }),
       });
-
+  
       if (!res.ok) {
         const errorText = await res.text();
         console.error("Error updating profile:", errorText);
         alert("Failed to update profile. Please try again.");
         return;
       }
-
+  
       await refreshSession();
-      alert("Profile updated successfully.");
     } catch (error) {
       console.error("Error updating profile:", error);
       alert("An error occurred while updating the profile.");
     }
   };
+  
 
   return (
     <Container>
       <h1>Settings</h1>
       <Form onSubmit={handleSubmit}>
-        <Form.Group controlId="formFirstName">
+        <Form.Group controlId="formFirstName" className="mb-3">
           <Form.Label>First Name</Form.Label>
           <Form.Control
             type="text"
@@ -72,7 +76,7 @@ export default function Settings() {
           />
         </Form.Group>
 
-        <Form.Group controlId="formLastName">
+        <Form.Group controlId="formLastName" className="mb-3">
           <Form.Label>Last Name</Form.Label>
           <Form.Control
             type="text"
@@ -82,7 +86,7 @@ export default function Settings() {
           />
         </Form.Group>
 
-        <Form.Group controlId="formZipCode">
+        <Form.Group controlId="formZipCode" className="mb-3">
           <Form.Label>Zip Code</Form.Label>
           <Form.Control
             type="text"
@@ -92,7 +96,7 @@ export default function Settings() {
           />
         </Form.Group>
 
-        <Form.Group controlId="formDietRes">
+        <Form.Group controlId="formDietRes" className="mb-3">
           <Form.Label>Dietary Restrictions</Form.Label>
           <Form.Control
             type="text"
@@ -102,7 +106,7 @@ export default function Settings() {
           />
         </Form.Group>
 
-        <Form.Group controlId="formAllergies">
+        <Form.Group controlId="formAllergies" className="mb-3">
           <Form.Label>Allergies</Form.Label>
           <Form.Control
             type="text"
