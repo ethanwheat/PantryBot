@@ -58,6 +58,7 @@ export default function Recipes() {
   };
 
   const handleRangeChange = (e) => setRangeValue(Number(e.target.value)); // Update state with the new value
+
   const handlePromptChange = (e) => {
     const value = e.target.value;
     setPrompt(value);
@@ -115,10 +116,9 @@ export default function Recipes() {
               </div>
               <hr style={{ margin: "20px 0" }} />
 
-              {/* Form with validation */}
               <Form onSubmit={handleSubmit(handleSearch)}>
                 <Form.Group className="mb-3" controlId="promptField">
-                  <Form.Label>What kind of Recipe can I help you find?</Form.Label>
+                  <Form.Label><h3>What kind of recipe can I help you find?</h3></Form.Label>
                   <Controller
                     name="prompt"
                     control={control}
@@ -127,9 +127,10 @@ export default function Recipes() {
                       <Form.Control
                         {...field}
                         as="textarea"
-                        style={{ resize: "none" }}
-                        rows={3}
+                        style={{ resize: "none", fontSize: '1.2rem' }}
+                        rows={4}
                         value={prompt}
+                        placeholder="Enter a recipe description"
                         onChange={handlePromptChange}
                       />
                     )}
@@ -137,13 +138,13 @@ export default function Recipes() {
                   {errors.prompt && (
                     <p className="text-danger">{errors.prompt.message}</p>
                   )}{" "}
-                  {/* Error message */}
                 </Form.Group>
 
-                {/* Other form fields */}
+
+                <hr style={{ marginBottom: "10px" }} />
                 <Row>
                   <Col className="d-flex flex-column">
-                    <p>Use...</p>
+                    <h4>Use...</h4>
                     <Form.Check
                       type="radio"
                       name="group1"
@@ -151,6 +152,7 @@ export default function Recipes() {
                       label="Any Items"
                       checked={!usePantry}
                       onChange={() => setUsePantry(false)}
+                      style={{ fontSize: '1.2rem', transform: 'scale(1)' }}
                     />
                     <Form.Check
                       type="radio"
@@ -158,43 +160,56 @@ export default function Recipes() {
                       id="pantry-switch"
                       label="Only Pantry Items"
                       checked={usePantry}
-                      onChange={() => setUsePantry(true)}
+                      onChange={() => {
+                        setUsePantry(true);
+                        setRangeValue(1);
+                      }}
+                      style={{ fontSize: '1.2rem', transform: 'scale(1)' }}
                     />
                   </Col>
                   <Col className="d-flex flex-column">
-                    <p>Profile Options</p>
+                    <h4>Profile Options:</h4>
                     <Form.Check
                       id="diet-switch"
-                      label="Consider Dietary Preferences"
+                      label="Consider Diets"
                       checked={considerDiet}
                       onChange={(e) => setConsiderDiet(e.target.checked)}
+                      style={{ fontSize: '1.2rem', transform: 'scale(1)' }}
                     />
                     <Form.Check
                       id="allergy-switch"
                       label="Consider Allergies"
                       checked={considerAllergies}
                       onChange={(e) => setConsiderAllergies(e.target.checked)}
+                      style={{ fontSize: '1.2rem', transform: 'scale(1)' }}
                     />
                   </Col>
                   <Col className="d-flex flex-column">
-                    <p>What's your budget?</p>
+                    <h4>What's your budget?</h4>
                     <Form.Range
                       min={0}
                       max={2}
                       step={1}
                       value={rangeValue}
                       onChange={handleRangeChange}
+                      disabled={usePantry}
                     />
                     <div className="d-flex justify-content-between mt-2">
-                      <span>$&nbsp;&nbsp;</span>
-                      <span>&nbsp;$$</span>
-                      <span>$$$</span>
+                      <span style={{ fontSize: '1.2rem' }}>$&nbsp;&nbsp;</span>
+                      <span style={{ fontSize: '1.2rem' }}>&nbsp;$$</span>
+                      <span style={{ fontSize: '1.2rem' }}>$$$</span>
                     </div>
                   </Col>
                 </Row>
-
+                
+                <hr style={{ margin: "20px 0" }} />
                 <div className="d-flex justify-content-center">
-                  <Button type="submit" variant="primary">
+                  <Button 
+                    type="submit" 
+                    variant="primary"
+                    size="lg"
+                  >
+                    <Search style={{ marginRight: '8px' }} />
                     Search
                   </Button>
                 </div>
@@ -222,7 +237,12 @@ export default function Recipes() {
                   <ThemedSpinner variant="primary" />
                 </div>
               ) : Object.keys(searchResults).length > 0 && searchResults.error ? (
-                <p className="text-danger">Something went wrong! {searchResults.error}</p>
+                <div
+                  className="d-flex flex-column justify-content-center align-items-center"
+                  style={{ height: "50vh" }}
+                >
+                  <h5 className="text-danger">Something went wrong! {searchResults.error}</h5>
+                </div>
               ) : Object.keys(searchResults).length > 0 ? (
                 <div>
                   <h3>{searchResults.name}</h3>
@@ -285,7 +305,12 @@ export default function Recipes() {
             ) : error ? (
               <p>"Something went wrong! " {error}</p>
             ) : noRecipes ? (
-              <p>No Recipes Found</p>
+              <div
+                className="d-flex flex-column justify-content-center align-items-center"
+                style={{ height: "50vh" }}
+              >
+                <h6>No Saved Recipes</h6>
+              </div>
             ) : (
               recipes.map((recipe) => (
                 <Button

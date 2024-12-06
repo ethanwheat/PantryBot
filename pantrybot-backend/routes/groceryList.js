@@ -206,7 +206,6 @@ router.post('/:id/addRecipeItems', authenticateToken, async (req, res) => {
                         { role: 'system', content: 'You are a helpful assistant that processes recipes and grocery data and provides JSON-formatted outputs.' },
                         { role: 'user', content: query },
                     ],
-                    max_tokens: 150,
                     temperature: 0.7,
                 });
 
