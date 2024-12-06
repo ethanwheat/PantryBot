@@ -15,7 +15,9 @@ const authenticateToken = (req, res, next) => {
         req.user = decoded.user; // Attach user info to the request
         next(); // Continue to the next middleware or route handler
     } catch (err) {
-        res.clearCookie("auth");  // clear the cookie if the token is invalid
+        res.clearCookie("auth" , {
+            domain: config.clientURL
+        });  // clear the cookie if the token is invalid
         res.status(401).json({ msg: 'Token is not valid' });
     }
 };
