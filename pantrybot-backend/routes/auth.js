@@ -7,6 +7,8 @@ const config = require('../config');
 const User = require('../models/User');
 const authenticateToken = require('../middleware/authenticateToken');
 
+const isProduction = config.nodeEnv === "production";
+
 // Validate token and get session
 router.get("/getSession", authenticateToken, async (req, res) => {
     try {
@@ -56,7 +58,7 @@ router.post('/register', async (req, res) => {
             res.cookie("auth", token, {
                 maxAge: expiresIn * 1000,
                 secure: true,
-                sameSite: "None",
+                domain: isProduction ? "pantrybot.xyz" : "localhost"
             });
             res.json({ msg: "User created successfully."});
         });
@@ -106,7 +108,7 @@ router.post('/login', async (req, res) => {
             res.cookie("auth", token, {
                 maxAge: expiresIn * 1000,
                 secure: true,
-                sameSite: "None",
+                domain: isProduction ? "pantrybot.xyz" : "localhost"
             });
             res.json({ msg: "User logged in successfully."});
         });
@@ -118,9 +120,7 @@ router.post('/login', async (req, res) => {
 
 router.post("/logout", authenticateToken, async (req, res) => {
     try {
-        res.clearCookie("auth", {
-            sameSite: "None",
-        });
+        res.clearCookie("auth", { domain: isProduction ? "pantrybot.xyz" : "localhost" });
         res.json({ msg: "Successfully logged out." });
     } catch (err) {
         console.error(err.message);
