@@ -56,7 +56,7 @@ router.post('/register', async (req, res) => {
             res.cookie("auth", token, {
                 maxAge: expiresIn * 1000,
                 secure: true,
-                domain: config.clientURL,
+                sameSite: "None",
             });
             res.json({ msg: "User created successfully."});
         });
@@ -106,7 +106,7 @@ router.post('/login', async (req, res) => {
             res.cookie("auth", token, {
                 maxAge: expiresIn * 1000,
                 secure: true,
-                domain: config.clientURL,
+                sameSite: "None",
             });
             res.json({ msg: "User logged in successfully."});
         });
@@ -119,7 +119,7 @@ router.post('/login', async (req, res) => {
 router.post("/logout", authenticateToken, async (req, res) => {
     try {
         res.clearCookie("auth", {
-            domain: config.clientURL
+            sameSite: "None",
         });
         res.json({ msg: "Successfully logged out." });
     } catch (err) {
