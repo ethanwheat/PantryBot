@@ -56,7 +56,7 @@ router.post('/register', async (req, res) => {
             res.cookie("auth", token, {
                 maxAge: expiresIn * 1000,
                 secure: true,
-                domain: ".pantrybot.xyz",
+                domain: "pantrybot.xyz",
             });
             res.json({ msg: "User created successfully."});
         });
@@ -106,7 +106,7 @@ router.post('/login', async (req, res) => {
             res.cookie("auth", token, {
                 maxAge: expiresIn * 1000,
                 secure: true,
-                domain: ".pantrybot.xyz",
+                domain: "pantrybot.xyz",
             });
             res.json({ msg: "User logged in successfully."});
         });
