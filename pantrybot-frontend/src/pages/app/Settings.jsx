@@ -103,6 +103,7 @@ export default function Settings() {
             name="diet_res"
             value={formData.diet_res}
             onChange={handleChange}
+            placeholder="(comma-separated)"
           />
         </Form.Group>
 
@@ -113,6 +114,7 @@ export default function Settings() {
             name="allergies"
             value={formData.allergies}
             onChange={handleChange}
+            placeholder="(comma-separated)"
           />
         </Form.Group>
 
