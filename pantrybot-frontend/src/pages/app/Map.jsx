@@ -1,0 +1,52 @@
+import React, { useEffect, useState } from "react";
+import { GoogleMap, LoadScript, Marker } from "@react-google-maps/api";
+import axios from "axios";
+
+const Map = ({ zipCode }) => {
+  const [center, setCenter] = useState({ lat: 38.973148, lng: -95.238251 }); // Default to Lawrence, KS
+  const [places, setPlaces] = useState([]);
+
+  useEffect(() => {
+    const fetchCoordinates = async () => {
+      try {
+        const geoResponse = await axios.get(
+          `https://maps.googleapis.com/maps/api/geocode/json?address=${zipCode}&key=AIzaSyCA5sX-J_sXrMGViSxn61iLG01G8vhBNc0`
+        );
+        const location = geoResponse.data.results[0].geometry.location;
+        setCenter(location);
+
+        const placesResponse = await axios.get(
+          `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${location.lat},${location.lng}&radius=5000&type=grocery_or_supermarket&key=AIzaSyCA5sX-J_sXrMGViSxn61iLG01G8vhBNc0`
+        );
+        setPlaces(placesResponse.data.results);
+      } catch (error) {
+        console.error("Error fetching map data:", error);
+      }
+    };
+
+    if (zipCode) fetchCoordinates();
+  }, [zipCode]);
+
+  return (
+    <LoadScript googleMapsApiKey="AIzaSyCA5sX-J_sXrMGViSxn61iLG01G8vhBNc0">
+      <GoogleMap
+        mapContainerStyle={{ width: "100%", height: "100%" }}
+        center={center}
+        zoom={12}
+      >
+        {places.map((place) => (
+          <Marker
+            key={place.place_id}
+            position={{
+              lat: place.geometry.location.lat,
+              lng: place.geometry.location.lng,
+            }}
+            title={place.name}
+          />
+        ))}
+      </GoogleMap>
+    </LoadScript>
+  );
+};
+
+export default Map;

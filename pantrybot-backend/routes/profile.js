@@ -33,4 +33,21 @@ router.post('/onboard', authenticateToken, async (req, res) => {
     }
 });
 
+router.get('/profile', authenticateToken, async (req, res) => {
+    try {
+        const userId = req.user.id;
+        const user = await User.findById(userId);
+
+        if (!user) {
+            return res.status(404).json({ msg: 'User not found' });
+        }
+
+        res.status(200).json({ profile: user.profile });
+    } catch (err) {
+        console.error(err.message);
+        res.status(500).send('Server Error');
+    }
+});
+
+
 module.exports = router;
