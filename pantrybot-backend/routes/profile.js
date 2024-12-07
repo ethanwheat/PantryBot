@@ -35,19 +35,26 @@ router.post('/onboard', authenticateToken, async (req, res) => {
 
 router.get('/profile', authenticateToken, async (req, res) => {
     try {
-        const userId = req.user.id;
-        const user = await User.findById(userId);
+        const user = await User.findById(req.user.id);
+        if (!user) return res.status(404).json({ msg: 'User not found' });
 
-        if (!user) {
-            return res.status(404).json({ msg: 'User not found' });
-        }
+        console.log("User Profile Data:", user.profile); // ***** DEBUG *****
 
-        res.status(200).json({ profile: user.profile });
+        res.status(200).json({
+            profile: {
+                firstName: user.profile.firstName,
+                lastName: user.profile.lastName,
+                zipCode: user.profile.zipCode,
+                diets: user.profile.diet_res,
+                allergies: user.profile.allergies,
+            },
+        });
     } catch (err) {
         console.error(err.message);
         res.status(500).send('Server Error');
     }
 });
+
 
 
 module.exports = router;
