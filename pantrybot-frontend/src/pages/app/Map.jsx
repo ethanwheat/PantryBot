@@ -3,12 +3,16 @@ import { GoogleMap, LoadScript, Marker } from "@react-google-maps/api";
 import axios from "axios";
 
 const Map = ({ zipCode }) => {
-  const apiKey = process.env.REACT_APP_GOOGLE_PLACES_API_KEY;
+  const apiKey = process.env.GOOGLE_MAPS_API_KEY;
   const [center, setCenter] = useState({ lat: 38.973148, lng: -95.238251 }); // Default to Lawrence, KS
   const [places, setPlaces] = useState([]);
 
   useEffect(() => {
-    console.log("Received zipCode:", zipCode);
+    if (!apiKey) {
+      console.error("API Key is not defined");
+      return;
+    }
+
     const fetchCoordinates = async () => {
       try {
         const geoResponse = await axios.get(
@@ -27,7 +31,7 @@ const Map = ({ zipCode }) => {
     };
 
     if (zipCode) fetchCoordinates();
-  }, [zipCode, apiKey]);
+  }, [zipCode]);
 
   return (
     <LoadScript googleMapsApiKey={apiKey}>
@@ -50,5 +54,4 @@ const Map = ({ zipCode }) => {
     </LoadScript>
   );
 };
-
 export default Map;
