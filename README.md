@@ -86,6 +86,7 @@ Add a .env file and populate the following fields:
 
 ```bash
   API_URL=<url_here>
+  GOOGLE_MAPS_API_KEY=<key_here>
 ```
 
 Run development server:
@@ -115,6 +116,7 @@ Install node packages:
 Add a .env file and populate the following fields:
 
 ```bash
+  PRODUCTION=<set_here>
   MONGO_URI=<uri_here>
   JWT_SECRET=<secret_here>
   CLIENT_URL=http://localhost:5173
@@ -137,11 +139,32 @@ Endpoints:
   <API_URL>/api/auth/login
   <API_URL>/api/auth/logout
   <API_URL>/api/profile/onboard
+  <API_URL>/api/groceryLists/
+  <API_URL>/api/groceryLists/:id/addRecipeItems
+  <API_URL>/api/pantryRoutes
+  <API_URL>/api/pantryRoutes/items
+  <API_URL>/api/recipes/add
+  PUT:
+  <API_URL>/api/groceryLists/:id/items/:itemId/quantity
+  <API_URL>/api/groceryLists/:id/items/:itemId/inCart
+  <API_URL>/api/groceryLists/items/:itemId/quantity
   GET:
   <API_URL>/api/auth/getSession
   <API_URL>/api/groceries/search
   <API_URL>/api/groceries/getprice
   <API_URL>/api/recipeLookup
+  <API_URL>/api/groceries/getprice/:item
+  <API_URL>/api/groceries/search/:item
+  <API_URL>/api/groceryLists/
+  <API_URL>/api/groceryLists/:id/items
+  <API_URL>/api/placesRoutes
+  <API_URL>/api/recipes
+  <API_URL>/api/recipes/:id
+  DELETE:
+  <API_URL>/api/groceryLists/:id
+  <API_URL>/api/groceryLists/:id/items/:itemId
+  <API_URL>/api/pantryRoutes/items/:itemId
+  <API_URL>/api/recipes/:id
 ```
 
 ## Authors
