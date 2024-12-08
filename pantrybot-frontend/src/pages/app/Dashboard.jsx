@@ -26,8 +26,8 @@ export default function Dashboard() {
           },
         });
         const userProfile = response.data.profile;
-        console.log("User profile data:", userProfile); // Debugging
-        //setZipCode(userProfile.zipCode);
+        //console.log("User profile data:", userProfile); // Debugging
+        setZipCode(userProfile.zipCode);
         setZipCode("66045");    // ** Hard set zip code ** 
       } catch (err) {
         console.error("Error fetching profile:", err);
