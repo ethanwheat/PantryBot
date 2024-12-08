@@ -7,6 +7,7 @@ import useRecipes from "../../hooks/UseRecipes";
 import { Button } from "react-bootstrap";
 import useModal from "../../hooks/UseModal";
 import ViewRecipeModal from "../../components/modals/ViewRecipeModal";
+import Map from "../../components/maps/Map";
 
 export default function Dashboard() {
   const {
@@ -48,10 +49,10 @@ export default function Dashboard() {
         <div>
           <p className="fs-3 fw-semibold">Nearby Grocery Stores</p>
           <div
-            className="bg-gray d-flex w-100 justify-content-center align-items-center"
+            className="d-flex w-100 justify-content-center align-items-center"
             style={{ height: "25rem" }}
           >
-            <p>Put map here.</p>
+            <Map />
           </div>
         </div>
         <div className="d-flex flex-column flex-sm-row gap-3">
