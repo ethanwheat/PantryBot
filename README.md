@@ -173,4 +173,4 @@ Endpoints:
 - Ethan Wheat [@ethanwheat](https://github.com/ethanwheat)
 - Mario Sumanasekara [@MarioS531](https://github.com/MarioS531)
 - Edgar Mendez [@EdgarMC22](https://github.com/EdgarMC22)
-- Add your name and github link here
+- Tanner Barcus [@tbarcus11](https://github.com/tbarcus11)
